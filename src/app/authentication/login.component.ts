@@ -46,6 +46,12 @@ import { AuthService } from './auth.service';
           </button>
         </form>
 
+        <div class="button-spacing">
+          <button type="button" (click)="navigateToRegister()" class="register-btn">
+            Create new account
+          </button>
+        </div>
+
         <div *ngIf="errorMessage" class="error-message">
           {{ errorMessage }}
         </div>
@@ -132,6 +138,27 @@ import { AuthService } from './auth.service';
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
+
+    .button-spacing {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .register-btn:hover {
+      background-color: #5a6268;
+    }
   `]
 })
 export class LoginComponent {
@@ -172,5 +199,9 @@ export class LoginComponent {
         }
       });
     }
+  }
+
+  navigateToRegister(): void {
+    this.router.navigate(['/register']); // Navigate to register component
   }
 }
