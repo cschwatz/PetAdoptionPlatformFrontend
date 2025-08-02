@@ -3,11 +3,30 @@ import { LoginComponent } from './authentication/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard } from './authentication/auth.guard';
 import { RegisterComponent } from './register/register.component';
+import { OngComponent } from './ong/ong.component';
+import { MyAnimalsComponent } from './my-animals/my-animals.component';
+import { MyAccountComponent } from './my-account/my-account.component';
+import { OngEventsComponent } from './ong-events/ong-events.component';
+import { SponsorshipComponent } from './sponsorship/sponsorship.component';
+import { AnimalComponent } from './animal/animal.component';
+import { AdoptionComponent } from './adoption/adoption.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'ong', component: OngComponent },
+  { path: 'animal', component: AnimalComponent },
+  { path: 'adoption', 
+    loadComponent: () => import('./adoption/adoption.component').then(c => c.AdoptionComponent) 
+  },
+  { path: 'animal/:id', 
+    loadComponent: () => import('./animal/animal.component').then(c => c.AnimalComponent) 
+  },
+  { path: 'my-animals', component: MyAnimalsComponent },
+  { path: 'ong-events', component: OngEventsComponent },
+  { path: 'my-account', component: MyAccountComponent },
+  { path: 'sponsorship', component: SponsorshipComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ];
