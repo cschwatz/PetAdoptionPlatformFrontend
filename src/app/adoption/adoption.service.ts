@@ -4,9 +4,6 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Animal } from '../animal/animal.model';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -93,4 +90,3 @@ export class AdoptionService {
     return throwError(() => new Error(errorMessage));
   }
 }
-

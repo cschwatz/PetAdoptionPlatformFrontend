@@ -1,0 +1,334 @@
+.account-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+
+.account-header {
+  text-align: center;
+  margin-bottom: 3rem;
+ 
+  h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+ 
+  p {
+    color: #666;
+    font-size: 1.2rem;
+  }
+}
+
+
+// Loading states
+.loading-container {
+  text-align: center;
+  padding: 4rem 0;
+ 
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.error-container {
+  text-align: center;
+  padding: 4rem 0;
+  color: #dc3545;
+ 
+  .retry-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+   
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+}
+
+
+// User type badge
+.user-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+ 
+  &.person {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+ 
+  &.ong {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+  }
+}
+
+
+// Account content
+.account-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+
+// Tab navigation
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid #dee2e6;
+ 
+  button {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6c757d;
+    transition: all 0.3s;
+    border-bottom: 3px solid transparent;
+   
+    &:hover {
+      background-color: #f8f9fa;
+      color: #495057;
+    }
+   
+    &.active {
+      color: #007bff;
+      border-bottom-color: #007bff;
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+
+// Tab content
+.tab-content {
+  padding: 2rem;
+}
+
+
+// Form sections
+.form-section {
+  margin-bottom: 2.5rem;
+ 
+  h3 {
+    color: #333;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+  }
+}
+
+
+// Form layout
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+ 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+
+.form-group {
+  flex: 1;
+ 
+  &.small {
+    flex: 0 0 120px;
+  }
+ 
+  &.flex-grow {
+    flex: 2;
+  }
+ 
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+   
+    small {
+      font-weight: normal;
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+  }
+ 
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+   
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+   
+    &.error {
+      border-color: #dc3545;
+     
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+    }
+   
+    &.readonly {
+      background-color: #f8f9fa;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+  }
+ 
+  small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+  }
+}
+
+
+// Form actions
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+ 
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+
+.save-btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+ 
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #218838 0%, #1abc9c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  }
+ 
+  &:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+
+.cancel-btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+ 
+  &:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+  }
+}
+
+
+// Messages
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+
+.success-message {
+  color: #155724;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  text-align: center;
+}
+
+
+// Responsive design
+@media (max-width: 768px) {
+  .account-container {
+    padding: 1rem;
+  }
+ 
+  .account-header h1 {
+    font-size: 2rem;
+  }
+ 
+  .tab-content {
+    padding: 1rem;
+  }
+ 
+  .user-type-badge {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+}
