@@ -730,7 +730,7 @@ export class AdoptionComponent implements OnInit {
   // Method to handle different image formats
   getImageSrc(photo: string | undefined): string {
     if (!photo) {
-      return '/assets/default-animal.jpg';
+      return '/assets/default-animal.jpeg';
     }
    
     // If it's already a complete data URL, return as-is
@@ -749,7 +749,7 @@ export class AdoptionComponent implements OnInit {
     }
    
     // Default fallback
-    return '/assets/default-animal.jpg';
+    return '/assets/default-animal.jpeg';
   }
 
 

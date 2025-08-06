@@ -83,6 +83,10 @@ export class AuthService {
     return this.isLoggedInSubject.asObservable();
   }
 
+  isLoggedInSync(): boolean {
+    return this.hasToken();
+  }
+
 
   getToken(): string | null {
     const token = localStorage.getItem('auth_token');

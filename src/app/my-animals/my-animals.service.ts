@@ -55,6 +55,14 @@ export class MyAnimalsService {
   }
 
 
+  // Create new animal (alias for consistency)
+  createMyAnimal(animal: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/animal`, animal).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An unknown error occurred!';
    

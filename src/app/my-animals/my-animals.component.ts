@@ -763,7 +763,7 @@ export class MyAnimalsComponent implements OnInit {
   // Method to handle different image formats
   getImageSrc(photo: string | undefined): string {
     if (!photo) {
-      return '/assets/default-animal.jpg';
+      return '/assets/default-animal.jpeg';
     }
    
     // If it's already a complete data URL, return as-is
@@ -782,13 +782,13 @@ export class MyAnimalsComponent implements OnInit {
     }
    
     // Default fallback
-    return '/assets/default-animal.jpg';
+    return '/assets/default-animal.jpeg';
   }
 
 
   onImageError(event: any): void {
     // Use a data URL for a simple placeholder instead of a missing file
-    event.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+    event.target.src = '/assets/default-animal.jpeg';
    
     // Prevent infinite loops by removing the error handler
     event.target.onerror = null;
@@ -797,7 +797,7 @@ export class MyAnimalsComponent implements OnInit {
 
   addNewAnimal(): void {
     console.log('➕ Adding new animal');
-    this.router.navigate(['/animal/new']);
+    this.router.navigate(['/animals/new']);
   }
 
 

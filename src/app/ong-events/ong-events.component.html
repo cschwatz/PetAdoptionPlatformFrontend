@@ -1,1 +1,148 @@
-<p>ong-events works!</p>
+<div class="events-container">
+  <header class="events-header">
+    <h1>📅 ONG Events & Activities</h1>
+    <p>Discover upcoming events and activities organized by animal welfare organizations</p>
+    <!-- Create Event Button (only for ONG users) -->
+    <button *ngIf="authService.isOng()" class="create-event-btn" (click)="createNewEvent()">
+      ➕ Create New Event
+    </button>
+  </header>
+
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading events...</p>
+  </div>
+
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <h3>⚠️ Oops! Something went wrong</h3>
+    <p>{{ error }}</p>
+    <button (click)="loadEvents()" class="retry-btn">Try Again</button>
+  </div>
+
+
+  <!-- Events Content -->
+  <div *ngIf="!loading && !error" class="events-section">
+    <!-- Filters -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label for="eventTypeFilter">Filter by Type:</label>
+        <select id="eventTypeFilter" [value]="selectedEventType" (change)="onEventTypeChange($event)" class="filter-select">
+          <option value="">All Events</option>
+          <option value="ADOPTION_FAIR">Adoption Fairs</option>
+          <option value="FUNDRAISING">Fundraising</option>
+          <option value="AWARENESS_CAMPAIGN">Awareness Campaigns</option>
+          <option value="VETERINARY_CLINIC">Veterinary Clinics</option>
+          <option value="TRAINING_WORKSHOP">Training Workshops</option>
+          <option value="VOLUNTEER_MEETING">Volunteer Meetings</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+     
+      <div class="filter-group">
+        <label for="timeFilter">Filter by Time:</label>
+        <select id="timeFilter" [value]="selectedTimeFilter" (change)="onTimeFilterChange($event)" class="filter-select">
+          <option value="all">All Events</option>
+          <option value="upcoming">Upcoming Only</option>
+          <option value="past">Past Events</option>
+        </select>
+      </div>
+    </div>
+
+
+    <!-- Events Count -->
+    <div class="events-count">
+      <span>{{ filteredEvents.length }} {{ filteredEvents.length === 1 ? 'event' : 'events' }} found</span>
+    </div>
+
+
+    <!-- Events Grid -->
+    <div class="events-grid" *ngIf="filteredEvents.length > 0">
+      <div class="event-card" *ngFor="let event of filteredEvents; trackBy: trackByEventId">
+       
+        <div class="card-header">
+          <div class="event-icon">{{ getEventIcon(event.eventType) }}</div>
+          <div class="event-info">
+            <h3 class="event-name">{{ event.name }}</h3>
+            <span class="event-type-badge" [ngClass]="'type-' + event.eventType.toLowerCase()">
+              {{ getEventTypeLabel(event.eventType) }}
+            </span>
+          </div>
+          <div class="event-status" [ngClass]="getEventStatus(event)">
+            {{ getEventStatusLabel(event) }}
+          </div>
+        </div>
+       
+        <div class="card-content">
+          <!-- Date and Time -->
+          <div class="event-details">
+            <div class="detail-row">
+              <span class="detail-icon">📅</span>
+              <div class="detail-content">
+                <div class="detail-label">Start Date</div>
+                <div class="detail-value">{{ formatDateTime(event.startDate) }}</div>
+              </div>
+            </div>
+           
+            <div class="detail-row">
+              <span class="detail-icon">🏁</span>
+              <div class="detail-content">
+                <div class="detail-label">End Date</div>
+                <div class="detail-value">{{ formatDateTime(event.endDate) }}</div>
+              </div>
+            </div>
+           
+            <div class="detail-row" *ngIf="event.address">
+              <span class="detail-icon">📍</span>
+              <div class="detail-content">
+                <div class="detail-label">Location</div>
+                <div class="detail-value">{{ getAddressString(event.address) }}</div>
+              </div>
+            </div>
+           
+            <div class="detail-row" *ngIf="event.ong">
+              <span class="detail-icon">🏢</span>
+              <div class="detail-content">
+                <div class="detail-label">Organized by</div>
+                <div class="detail-value">{{ event.ong.name }}</div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Action Buttons -->
+          <div class="card-footer">
+            <button class="action-btn primary" (click)="viewEventDetails(event)" *ngIf="!isPastEvent(event)">
+              📋 View Details
+            </button>
+            <button class="action-btn secondary" (click)="contactOrganizer(event)" *ngIf="event.ong">
+              📞 Contact Organizer
+            </button>
+            <button class="action-btn tertiary" (click)="shareEvent(event)">
+              📤 Share
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Empty State -->
+    <div *ngIf="filteredEvents.length === 0 && !loading" class="empty-state">
+      <div class="empty-icon">📅</div>
+      <h3>No events found</h3>
+      <p *ngIf="selectedEventType || selectedTimeFilter !== 'all'">
+        Try adjusting your filters to see more events.
+      </p>
+      <p *ngIf="!selectedEventType && selectedTimeFilter === 'all'">
+        There are currently no events scheduled in our system.
+      </p>
+      <button (click)="clearFilters()" class="clear-filters-btn" *ngIf="selectedEventType || selectedTimeFilter !== 'all'">
+        Clear Filters
+      </button>
+    </div>
+  </div>
+</div>

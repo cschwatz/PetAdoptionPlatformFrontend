@@ -11,22 +11,41 @@ import { SponsorshipComponent } from './sponsorship/sponsorship.component';
 import { AnimalComponent } from './animal/animal.component';
 import { AdoptionComponent } from './adoption/adoption.component';
 
+
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'ong', component: OngComponent },
-  { path: 'animal', component: AnimalComponent },
-  { path: 'adoption', 
-    loadComponent: () => import('./adoption/adoption.component').then(c => c.AdoptionComponent) 
+  { path: 'ong/:id',
+    loadComponent: () => import('./ong/ong-details.component').then(c => c.OngDetailsComponent)
   },
-  { path: 'animal/:id', 
-    loadComponent: () => import('./animal/animal.component').then(c => c.AnimalComponent) 
+  { path: 'animal', component: AnimalComponent },
+  { path: 'adoption',
+    loadComponent: () => import('./adoption/adoption.component').then(c => c.AdoptionComponent)
+  },
+  { path: 'animal/:id',
+    loadComponent: () => import('./animal/animal.component').then(c => c.AnimalComponent)
+  },
+  { path: 'animal/edit/:id',
+    loadComponent: () => import('./animal/animal-edit.component').then(c => c.AnimalEditComponent),
+    canActivate: [authGuard]
+  },
+  { path: 'animals/new',
+    loadComponent: () => import('./animal/animal-create.component').then(c => c.AnimalCreateComponent),
+    canActivate: [authGuard]
   },
   { path: 'my-animals', component: MyAnimalsComponent },
   { path: 'ong-events', component: OngEventsComponent },
+  { path: 'events/new',
+    loadComponent: () => import('./ong-events/event-create.component').then(c => c.EventCreateComponent),
+    canActivate: [authGuard]
+  },
+  { path: 'event/:id',
+    loadComponent: () => import('./ong-events/event-detais.component').then(c => c.EventDetailsComponent)
+  },
   { path: 'my-account', component: MyAccountComponent },
   { path: 'sponsorship', component: SponsorshipComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/dashboard' }
-];
+]

@@ -452,7 +452,7 @@ export class AnimalComponent implements OnInit {
 
   getImageSrc(photo: string | undefined): string {
     if (!photo) {
-      return '/assets/default-animal.jpg';
+      return '/assets/default-animal.jpeg';
     }
     
     if (photo.startsWith('data:')) {
@@ -467,11 +467,11 @@ export class AnimalComponent implements OnInit {
       return `data:image/jpeg;base64,${photo}`;
     }
     
-    return '/assets/default-animal.jpg';
+    return '/assets/default-animal.jpeg';
   }
 
   onImageError(event: any): void {
-    event.target.src = '/assets/default-animal.jpg';
+    event.target.src = '/assets/default-animal.jpeg';
     event.target.onerror = null;
   }
 
