@@ -7,7 +7,6 @@ import { Person, PersonUpdateRequest } from '../person/person.model';
 import { Ong, OngUpdateRequest } from '../ong/ong.model';
 import { Address } from '../address/address.model';
 
-
 @Component({
   selector: 'app-my-account',
   standalone: true,
@@ -15,61 +14,46 @@ import { Address } from '../address/address.model';
   template: `
     <div class="account-container">
       <div class="account-header">
-        <h1>My Account</h1>
-        <p>Manage your account information and settings</p>
+        <h1>Minha Conta</h1>
+        <p>Gerencie suas informações de conta e configurações</p>
       </div>
 
-
-      <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading account information...</p>
+        <p>Carregando informações da conta...</p>
       </div>
 
-
-      <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Error Loading Account</h3>
+        <h3>⚠️ Erro ao Carregar Conta</h3>
         <p>{{ error }}</p>
-        <button (click)="loadUserData()" class="retry-btn">Try Again</button>
+        <button (click)="loadUserData()" class="retry-btn">Tentar Novamente</button>
       </div>
 
-
-      <!-- Account Content -->
       <div *ngIf="!loading && !error && userInfo" class="account-content">
-       
-        <!-- User Type Badge -->
         <div class="user-type-badge" [ngClass]="userInfo.userType.toLowerCase()">
-          {{ isPerson() ? '👤 Individual Account' : '🏢 Organization Account' }}
+          {{ isPerson() ? '👤 Conta Individual' : '🏢 Conta de Organização' }}
         </div>
 
-
-        <!-- Tab Navigation -->
         <div class="tab-nav">
           <button
             [class.active]="activeTab === 'profile'"
             (click)="activeTab = 'profile'">
-            Profile Information
+            Informações do Perfil
           </button>
           <button
             [class.active]="activeTab === 'password'"
             (click)="activeTab = 'password'">
-            Change Password
+            Alterar Senha
           </button>
         </div>
 
-
-        <!-- Profile Tab -->
         <div *ngIf="activeTab === 'profile'" class="tab-content">
           <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-           
-            <!-- Person Form -->
             <div *ngIf="isPerson()" class="form-section">
-              <h3>Personal Information</h3>
-             
+              <h3>Informações Pessoais</h3>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="firstName">First Name *</label>
+                  <label for="firstName">Nome *</label>
                   <input
                     type="text"
                     id="firstName"
@@ -78,13 +62,12 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched"
                        class="error-message">
-                    First name is required
+                    Nome é obrigatório
                   </div>
                 </div>
 
-
                 <div class="form-group">
-                  <label for="middleName">Middle Name</label>
+                  <label for="middleName">Nome do Meio</label>
                   <input
                     type="text"
                     id="middleName"
@@ -92,9 +75,8 @@ import { Address } from '../address/address.model';
                   >
                 </div>
 
-
                 <div class="form-group">
-                  <label for="familyName">Family Name *</label>
+                  <label for="familyName">Sobrenome *</label>
                   <input
                     type="text"
                     id="familyName"
@@ -103,11 +85,10 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('familyName')?.invalid && profileForm.get('familyName')?.touched"
                        class="error-message">
-                    Family name is required
+                    Sobrenome é obrigatório
                   </div>
                 </div>
               </div>
-
 
               <div class="form-row">
                 <div class="form-group">
@@ -121,13 +102,12 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('cpf')?.invalid && profileForm.get('cpf')?.touched"
                        class="error-message">
-                    CPF is required
+                    CPF é obrigatório
                   </div>
                 </div>
 
-
                 <div class="form-group">
-                  <label for="login">Username</label>
+                  <label for="login">Nome de Usuário</label>
                   <input
                     type="text"
                     id="login"
@@ -135,19 +115,16 @@ import { Address } from '../address/address.model';
                     readonly
                     class="readonly"
                   >
-                  <small>Username cannot be changed</small>
+                  <small>Nome de usuário não pode ser alterado</small>
                 </div>
               </div>
             </div>
 
-
-            <!-- ONG Form -->
             <div *ngIf="isOng()" class="form-section">
-              <h3>Organization Information</h3>
-             
+              <h3>Informações da Organização</h3>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="name">Organization Name *</label>
+                  <label for="name">Nome da Organização *</label>
                   <input
                     type="text"
                     id="name"
@@ -156,10 +133,9 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched"
                        class="error-message">
-                    Organization name is required
+                    Nome da organização é obrigatório
                   </div>
                 </div>
-
 
                 <div class="form-group">
                   <label for="cnpj">CNPJ *</label>
@@ -172,25 +148,23 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('cnpj')?.invalid && profileForm.get('cnpj')?.touched"
                        class="error-message">
-                    CNPJ is required
+                    CNPJ é obrigatório
                   </div>
                 </div>
               </div>
 
-
               <div class="form-row">
                 <div class="form-group">
-                  <label for="pix">PIX Key</label>
+                  <label for="pix">Chave PIX</label>
                   <input
                     type="text"
                     id="pix"
                     formControlName="pix"
-                    placeholder="Enter your PIX key for donations"
+                    placeholder="Digite sua chave PIX para doações"
                   >
-                  <small class="help-text">Optional: Add your PIX key to receive donations</small>
+                  <small class="help-text">Opcional: Adicione sua chave PIX para receber doações</small>
                 </div>
               </div>
-
 
               <div class="form-row">
                 <div class="form-group">
@@ -199,11 +173,10 @@ import { Address } from '../address/address.model';
                     type="url"
                     id="instagram"
                     formControlName="instagram"
-                    placeholder="https://instagram.com/yourorganization"
+                    placeholder="https://instagram.com/suaorganizacao"
                   >
-                  <small class="help-text">Optional: Link to your Instagram profile</small>
+                  <small class="help-text">Opcional: Link para seu perfil do Instagram</small>
                 </div>
-
 
                 <div class="form-group">
                   <label for="facebook">Facebook</label>
@@ -211,11 +184,10 @@ import { Address } from '../address/address.model';
                     type="url"
                     id="facebook"
                     formControlName="facebook"
-                    placeholder="https://facebook.com/yourorganization"
+                    placeholder="https://facebook.com/suaorganizacao"
                   >
-                  <small class="help-text">Optional: Link to your Facebook page</small>
+                  <small class="help-text">Opcional: Link para sua página do Facebook</small>
                 </div>
-
 
                 <div class="form-group">
                   <label for="tiktok">TikTok</label>
@@ -223,16 +195,15 @@ import { Address } from '../address/address.model';
                     type="url"
                     id="tiktok"
                     formControlName="tiktok"
-                    placeholder="https://tiktok.com/@yourorganization"
+                    placeholder="https://tiktok.com/@suaorganizacao"
                   >
-                  <small class="help-text">Optional: Link to your TikTok profile</small>
+                  <small class="help-text">Opcional: Link para seu perfil do TikTok</small>
                 </div>
               </div>
 
-
               <div class="form-row">
                 <div class="form-group">
-                  <label for="login">Username</label>
+                  <label for="login">Nome de Usuário</label>
                   <input
                     type="text"
                     id="login"
@@ -240,16 +211,13 @@ import { Address } from '../address/address.model';
                     readonly
                     class="readonly"
                   >
-                  <small>Username cannot be changed</small>
+                  <small>Nome de usuário não pode ser alterado</small>
                 </div>
               </div>
             </div>
 
-
-            <!-- Contact Information (Common) -->
             <div class="form-section">
-              <h3>Contact Information</h3>
-             
+              <h3>Informações de Contato</h3>
               <div class="form-row">
                 <div class="form-group">
                   <label for="email">Email *</label>
@@ -261,14 +229,13 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
                        class="error-message">
-                    <span *ngIf="profileForm.get('email')?.errors?.['required']">Email is required</span>
-                    <span *ngIf="profileForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                    <span *ngIf="profileForm.get('email')?.errors?.['required']">Email é obrigatório</span>
+                    <span *ngIf="profileForm.get('email')?.errors?.['email']">Por favor, digite um email válido</span>
                   </div>
                 </div>
 
-
                 <div class="form-group">
-                  <label for="phone">Phone *</label>
+                  <label for="phone">Telefone *</label>
                   <input
                     type="tel"
                     id="phone"
@@ -278,17 +245,14 @@ import { Address } from '../address/address.model';
                   >
                   <div *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched"
                        class="error-message">
-                    Phone is required
+                    Telefone é obrigatório
                   </div>
                 </div>
               </div>
             </div>
 
-
-            <!-- Address Information (Common) -->
             <div class="form-section">
-              <h3>Address Information</h3>
-             
+              <h3>Informações de Endereço</h3>
               <div formGroupName="address">
                 <div class="form-row">
                   <div class="form-group">
@@ -302,13 +266,12 @@ import { Address } from '../address/address.model';
                     >
                     <div *ngIf="profileForm.get('address.cep')?.invalid && profileForm.get('address.cep')?.touched"
                          class="error-message">
-                      CEP is required
+                      CEP é obrigatório
                     </div>
                   </div>
 
-
                   <div class="form-group">
-                    <label for="state">State *</label>
+                    <label for="state">Estado *</label>
                     <input
                       type="text"
                       id="state"
@@ -317,13 +280,12 @@ import { Address } from '../address/address.model';
                     >
                     <div *ngIf="profileForm.get('address.state')?.invalid && profileForm.get('address.state')?.touched"
                          class="error-message">
-                      State is required
+                      Estado é obrigatório
                     </div>
                   </div>
 
-
                   <div class="form-group">
-                    <label for="city">City *</label>
+                    <label for="city">Cidade *</label>
                     <input
                       type="text"
                       id="city"
@@ -332,15 +294,14 @@ import { Address } from '../address/address.model';
                     >
                     <div *ngIf="profileForm.get('address.city')?.invalid && profileForm.get('address.city')?.touched"
                          class="error-message">
-                      City is required
+                      Cidade é obrigatória
                     </div>
                   </div>
                 </div>
 
-
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="neighborhood">Neighborhood *</label>
+                    <label for="neighborhood">Bairro *</label>
                     <input
                       type="text"
                       id="neighborhood"
@@ -349,13 +310,12 @@ import { Address } from '../address/address.model';
                     >
                     <div *ngIf="profileForm.get('address.neighborhood')?.invalid && profileForm.get('address.neighborhood')?.touched"
                          class="error-message">
-                      Neighborhood is required
+                      Bairro é obrigatório
                     </div>
                   </div>
 
-
                   <div class="form-group flex-grow">
-                    <label for="street">Street *</label>
+                    <label for="street">Rua *</label>
                     <input
                       type="text"
                       id="street"
@@ -364,13 +324,12 @@ import { Address } from '../address/address.model';
                     >
                     <div *ngIf="profileForm.get('address.street')?.invalid && profileForm.get('address.street')?.touched"
                          class="error-message">
-                      Street is required
+                      Rua é obrigatória
                     </div>
                   </div>
 
-
                   <div class="form-group small">
-                    <label for="number">Number *</label>
+                    <label for="number">Número *</label>
                     <input
                       type="number"
                       id="number"
@@ -379,50 +338,45 @@ import { Address } from '../address/address.model';
                     >
                     <div *ngIf="profileForm.get('address.number')?.invalid && profileForm.get('address.number')?.touched"
                          class="error-message">
-                      Number is required
+                      Número é obrigatório
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-
-            <!-- Form Actions -->
             <div class="form-actions">
-              <!-- Debug info (temporary) -->
               <div style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; font-size: 0.875rem;">
-                <strong>Debug Info:</strong><br>
-                Form Valid: {{ profileForm.valid ? '✅' : '❌' }}<br>
-                Is Updating: {{ isUpdating ? '⏳' : '✅' }}<br>
-                Button Should Be: {{ (profileForm.invalid || isUpdating) ? 'DISABLED' : 'ENABLED' }}
+                <strong>Informações de Debug:</strong><br>
+                Formulário Válido: {{ profileForm.valid ? '✅' : '❌' }}<br>
+                Está Atualizando: {{ isUpdating ? '⏳' : '✅' }}<br>
+                Botão Deveria Estar: {{ (profileForm.invalid || isUpdating) ? 'DESABILITADO' : 'HABILITADO' }}
               </div>
              
               <button
                 type="submit"
                 [disabled]="profileForm.invalid || isUpdating"
                 class="save-btn">
-                {{ isUpdating ? 'Saving...' : 'Save Changes' }}
+                {{ isUpdating ? 'Salvando...' : 'Salvar Alterações' }}
               </button>
              
               <button
                 type="button"
                 (click)="cancelAccountUpdate()"
                 class="cancel-btn">
-                Cancel Changes
+                Cancelar Alterações
               </button>
             </div>
           </form>
         </div>
 
-
-        <!-- Password Tab -->
         <div *ngIf="activeTab === 'password'" class="tab-content">
           <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
             <div class="form-section">
-              <h3>Change Password</h3>
+              <h3>Alterar Senha</h3>
              
               <div class="form-group">
-                <label for="oldPassword">Current Password *</label>
+                <label for="oldPassword">Senha Atual *</label>
                 <input
                   type="password"
                   id="oldPassword"
@@ -431,13 +385,12 @@ import { Address } from '../address/address.model';
                 >
                 <div *ngIf="passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched"
                      class="error-message">
-                  Current password is required
+                  Senha atual é obrigatória
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="newPassword">New Password *</label>
+                <label for="newPassword">Nova Senha *</label>
                 <input
                   type="password"
                   id="newPassword"
@@ -446,14 +399,13 @@ import { Address } from '../address/address.model';
                 >
                 <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
                      class="error-message">
-                  <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">New password is required</span>
-                  <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Password must be at least 6 characters</span>
+                  <span *ngIf="passwordForm.get('newPassword')?.errors?.['required']">Nova senha é obrigatória</span>
+                  <span *ngIf="passwordForm.get('newPassword')?.errors?.['minlength']">Senha deve ter pelo menos 6 caracteres</span>
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="confirmPassword">Confirm New Password *</label>
+                <label for="confirmPassword">Confirmar Nova Senha *</label>
                 <input
                   type="password"
                   id="confirmPassword"
@@ -462,37 +414,33 @@ import { Address } from '../address/address.model';
                 >
                 <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
                      class="error-message">
-                  <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
-                  <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not match</span>
+                  <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['required']">Por favor, confirme sua senha</span>
+                  <span *ngIf="passwordForm.get('confirmPassword')?.errors?.['passwordMismatch']">Senhas não coincidem</span>
                 </div>
               </div>
             </div>
-
 
             <div class="form-actions">
               <button
                 type="submit"
                 [disabled]="passwordForm.invalid || isChangingPassword"
                 class="save-btn">
-                {{ isChangingPassword ? 'Changing...' : 'Change Password' }}
+                {{ isChangingPassword ? 'Alterando...' : 'Alterar Senha' }}
               </button>
              
               <button
                 type="button"
                 (click)="resetPasswordForm()"
                 class="cancel-btn">
-                Cancel
+                Cancelar
               </button>
             </div>
           </form>
         </div>
 
-
-        <!-- Success/Error Messages -->
         <div *ngIf="successMessage" class="success-message">
           {{ successMessage }}
         </div>
-
 
         <div *ngIf="errorMessage" class="error-message">
           {{ errorMessage }}
@@ -514,7 +462,6 @@ export class MyAccountComponent implements OnInit {
   errorMessage = '';
   activeTab: 'profile' | 'password' = 'profile';
 
-
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
@@ -524,29 +471,24 @@ export class MyAccountComponent implements OnInit {
     this.passwordForm = this.createPasswordForm();
   }
 
-
   ngOnInit(): void {
     this.loadUserData();
   }
 
-
   private createProfileForm(): FormGroup {
     return this.fb.group({
-      // Person fields
       firstName: [''],
       middleName: [''],
       familyName: [''],
       cpf: [''],
      
-      // ONG fields
       name: [''],
       cnpj: [''],
-      pix: [''], // PIX key for donations
-      instagram: [''], // Instagram profile URL
-      facebook: [''], // Facebook profile URL
-      tiktok: [''], // TikTok profile URL
+      pix: [''],
+      instagram: [''],
+      facebook: [''],
+      tiktok: [''],
      
-      // Common fields
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       address: this.fb.group({
@@ -560,7 +502,6 @@ export class MyAccountComponent implements OnInit {
     });
   }
 
-
   private createPasswordForm(): FormGroup {
     return this.fb.group({
       oldPassword: ['', Validators.required],
@@ -568,7 +509,6 @@ export class MyAccountComponent implements OnInit {
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
-
 
   private passwordMatchValidator(form: FormGroup) {
     const newPassword = form.get('newPassword');
@@ -581,7 +521,6 @@ export class MyAccountComponent implements OnInit {
    
     return null;
   }
-
 
   loadUserData(): void {
     this.loading = true;
@@ -596,24 +535,21 @@ export class MyAccountComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          this.error = error.message || 'Failed to load account information';
+          this.error = error.message || 'Falha ao carregar informações da conta';
           this.loading = false;
         }
       });
   }
 
-
   private populateForm(userInfo: UserInfo): void {
     if (userInfo.userType === 'PERSON') {
       const person = userInfo.user as Person;
      
-      // Clear ONG-specific validators and update validity
       this.profileForm.get('name')?.clearValidators();
       this.profileForm.get('name')?.updateValueAndValidity();
       this.profileForm.get('cnpj')?.clearValidators();
       this.profileForm.get('cnpj')?.updateValueAndValidity();
      
-      // Set person-specific validators and update validity
       this.profileForm.get('firstName')?.setValidators([Validators.required]);
       this.profileForm.get('firstName')?.updateValueAndValidity();
       this.profileForm.get('familyName')?.setValidators([Validators.required]);
@@ -633,15 +569,13 @@ export class MyAccountComponent implements OnInit {
     } else {
       const ong = userInfo.user as Ong;
      
-      // Clear person-specific validators and update validity
       this.profileForm.get('firstName')?.clearValidators();
       this.profileForm.get('firstName')?.updateValueAndValidity();
       this.profileForm.get('familyName')?.clearValidators();
       this.profileForm.get('familyName')?.updateValueAndValidity();
       this.profileForm.get('cpf')?.clearValidators();
       this.profileForm.get('cpf')?.updateValueAndValidity();
-     
-      // Set ONG-specific validators and update validity
+
       this.profileForm.get('name')?.setValidators([Validators.required]);
       this.profileForm.get('name')?.updateValueAndValidity();
       this.profileForm.get('cnpj')?.setValidators([Validators.required]);
@@ -650,10 +584,10 @@ export class MyAccountComponent implements OnInit {
       this.profileForm.patchValue({
         name: ong.name,
         cnpj: ong.cnpj,
-        pix: ong.pix || '', // Include PIX field
-        instagram: ong.instagram || '', // Include Instagram field
-        facebook: ong.facebook || '', // Include Facebook field
-        tiktok: ong.tiktok || '', // Include TikTok field
+        pix: ong.pix || '',
+        instagram: ong.instagram || '',
+        facebook: ong.facebook || '',
+        tiktok: ong.tiktok || '',
         email: ong.email,
         phone: ong.phone,
         address: ong.address
@@ -661,27 +595,13 @@ export class MyAccountComponent implements OnInit {
     }
    
     this.profileForm.updateValueAndValidity();
-   
-    // Debug: Log form status for troubleshooting
-    console.log('🔍 Form populated for', userInfo.userType);
-    console.log('📊 Form valid:', this.profileForm.valid);
-    console.log('❌ Form errors:', this.profileForm.errors);
-    console.log('🔧 Form controls status:');
-    Object.keys(this.profileForm.controls).forEach(key => {
-      const control = this.profileForm.get(key);
-      if (control?.invalid) {
-        console.log(`  - ${key}: invalid (${JSON.stringify(control.errors)})`);
-      }
-    });
   }
-
 
   updateProfile(): void {
     if (this.profileForm.valid && this.userInfo) {
       this.isUpdating = true;
       this.successMessage = '';
       this.errorMessage = '';
-
 
       if (this.userInfo.userType === 'PERSON') {
         const person = this.userInfo.user as Person;
@@ -695,25 +615,23 @@ export class MyAccountComponent implements OnInit {
           address: this.profileForm.value.address
         };
 
-
         if (!person.id) {
-          this.errorMessage = 'Person ID not found';
+          this.errorMessage = 'ID da pessoa não encontrado';
           this.isUpdating = false;
           return;
         }
-
 
         this.accountService.updatePerson(person.id, updateData)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: (updatedPerson) => {
               this.userInfo!.user = updatedPerson as Person;
-              this.successMessage = 'Profile updated successfully!';
+              this.successMessage = 'Perfil atualizado com sucesso!';
               this.isUpdating = false;
               setTimeout(() => this.successMessage = '', 3000);
             },
             error: (error) => {
-              this.errorMessage = error.error?.message || 'Failed to update profile';
+              this.errorMessage = error.error?.message || 'Falha ao atualizar perfil';
               this.isUpdating = false;
             }
           });
@@ -722,34 +640,32 @@ export class MyAccountComponent implements OnInit {
         const updateData: OngUpdateRequest = {
           name: this.profileForm.value.name,
           cnpj: this.profileForm.value.cnpj,
-          pix: this.profileForm.value.pix, // Include PIX field
-          instagram: this.profileForm.value.instagram, // Include Instagram field
-          facebook: this.profileForm.value.facebook, // Include Facebook field
-          tiktok: this.profileForm.value.tiktok, // Include TikTok field
+          pix: this.profileForm.value.pix,
+          instagram: this.profileForm.value.instagram,
+          facebook: this.profileForm.value.facebook,
+          tiktok: this.profileForm.value.tiktok,
           email: this.profileForm.value.email,
           phone: this.profileForm.value.phone,
           address: this.profileForm.value.address
         };
 
-
         if (!ong.id) {
-          this.errorMessage = 'ONG ID not found';
+          this.errorMessage = 'ID da ONG não encontrado';
           this.isUpdating = false;
           return;
         }
-
 
         this.accountService.updateOng(ong.id, updateData)
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe({
             next: (updatedOng) => {
               this.userInfo!.user = updatedOng as Ong;
-              this.successMessage = 'Profile updated successfully!';
+              this.successMessage = 'Perfil atualizado com sucesso!';
               this.isUpdating = false;
               setTimeout(() => this.successMessage = '', 3000);
             },
             error: (error) => {
-              this.errorMessage = error.error?.message || 'Failed to update profile';
+              this.errorMessage = error.error?.message || 'Falha ao atualizar perfil';
               this.isUpdating = false;
             }
           });
@@ -757,34 +673,30 @@ export class MyAccountComponent implements OnInit {
     }
   }
 
-
   changePassword(): void {
     if (this.passwordForm.valid) {
       this.isChangingPassword = true;
       this.successMessage = '';
       this.errorMessage = '';
 
-
       const { oldPassword, newPassword } = this.passwordForm.value;
-
 
       this.accountService.changePassword(oldPassword, newPassword)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            this.successMessage = 'Password changed successfully!';
+            this.successMessage = 'Senha alterada com sucesso!';
             this.resetPasswordForm();
             this.isChangingPassword = false;
             setTimeout(() => this.successMessage = '', 3000);
           },
           error: (error) => {
-            this.errorMessage = error.error?.message || 'Failed to change password';
+            this.errorMessage = error.error?.message || 'Falha ao alterar senha';
             this.isChangingPassword = false;
           }
         });
     }
   }
-
 
   resetForm(): void {
     if (this.userInfo) {
@@ -794,26 +706,21 @@ export class MyAccountComponent implements OnInit {
     }
   }
 
-
   resetPasswordForm(): void {
     this.passwordForm.reset();
     this.errorMessage = '';
     this.successMessage = '';
   }
 
-
   cancelAccountUpdate(): void {
     this.resetForm();
   }
 
-
-  // Helper methods for template
   getPersonLogin(): string {
     return this.userInfo && this.userInfo.userType === 'PERSON'
       ? (this.userInfo.user as Person).login
       : '';
   }
-
 
   getOngLogin(): string {
     return this.userInfo && this.userInfo.userType === 'ONG'
@@ -821,25 +728,18 @@ export class MyAccountComponent implements OnInit {
       : '';
   }
 
-
-  // Type guard helpers for cleaner template logic
   isPerson(): boolean {
     return this.userInfo?.userType === 'PERSON';
   }
-
 
   isOng(): boolean {
     return this.userInfo?.userType === 'ONG';
   }
 
-
-  // Get current user as Person (with type safety)
   getPersonData(): Person | null {
     return this.isPerson() ? (this.userInfo!.user as Person) : null;
   }
 
-
-  // Get current user as ONG (with type safety)
   getOngData(): Ong | null {
     return this.isOng() ? (this.userInfo!.user as Ong) : null;
   }

@@ -6,46 +6,39 @@ import { AdoptionService } from '../adoption/adoption.service';
 import { Animal } from './animal.model';
 
 @Component({
-  selector: 'app-animal-detail',
+  selector: 'app-animal',
   standalone: true,
   imports: [CommonModule],
   template: `
     <div class="animal-detail-container">
-      <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading animal details...</p>
+        <p>Carregando detalhes do animal...</p>
       </div>
 
-      <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Ops! Nossos animais estão trabalhando para que tudo volte ao normal</h3>
         <p>{{ error }}</p>
-        <button (click)="loadAnimal()" class="retry-btn">Try Again</button>
+        <button (click)="loadAnimal()" class="retry-btn">Tentar Novamente</button>
       </div>
 
-      <!-- Animal Details -->
       <div *ngIf="animal && !loading && !error" class="animal-detail">
-        <!-- Back Button -->
         <button (click)="goBack()" class="back-btn">
-          ← Back to Animals
+          ← Voltar aos Animais
         </button>
 
         <div class="animal-content">
-          <!-- Animal Image -->
           <div class="animal-image-section">
-            <img 
-              [src]="getImageSrc(animal.photo)" 
+            <img
+              [src]="getImageSrc(animal.photo)"
               [alt]="animal.name"
               (error)="onImageError($event)"
               class="animal-main-image">
-            
             <div class="status-badge" [ngClass]="'status-' + (animal.adopted ? 'adopted' : 'available')">
-              {{ animal.adopted ? 'Adopted' : 'Available' }}
+              {{ animal.adopted ? 'Adotado' : 'Disponível' }}
             </div>
           </div>
 
-          <!-- Animal Information -->
           <div class="animal-info-section">
             <div class="animal-header">
               <h1 class="animal-name">{{ animal.name }}</h1>
@@ -54,45 +47,45 @@ import { Animal } from './animal.model';
 
             <div class="animal-details">
               <div class="detail-group">
-                <h3>Basic Information</h3>
+                <h3>Informações Básicas</h3>
                 <div class="detail-grid">
                   <div class="detail-item">
-                    <span class="label">Breed:</span>
-                    <span class="value">{{ animal.breed || 'Mixed' }}</span>
+                    <span class="label">Raça:</span>
+                    <span class="value">{{ animal.breed || 'Sem Raça Definida' }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">Age:</span>
-                    <span class="value">{{ animal.age }} {{ animal.age === 1 ? 'year' : 'years' }} old</span>
+                    <span class="label">Idade:</span>
+                    <span class="value">{{ animal.age }} {{ animal.age === 1 ? 'ano' : 'anos' }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">Gender:</span>
-                    <span class="value">{{ animal.gender === 'M' ? 'Male' : 'Female' }}</span>
+                    <span class="label">Sexo:</span>
+                    <span class="value">{{ animal.gender === 'M' ? 'Macho' : 'Fêmea' }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">Weight:</span>
+                    <span class="label">Peso:</span>
                     <span class="value">{{ animal.weight }} kg</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">Fur:</span>
+                    <span class="label">Pelagem:</span>
                     <span class="value">{{ animal.fur }}</span>
                   </div>
                   <div class="detail-item">
-                    <span class="label">Castrated:</span>
-                    <span class="value">{{ animal.castrated ? 'Yes' : 'No' }}</span>
+                    <span class="label">Castrado:</span>
+                    <span class="value">{{ animal.castrated ? 'Sim' : 'Não' }}</span>
                   </div>
                 </div>
               </div>
 
               <div class="detail-group" *ngIf="animal.obs">
-                <h3>About {{ animal.name }}</h3>
+                <h3>Sobre {{ animal.name }}</h3>
                 <p class="animal-description">{{ animal.obs }}</p>
               </div>
 
               <div class="detail-group" *ngIf="animal.ong">
-                <h3>Contact Information</h3>
+                <h3>Informações de Contato</h3>
                 <div class="contact-info">
                   <div class="contact-item">
-                    <span class="label">Organization:</span>
+                    <span class="label">Organização:</span>
                     <span class="value">{{ animal.ong.name }}</span>
                   </div>
                   <div class="contact-item" *ngIf="animal.ong.email">
@@ -102,13 +95,13 @@ import { Animal } from './animal.model';
                     </span>
                   </div>
                   <div class="contact-item" *ngIf="animal.ong.phone">
-                    <span class="label">Phone:</span>
+                    <span class="label">Telefone:</span>
                     <span class="value">
                       <a [href]="'tel:' + animal.ong.phone">{{ animal.ong.phone }}</a>
                     </span>
                   </div>
                   <div class="contact-item" *ngIf="animal.ong.address">
-                    <span class="label">Address:</span>
+                    <span class="label">Endereço:</span>
                     <span class="value">
                       {{ animal.ong.address.street }}, {{ animal.ong.address.number }}<br>
                       {{ animal.ong.address.neighborhood }}, {{ animal.ong.address.city }} - {{ animal.ong.address.state }}<br>
@@ -119,19 +112,18 @@ import { Animal } from './animal.model';
               </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="action-buttons" *ngIf="!animal.adopted">
               <button class="adopt-btn primary" (click)="showInterest()">
-                ❤️ I'm Interested in {{ animal.name }}
+                ❤️ Tenho Interesse em {{ animal.name }}
               </button>
               <button class="share-btn" (click)="shareAnimal()">
-                📤 Share
+                📤 Compartilhar
               </button>
             </div>
 
             <div class="adopted-message" *ngIf="animal.adopted">
-              <p>{{ animal.name }} has already found a loving home! 🎉</p>
-              <button (click)="goBack()" class="back-btn-alt">Browse Other Animals</button>
+              <p>{{ animal.name }} já encontrou um lar cheio de amor! 🎉</p>
+              <button (click)="goBack()" class="back-btn-alt">Navegar por Outros Animais</button>
             </div>
           </div>
         </div>
@@ -422,15 +414,15 @@ export class AnimalComponent implements OnInit {
     if (id) {
       this.loadAnimal(id);
     } else {
-      this.error = 'Invalid animal ID';
+      this.error = 'ID do animal inválido';
     }
   }
 
   loadAnimal(id?: string): void {
     const animalId = id;
-    
+   
     if (!animalId) {
-      this.error = 'Invalid animal ID';
+      this.error = 'ID do animal inválido';
       return;
     }
 
@@ -443,8 +435,7 @@ export class AnimalComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading animal:', error);
-        this.error = error.message || 'Failed to load animal details.';
+        this.error = error.message || 'Falha ao carregar detalhes do animal.';
         this.loading = false;
       }
     });
@@ -452,45 +443,46 @@ export class AnimalComponent implements OnInit {
 
   getImageSrc(photo: string | undefined): string {
     if (!photo) {
-      return '/assets/default-animal.jpeg';
+      return '/assets/default-animal.jpg';
     }
-    
+   
     if (photo.startsWith('data:')) {
       return photo;
     }
-    
+   
     if (photo.startsWith('http://') || photo.startsWith('https://')) {
       return photo;
     }
-    
+   
     if (photo.match(/^[A-Za-z0-9+/]/)) {
       return `data:image/jpeg;base64,${photo}`;
     }
-    
-    return '/assets/default-animal.jpeg';
+   
+    return '/assets/default-animal.jpg';
   }
 
-  onImageError(event: any): void {
-    event.target.src = '/assets/default-animal.jpeg';
-    event.target.onerror = null;
+  onImageError(event: Event): void {
+    const target = event.target as HTMLImageElement;
+    target.src = '/assets/default-animal.jpg';
+    target.onerror = null;
   }
 
   goBack(): void {
-    this.router.navigate(['/adoption']);
+    this.router.navigate(['/adopt']);
   }
 
   showInterest(): void {
     if (this.animal) {
-      const message = `Hi! I'm interested in adopting ${this.animal.name}. Could you please provide more information?`;
+      const message = `Olá! Tenho interesse em adotar ${this.animal.name}. Poderiam fornecer mais informações?`;
       const email = this.animal.ong?.email;
       const phone = this.animal.ong?.phone;
-      
+     
       if (email) {
-        window.open(`mailto:${email}?subject=Interest in ${this.animal.name}&body=${encodeURIComponent(message)}`);
+        window.open(`mailto:${email}?subject=Interesse em ${this.animal.name}&body=${encodeURIComponent(message)}`);
       } else if (phone) {
-        alert(`Please contact us at: ${phone}\n\nMessage: ${message}`);
+        alert(`Por favor, entre em contato conosco: ${phone}\n\nMensagem: ${message}`);
       } else {
-        alert(`Thank you for your interest in ${this.animal.name}! Please contact the organization for more information.`);
+        alert(`Obrigado pelo seu interesse em ${this.animal.name}! Por favor, entre em contato com a organização para mais informações.`);
       }
     }
   }
@@ -498,14 +490,13 @@ export class AnimalComponent implements OnInit {
   shareAnimal(): void {
     if (this.animal && navigator.share) {
       navigator.share({
-        title: `Meet ${this.animal.name}`,
-        text: `Check out this adorable ${this.animal.animalType.toLowerCase()} looking for a home!`,
+        title: `Conheça ${this.animal.name}`,
+        text: `Confira este adorável ${this.animal.animalType.toLowerCase()} procurando um lar!`,
         url: window.location.href
       });
     } else {
-      // Fallback for browsers that don't support Web Share API
       navigator.clipboard.writeText(window.location.href).then(() => {
-        alert('Link copied to clipboard!');
+        alert('Link copiado para a área de transferência!');
       });
     }
   }

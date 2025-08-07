@@ -2,20 +2,20 @@ import { Ong } from "../ong/ong.model";
 import { Person } from "../person/person.model";
 
 export interface Animal {
-  id: string; // UUID as string, optional if hidden in some contexts
+  id: string;
   name: string;
-  animalType: string; // match your AnimalTypeEnum
+  animalType: string;
   age: number;
-  gender: string; // match your AnimalGenderEnum
+  gender: string;
   breed: string;
   color: string;
-  size: number; // assuming size is stored as an int (e.g., 1=Small, 2=Medium)
+  size: number;
   weight: number;
-  fur: string; // match your FurSizeEnum
+  fur: string;
   obs?: string;
   castrated: boolean;
   adopted: boolean;
-  photo?: string; // backend sends byte[] — will need to be converted to base64 on the backend
+  photo?: string;
   ong?: Ong;
   person?: Person;
 }

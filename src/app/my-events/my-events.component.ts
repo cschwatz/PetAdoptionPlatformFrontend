@@ -7,7 +7,6 @@ import { Event as EventModel, EventTypeEnum } from '../ong-events/event.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-my-events',
   standalone: true,
@@ -15,48 +14,39 @@ import { AuthService } from '../authentication/auth.service';
   template: `
     <div class="my-events-container">
       <header class="my-events-header">
-        <h1>📅 My Events</h1>
-        <p>Manage your organization's events and activities</p>
+        <h1>📅 Meus Eventos</h1>
+        <p>Gerencie os eventos e atividades da sua organização</p>
         <button class="add-event-btn" (click)="addNewEvent()">
-          ➕ Add New Event
+          ➕ Adicionar Novo Evento
         </button>
       </header>
 
-
-      <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading your events...</p>
+        <p>Carregando seus eventos...</p>
       </div>
 
-
-      <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Ops! Alguma patinha se enroscou nos cabos</h3>
         <p>{{ error }}</p>
-        <button (click)="loadMyEvents()" class="retry-btn">Try Again</button>
+        <button (click)="loadMyEvents()" class="retry-btn">Tentar Novamente</button>
       </div>
 
-
-      <!-- Events Grid -->
       <div *ngIf="!loading && !error" class="events-section">
-        <!-- Controls -->
         <div class="controls">
           <div class="events-count">
-            <span>{{ totalEvents }} events organized by you</span>
+            <span>{{ totalEvents }} eventos organizados por você</span>
           </div>
           <div class="page-size-selector">
-            <label for="pageSize">Show: </label>
+            <label for="pageSize">Mostrar: </label>
             <select id="pageSize" [value]="pageSize" (change)="onPageSizeChange($event)" class="page-size-select">
-              <option value="5">5 per page</option>
-              <option value="10">10 per page</option>
-              <option value="20">20 per page</option>
+              <option value="5">5 por página</option>
+              <option value="10">10 por página</option>
+              <option value="20">20 por página</option>
             </select>
           </div>
         </div>
 
-
-        <!-- Events Cards Grid -->
         <div class="events-grid" *ngIf="paginatedEvents.length > 0">
           <div class="event-card" *ngFor="let event of paginatedEvents; trackBy: trackByEventId">
            
@@ -78,64 +68,58 @@ import { AuthService } from '../authentication/auth.service';
              
               <div class="event-details">
                 <div class="detail-row">
-                  <span class="label">Start:</span>
+                  <span class="label">Início:</span>
                   <span class="value">{{ formatDateTime(event.startDate) }}</span>
                 </div>
                 <div class="detail-row">
-                  <span class="label">End:</span>
+                  <span class="label">Fim:</span>
                   <span class="value">{{ formatDateTime(event.endDate) }}</span>
                 </div>
               </div>
 
-
               <p class="event-description" *ngIf="event.obs">{{ event.obs.length > 100 ? event.obs.substring(0, 100) + '...' : event.obs }}</p>
-
 
               <div class="card-footer">
                 <button class="edit-btn" (click)="editEvent(event)">
-                  ✏️ Edit
+                  ✏️ Editar
                 </button>
                 <button class="view-btn" (click)="viewEventDetails(event)">
-                  👁️ View
+                  Ver
                 </button>
                 <button class="delete-btn" (click)="deleteEvent(event)">
-                  🗑️ Delete
+                  🗑️ Excluir
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-
-        <!-- Empty State -->
         <div *ngIf="paginatedEvents.length === 0" class="empty-state">
           <div class="empty-icon">📅</div>
-          <h3>No Events Yet</h3>
-          <p>You haven't created any events yet. Create your first event to get started!</p>
+          <h3>Nenhum Evento Ainda</h3>
+          <p>Você ainda não criou nenhum evento. Crie seu primeiro evento para começar!</p>
           <button class="add-event-btn-large" (click)="addNewEvent()">
-            ➕ Create Your First Event
+            ➕ Criar Seu Primeiro Evento
           </button>
         </div>
 
-
-        <!-- Pagination -->
         <div class="pagination" *ngIf="totalPages > 1">
           <button
             class="pagination-btn"
             (click)="previousPage()"
             [disabled]="currentPage === 1">
-            ← Previous
+            ← Anterior
           </button>
          
           <div class="pagination-info">
-            <span>Page {{ currentPage }} of {{ totalPages }}</span>
+            <span>Página {{ currentPage }} de {{ totalPages }}</span>
           </div>
          
           <button
             class="pagination-btn"
             (click)="nextPage()"
             [disabled]="currentPage === totalPages">
-            Next →
+            Próxima →
           </button>
         </div>
       </div>
@@ -149,8 +133,6 @@ import { AuthService } from '../authentication/auth.service';
       font-family: 'Arial', sans-serif;
     }
 
-
-    /* Header Styles */
     .my-events-header {
       text-align: center;
       margin-bottom: 40px;
@@ -161,20 +143,17 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
     }
 
-
     .my-events-header h1 {
       font-size: 2.5em;
       margin: 0 0 10px 0;
       font-weight: 700;
     }
 
-
     .my-events-header p {
       font-size: 1.2em;
       margin: 0 0 30px 0;
       opacity: 0.9;
     }
-
 
     .add-event-btn, .add-event-btn-large {
       background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
@@ -189,25 +168,20 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
     }
 
-
     .add-event-btn:hover, .add-event-btn-large:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
     }
-
 
     .add-event-btn-large {
       padding: 15px 30px;
       font-size: 1.2em;
     }
 
-
-    /* Loading Styles */
     .loading-container {
       text-align: center;
       padding: 60px 20px;
     }
-
 
     .loading-spinner {
       width: 50px;
@@ -219,14 +193,11 @@ import { AuthService } from '../authentication/auth.service';
       margin: 0 auto 20px;
     }
 
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-
-    /* Error Styles */
     .error-container {
       text-align: center;
       padding: 60px 20px;
@@ -236,12 +207,10 @@ import { AuthService } from '../authentication/auth.service';
       margin: 20px 0;
     }
 
-
     .error-container h3 {
       color: #e53e3e;
       margin-bottom: 10px;
     }
-
 
     .retry-btn {
       background: #e53e3e;
@@ -253,8 +222,6 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 15px;
     }
 
-
-    /* Controls Styles */
     .controls {
       display: flex;
       justify-content: space-between;
@@ -266,20 +233,17 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
-
     .events-count {
       font-size: 1.1em;
       font-weight: 600;
       color: #4a5568;
     }
 
-
     .page-size-selector {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
 
     .page-size-select {
       padding: 8px 12px;
@@ -288,15 +252,12 @@ import { AuthService } from '../authentication/auth.service';
       font-size: 14px;
     }
 
-
-    /* Events Grid */
     .events-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: 25px;
       margin-bottom: 40px;
     }
-
 
     .event-card {
       background: white;
@@ -307,12 +268,10 @@ import { AuthService } from '../authentication/auth.service';
       border: 1px solid #e2e8f0;
     }
 
-
     .event-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     }
-
 
     .card-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -323,18 +282,15 @@ import { AuthService } from '../authentication/auth.service';
       gap: 15px;
     }
 
-
     .event-icon {
       font-size: 2em;
     }
-
 
     .event-type {
       flex: 1;
       font-weight: 600;
       font-size: 1.1em;
     }
-
 
     .status-badge {
       padding: 6px 12px;
@@ -344,34 +300,28 @@ import { AuthService } from '../authentication/auth.service';
       text-transform: uppercase;
     }
 
-
     .status-upcoming {
       background: #48bb78;
       color: white;
     }
-
 
     .status-ongoing {
       background: #ed8936;
       color: white;
     }
 
-
     .status-past {
       background: #a0aec0;
       color: white;
     }
 
-
     .card-content {
       padding: 25px;
     }
 
-
     .event-header {
       margin-bottom: 20px;
     }
-
 
     .event-name {
       font-size: 1.4em;
@@ -380,18 +330,15 @@ import { AuthService } from '../authentication/auth.service';
       margin: 0 0 10px 0;
     }
 
-
     .event-location {
       color: #718096;
       margin: 0;
       font-size: 0.95em;
     }
 
-
     .event-details {
       margin-bottom: 15px;
     }
-
 
     .detail-row {
       display: flex;
@@ -400,17 +347,14 @@ import { AuthService } from '../authentication/auth.service';
       font-size: 0.95em;
     }
 
-
     .detail-row .label {
       font-weight: 600;
       color: #4a5568;
     }
 
-
     .detail-row .value {
       color: #718096;
     }
-
 
     .event-description {
       color: #718096;
@@ -419,12 +363,10 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 20px;
     }
 
-
     .card-footer {
       display: flex;
       gap: 10px;
     }
-
 
     .edit-btn, .view-btn, .delete-btn {
       flex: 1;
@@ -437,41 +379,33 @@ import { AuthService } from '../authentication/auth.service';
       font-size: 0.9em;
     }
 
-
     .edit-btn {
       background: #4299e1;
       color: white;
     }
 
-
     .edit-btn:hover {
       background: #3182ce;
     }
-
 
     .view-btn {
       background: #48bb78;
       color: white;
     }
 
-
     .view-btn:hover {
       background: #38a169;
     }
-
 
     .delete-btn {
       background: #e53e3e;
       color: white;
     }
 
-
     .delete-btn:hover {
       background: #c53030;
     }
 
-
-    /* Empty State */
     .empty-state {
       text-align: center;
       padding: 80px 20px;
@@ -480,12 +414,10 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
-
     .empty-icon {
       font-size: 4em;
       margin-bottom: 20px;
     }
-
 
     .empty-state h3 {
       font-size: 1.8em;
@@ -493,15 +425,12 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 15px;
     }
 
-
     .empty-state p {
       color: #718096;
       font-size: 1.1em;
       margin-bottom: 30px;
     }
 
-
-    /* Pagination */
     .pagination {
       display: flex;
       justify-content: center;
@@ -509,7 +438,6 @@ import { AuthService } from '../authentication/auth.service';
       gap: 20px;
       margin-top: 40px;
     }
-
 
     .pagination-btn {
       background: #667eea;
@@ -522,30 +450,24 @@ import { AuthService } from '../authentication/auth.service';
       transition: all 0.3s ease;
     }
 
-
     .pagination-btn:disabled {
       background: #a0aec0;
       cursor: not-allowed;
     }
 
-
     .pagination-btn:not(:disabled):hover {
       background: #5a67d8;
     }
-
 
     .pagination-info {
       font-weight: 600;
       color: #4a5568;
     }
 
-
-    /* Responsive Design */
     @media (max-width: 768px) {
       .events-grid {
         grid-template-columns: 1fr;
       }
-
 
       .controls {
         flex-direction: column;
@@ -553,11 +475,9 @@ import { AuthService } from '../authentication/auth.service';
         text-align: center;
       }
 
-
       .my-events-header h1 {
         font-size: 2em;
       }
-
 
       .card-footer {
         flex-direction: column;
@@ -571,12 +491,10 @@ export class MyEventsComponent implements OnInit {
   loading = false;
   error: string | null = null;
  
-  // Pagination
   currentPage = 1;
   pageSize = 5;
   totalEvents = 0;
   totalPages = 0;
-
 
   constructor(
     private myEventsService: MyEventsService,
@@ -586,55 +504,41 @@ export class MyEventsComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-
   ngOnInit(): void {
-    console.log('🚀 MyEventsComponent ngOnInit called');
-   
-    // Check if user is an ONG
     if (!this.authService.isOng()) {
-      this.error = 'You must be logged in as an ONG to manage events.';
+      this.error = 'Você deve estar logado como uma ONG para gerenciar eventos.';
       return;
     }
-
 
     this.loadMyEvents();
   }
 
-
   loadMyEvents(): void {
-    console.log('📡 loadMyEvents called');
-   
     if (this.loading) {
-      console.log('⚠️ Already loading, skipping request');
       return;
     }
 
-
     this.loading = true;
     this.error = null;
-
 
     this.myEventsService.getMyEvents()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (events) => {
-          console.log('✅ My events loaded:', events.length);
-          this.events = events;
-          this.totalEvents = events.length;
+          this.events = events as EventModel[];
+          this.totalEvents = (events as EventModel[]).length;
           this.calculatePagination();
           this.updatePaginatedEvents();
           this.loading = false;
           this.cdr.detectChanges();
         },
         error: (error: any) => {
-          console.error('❌ Error loading my events:', error);
-          this.error = error.message || 'Failed to load events.';
+          this.error = error.message || 'Falha ao carregar eventos.';
           this.loading = false;
           this.cdr.detectChanges();
         }
       });
   }
-
 
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.totalEvents / this.pageSize);
@@ -643,13 +547,11 @@ export class MyEventsComponent implements OnInit {
     }
   }
 
-
   updatePaginatedEvents(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.paginatedEvents = this.events.slice(startIndex, endIndex);
   }
-
 
   onPageSizeChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
@@ -659,7 +561,6 @@ export class MyEventsComponent implements OnInit {
     this.updatePaginatedEvents();
   }
 
-
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -667,64 +568,47 @@ export class MyEventsComponent implements OnInit {
     }
   }
 
-
   nextPage(): void {
     this.goToPage(this.currentPage + 1);
   }
-
 
   previousPage(): void {
     this.goToPage(this.currentPage - 1);
   }
 
-
   trackByEventId(index: number, event: EventModel): string {
     return event.id;
   }
 
-
-  // Navigation methods
   addNewEvent(): void {
-    console.log('➕ Adding new event');
     this.router.navigate(['/events/new']);
   }
 
-
   editEvent(event: EventModel): void {
-    console.log('✏️ Editing event:', event.name);
     this.router.navigate(['/event/edit', event.id]);
   }
 
-
   viewEventDetails(event: EventModel): void {
-    console.log('👁️ Viewing event details:', event.name);
     this.router.navigate(['/event', event.id]);
   }
 
-
   deleteEvent(event: EventModel): void {
-    const confirmed = confirm(`Are you sure you want to delete "${event.name}"? This action cannot be undone.`);
+    const confirmed = confirm(`Tem certeza de que deseja excluir "${event.name}"? Esta ação não pode ser desfeita.`);
    
     if (confirmed) {
-      console.log('🗑️ Deleting event:', event.name);
-     
       this.myEventsService.deleteMyEvent(event.id)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            console.log('✅ Event deleted successfully');
             this.loadMyEvents(); // Reload the list
           },
           error: (error: any) => {
-            console.error('❌ Error deleting event:', error);
-            alert('Failed to delete event. Please try again.');
+            alert('Falha ao excluir evento. Tente novamente.');
           }
         });
     }
   }
 
-
-  // Utility methods
   private parseBackendDate(dateStr: string): Date {
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month, year] = datePart.split('/');
@@ -732,7 +616,6 @@ export class MyEventsComponent implements OnInit {
    
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
   }
-
 
   getEventIcon(eventType: EventTypeEnum): string {
     const iconMap = {
@@ -746,55 +629,50 @@ export class MyEventsComponent implements OnInit {
     return iconMap[eventType] || '📅';
   }
 
-
   getEventTypeLabel(eventType: EventTypeEnum): string {
     const labelMap = {
-      [EventTypeEnum.ADOPTION_FAIR]: 'Adoption Fair',
-      [EventTypeEnum.FUNDRAISING]: 'Fundraising',
-      [EventTypeEnum.AWARENESS_CAMPAIGN]: 'Awareness Campaign',
-      [EventTypeEnum.VETERINARY_CLINIC]: 'Veterinary Clinic',
-      [EventTypeEnum.VOLUNTEER_MEETING]: 'Volunteer Meeting',
-      [EventTypeEnum.OTHER]: 'Other'
+      [EventTypeEnum.ADOPTION_FAIR]: 'Feira de Adoção',
+      [EventTypeEnum.FUNDRAISING]: 'Arrecadação de Fundos',
+      [EventTypeEnum.AWARENESS_CAMPAIGN]: 'Campanha de Conscientização',
+      [EventTypeEnum.VETERINARY_CLINIC]: 'Clínica Veterinária',
+      [EventTypeEnum.VOLUNTEER_MEETING]: 'Reunião de Voluntários',
+      [EventTypeEnum.OTHER]: 'Outro'
     };
     return labelMap[eventType] || eventType;
   }
-
 
   getEventStatus(event: EventModel): string {
     const now = new Date();
     const startDate = this.parseBackendDate(event.startDate);
     const endDate = this.parseBackendDate(event.endDate);
 
-
     if (endDate < now) return 'past';
-    if (startDate <= now && endDate >= now) return 'ongoing';
-    return 'upcoming';
+    if (startDate <= now && endDate >= now) return 'em_andamento';
+    return 'em_breve';
   }
-
 
   getEventStatusLabel(event: EventModel): string {
     const status = this.getEventStatus(event);
     const statusMap: { [key: string]: string } = {
-      'upcoming': 'Upcoming',
-      'ongoing': 'Ongoing',
-      'past': 'Past'
+      'em_breve': 'Em breve',
+      'em_andamento': 'Em Andamento',
+      'encerrado': 'Encerrado'
     };
-    return statusMap[status] || 'Unknown';
+    return statusMap[status] || 'Desconhecido';
   }
-
 
   formatDateTime(dateTimeStr: string): string {
     const date = this.parseBackendDate(dateTimeStr);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('pt-BR', {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'America/Sao_Paulo'
     });
   }
-
 
   getAddressString(address: any): string {
     if (!address) return '';

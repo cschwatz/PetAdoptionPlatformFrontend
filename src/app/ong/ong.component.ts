@@ -7,7 +7,6 @@ import { Ong } from './ong.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-ong',
   standalone: true,
@@ -15,45 +14,36 @@ import { AuthService } from '../authentication/auth.service';
   template: `
     <div class="ongs-container">
       <header class="ongs-header">
-        <h1>🏢 Organizations & Shelters</h1>
-        <p>Discover the amazing organizations working to help animals find loving homes</p>
+        <h1>🏢 Organizações</h1>
+        <p>Descubra as organizações que estão trabalhando em prol dos animais</p>
       </header>
 
-
-      <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading organizations...</p>
+        <p>Carregando organizações...</p>
       </div>
 
-
-      <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Opa! O servidor foi usado de arranhador de novo</h3>
         <p>{{ error }}</p>
-        <button (click)="loadOngs()" class="retry-btn">Try Again</button>
+        <button (click)="loadOngs()" class="retry-btn">Tentar Novamente</button>
       </div>
 
-
-      <!-- ONGs Grid -->
       <div *ngIf="!loading && !error" class="ongs-section">
-        <!-- Controls -->
         <div class="controls">
           <div class="ongs-count">
-            <span>{{ totalOngs }} organizations helping animals</span>
+            <span>{{ totalOngs }} organizações ajudando animais</span>
           </div>
           <div class="page-size-selector">
-            <label for="pageSize">Show: </label>
+            <label for="pageSize">Mostrar: </label>
             <select id="pageSize" [value]="pageSize" (change)="onPageSizeChange($event)" class="page-size-select">
-              <option value="6">6 per page</option>
-              <option value="12">12 per page</option>
-              <option value="18">18 per page</option>
+              <option value="6">6 por página</option>
+              <option value="12">12 por página</option>
+              <option value="18">18 por página</option>
             </select>
           </div>
         </div>
 
-
-        <!-- ONGs Cards Grid -->
         <div class="ongs-grid" *ngIf="paginatedOngs.length > 0">
           <div class="ong-card" *ngFor="let ong of paginatedOngs; trackBy: trackByOngId"
                (click)="viewOngDetails(ong)">>
@@ -80,30 +70,41 @@ import { AuthService } from '../authentication/auth.service';
                   <span class="contact-icon">📍</span>
                   <span class="contact-value">{{ getAddressString(ong.address) }}</span>
                 </div>
+               
+                <!-- Social Media Links -->
+                <div class="social-media-row" *ngIf="ong.instagram || ong.facebook || ong.tiktok">
+                  <span class="contact-icon">🌐</span>
+                  <div class="social-links">
+                    <a *ngIf="ong.instagram" [href]="ong.instagram" target="_blank" class="social-link instagram" title="Instagram">
+                      📸
+                    </a>
+                    <a *ngIf="ong.facebook" [href]="ong.facebook" target="_blank" class="social-link facebook" title="Facebook">
+                      👥
+                    </a>
+                    <a *ngIf="ong.tiktok" [href]="ong.tiktok" target="_blank" class="social-link tiktok" title="TikTok">
+                      🎵
+                    </a>
+                  </div>
+                </div>
               </div>
-
 
               <div class="card-footer">
                 <button class="contact-btn" (click)="contactOng(ong, $event)">
-                  💬 Contact
+                  💬 Contato
                 </button>
                 <button class="view-btn" (click)="viewOngDetails(ong, $event)">
-                  👁️ View Details
+                  Ver Detalhes
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-
-        <!-- Empty State -->
         <div *ngIf="paginatedOngs.length === 0 && !loading" class="empty-state">
-          <h3>🏢 No organizations found</h3>
-          <p>There are currently no registered organizations in our system.</p>
+          <h3>🏢 Nenhuma organização encontrada</h3>
+          <p>Atualmente não há organizações cadastradas em nossa plataforma.</p>
         </div>
 
-
-        <!-- Pagination -->
         <div class="pagination" *ngIf="totalPages > 1">
           <button
             class="page-btn"
@@ -126,7 +127,7 @@ import { AuthService } from '../authentication/auth.service';
             class="page-btn"
             [disabled]="currentPage === totalPages"
             (click)="goToPage(currentPage + 1)">
-            Next →
+            Próximo →
           </button>
         </div>
       </div>
@@ -141,12 +142,10 @@ import { AuthService } from '../authentication/auth.service';
       background-color: #f8f9fa;
     }
 
-
     .ongs-header {
       text-align: center;
       margin-bottom: 3rem;
     }
-
 
     .ongs-header h1 {
       color: #333;
@@ -154,18 +153,15 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 0.5rem;
     }
 
-
     .ongs-header p {
       color: #666;
       font-size: 1.2rem;
     }
 
-
     .loading-container {
       text-align: center;
       padding: 4rem 0;
     }
-
 
     .loading-spinner {
       width: 50px;
@@ -177,19 +173,16 @@ import { AuthService } from '../authentication/auth.service';
       margin: 0 auto 1rem;
     }
 
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
 
     .error-container {
       text-align: center;
       padding: 4rem 0;
       color: #dc3545;
     }
-
 
     .retry-btn {
       background-color: #007bff;
@@ -202,11 +195,9 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 1rem;
     }
 
-
     .retry-btn:hover {
       background-color: #0056b3;
     }
-
 
     .controls {
       display: flex;
@@ -217,12 +208,10 @@ import { AuthService } from '../authentication/auth.service';
       gap: 1rem;
     }
 
-
     .ongs-count {
       color: #666;
       font-weight: 500;
     }
-
 
     .page-size-selector {
       display: flex;
@@ -230,13 +219,11 @@ import { AuthService } from '../authentication/auth.service';
       gap: 0.5rem;
     }
 
-
     .page-size-select {
       padding: 0.25rem 0.5rem;
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-
 
     .ongs-grid {
       display: grid;
@@ -244,7 +231,6 @@ import { AuthService } from '../authentication/auth.service';
       gap: 2rem;
       margin-bottom: 3rem;
     }
-
 
     .ong-card {
       background: white;
@@ -256,12 +242,10 @@ import { AuthService } from '../authentication/auth.service';
       position: relative;
     }
 
-
     .ong-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     }
-
 
     .card-header {
       display: flex;
@@ -271,17 +255,14 @@ import { AuthService } from '../authentication/auth.service';
       color: white;
     }
 
-
     .ong-icon {
       font-size: 3rem;
       margin-right: 1rem;
     }
 
-
     .ong-info {
       flex: 1;
     }
-
 
     .ong-name {
       margin: 0 0 0.5rem 0;
@@ -289,23 +270,19 @@ import { AuthService } from '../authentication/auth.service';
       font-weight: bold;
     }
 
-
     .ong-cnpj {
       margin: 0;
       opacity: 0.9;
       font-size: 0.9rem;
     }
 
-
     .card-content {
       padding: 1.5rem;
     }
 
-
     .contact-info {
       margin-bottom: 1.5rem;
     }
-
 
     .contact-row {
       display: flex;
@@ -316,7 +293,6 @@ import { AuthService } from '../authentication/auth.service';
       border-radius: 8px;
     }
 
-
     .contact-icon {
       margin-right: 0.75rem;
       font-size: 1.1rem;
@@ -324,13 +300,39 @@ import { AuthService } from '../authentication/auth.service';
       text-align: center;
     }
 
-
     .contact-value {
       color: #333;
       flex: 1;
       word-break: break-word;
     }
 
+    .social-media-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding: 0.5rem;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .social-link {
+      display: inline-block;
+      font-size: 1.2rem;
+      text-decoration: none;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .social-link:hover {
+      transform: scale(1.1);
+    }
 
     .card-footer {
       display: flex;
@@ -341,7 +343,6 @@ import { AuthService } from '../authentication/auth.service';
       border-top: 1px solid #eee;
       gap: 0.5rem;
     }
-
 
     .contact-btn {
       background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -356,12 +357,10 @@ import { AuthService } from '../authentication/auth.service';
       flex: 1;
     }
 
-
     .contact-btn:hover {
       background: linear-gradient(135deg, #218838 0%, #1dd1a1 100%);
       transform: translateY(-2px);
     }
-
 
     .view-btn {
       background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -376,19 +375,16 @@ import { AuthService } from '../authentication/auth.service';
       flex: 1;
     }
 
-
     .view-btn:hover {
       background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
       transform: translateY(-2px);
     }
-
 
     .empty-state {
       text-align: center;
       padding: 4rem 0;
       color: #666;
     }
-
 
     .pagination {
       display: flex;
@@ -397,7 +393,6 @@ import { AuthService } from '../authentication/auth.service';
       gap: 1rem;
       margin-top: 2rem;
     }
-
 
     .page-btn {
       background-color: #007bff;
@@ -409,23 +404,19 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .page-btn:hover:not(:disabled) {
       background-color: #0056b3;
     }
-
 
     .page-btn:disabled {
       background-color: #6c757d;
       cursor: not-allowed;
     }
 
-
     .page-numbers {
       display: flex;
       gap: 0.5rem;
     }
-
 
     .page-number {
       background-color: #f8f9fa;
@@ -437,11 +428,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: all 0.3s;
     }
 
-
     .page-number:hover {
       background-color: #e9ecef;
     }
-
 
     .page-number.active {
       background-color: #007bff;
@@ -449,18 +438,15 @@ import { AuthService } from '../authentication/auth.service';
       border-color: #007bff;
     }
 
-
     @media (max-width: 768px) {
       .ongs-container {
         padding: 1rem;
       }
 
-
       .ongs-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
-
 
       .controls {
         flex-direction: column;
@@ -468,35 +454,29 @@ import { AuthService } from '../authentication/auth.service';
         text-align: center;
       }
 
-
       .pagination {
         flex-direction: column;
         gap: 1rem;
       }
 
-
       .page-numbers {
         justify-content: center;
       }
-
 
       .card-footer {
         flex-direction: column;
         gap: 0.5rem;
       }
 
-
       .contact-btn, .view-btn {
         flex: none;
         width: 100%;
       }
 
-
       .card-header {
         flex-direction: column;
         text-align: center;
       }
-
 
       .ong-icon {
         margin-right: 0;
@@ -511,15 +491,12 @@ export class OngComponent implements OnInit {
   loading = false;
   error: string | null = null;
  
-  // Pagination
   currentPage = 1;
   pageSize = 6;
   totalOngs = 0;
   totalPages = 0;
  
-  // Cache page numbers to avoid recalculating on every change detection
   pageNumbers: number[] = [];
-
 
   constructor(
     private ongService: OngService,
@@ -529,41 +506,29 @@ export class OngComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-
   ngOnInit(): void {
-    console.log('🚀 OngComponent ngOnInit called');
     this.loadOngs();
   }
 
 
   loadOngs(): void {
-    console.log('📡 loadOngs called');
-   
     if (this.loading) {
-      console.log('⚠️ Already loading, skipping request');
       return;
     }
 
-
-    // Check if user is authenticated
     if (!this.authService.isLoggedInSync()) {
-      console.log('❌ User not authenticated, redirecting to login');
-      this.error = 'You must be logged in to view organizations.';
+      this.error = 'Você precisa estar logado para ver as organizações.';
       this.router.navigate(['/login']);
       return;
     }
 
-
     this.loading = true;
     this.error = null;
-
 
     this.ongService.getAllOngs()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (ongs: any) => {
-          console.log('✅ ONGs loaded:', ongs.length);
-          console.log('🔍 First ONG structure:', ongs[0]); // Debug: check ONG structure
           this.ongs = ongs as Ong[];
           this.totalOngs = ongs.length;
           this.calculatePagination();
@@ -572,16 +537,13 @@ export class OngComponent implements OnInit {
           this.cdr.detectChanges();
         },
         error: (error) => {
-          console.error('❌ Error loading ONGs:', error);
-         
-          // Handle specific error cases
           if (error.message.includes('forbidden') || error.message.includes('403')) {
-            this.error = 'Access forbidden. The ONG listing might be restricted to admin users or require special permissions. Please check with your administrator.';
+            this.error = 'Acesso não permitido. Por favor fale com um administrador.';
           } else if (error.message.includes('401')) {
-            this.error = 'Your session has expired. Please log in again.';
+            this.error = 'Sua sessão expirou. Por favor realize o login novamente.';
             this.router.navigate(['/login']);
           } else {
-            this.error = error.message || 'Failed to load organizations. Please try again later.';
+            this.error = error.message || 'Falha ao carregar as organizações. Por favor tente novamente.';
           }
          
           this.loading = false;
@@ -590,7 +552,6 @@ export class OngComponent implements OnInit {
       });
   }
 
-
   private calculatePagination(): void {
     this.totalPages = Math.ceil(this.totalOngs / this.pageSize);
     if (this.currentPage > this.totalPages) {
@@ -598,7 +559,6 @@ export class OngComponent implements OnInit {
     }
     this.updatePageNumbers();
   }
-
 
   private updatePageNumbers(): void {
     const pages: number[] = [];
@@ -620,13 +580,11 @@ export class OngComponent implements OnInit {
     this.pageNumbers = pages;
   }
 
-
   private updatePaginatedOngs(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = startIndex + this.pageSize;
     this.paginatedOngs = this.ongs.slice(startIndex, endIndex);
   }
-
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
@@ -636,7 +594,6 @@ export class OngComponent implements OnInit {
     }
   }
 
-
   onPageSizeChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.pageSize = parseInt(target.value, 10);
@@ -645,38 +602,26 @@ export class OngComponent implements OnInit {
     this.updatePaginatedOngs();
   }
 
-
-  // TrackBy function to optimize *ngFor performance
   trackByOngId(index: number, ong: Ong): any {
     return ong.id || index;
   }
 
-
-  // Format CNPJ for display
   formatCnpj(cnpj: string): string {
     if (!cnpj) return '';
-    // Format: XX.XXX.XXX/XXXX-XX
     return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
   }
 
-
-  // Format phone for display
   formatPhone(phone: string): string {
     if (!phone) return '';
-    // Remove any non-digits and format
     const digits = phone.replace(/\D/g, '');
     if (digits.length === 11) {
-      // Mobile: (XX) XXXXX-XXXX
       return digits.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
     } else if (digits.length === 10) {
-      // Landline: (XX) XXXX-XXXX
       return digits.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
     }
-    return phone; // Return as-is if format is unexpected
+    return phone;
   }
 
-
-  // Get formatted address string
   getAddressString(address: any): string {
     if (!address) return '';
    
@@ -690,7 +635,6 @@ export class OngComponent implements OnInit {
     return parts.join(', ');
   }
 
-
   contactOng(ong: Ong, event?: Event): void {
     if (event) {
       event.stopPropagation();
@@ -701,45 +645,36 @@ export class OngComponent implements OnInit {
     if (ong.email) contactInfo.push(`Email: ${ong.email}`);
    
     const message = contactInfo.length > 0
-      ? `Contact ${ong.name}:\n\n${contactInfo.join('\n')}`
-      : `Contact information for ${ong.name} is not available.`;
+      ? `Contatp ${ong.name}:\n\n${contactInfo.join('\n')}`
+      : `Informação de contato de ${ong.name} não está disponível.`;
    
     alert(message);
   }
-
 
   viewOngDetails(ong: Ong, event?: Event): void {
     if (event) {
       event.stopPropagation();
     }
-   
-    console.log('🔍 Full ONG object:', ong); // Debug: see full object
-    console.log('🔍 ONG ID property:', ong.id); // Debug: see ID specifically
-   
-    // Handle different possible ID property names
+
     const ongId = ong.id || (ong as any).ongId || (ong as any).uuid || (ong as any).identifier;
    
     if (!ongId) {
-      console.error('❌ No valid ID found for ONG:', ong);
-      alert('Sorry, this organization details cannot be viewed (no ID available).');
+      alert('Desculpe, mas os detalhes desta organização não podem ser vistos, pois não há ID disponível.');
       return;
     }
    
-    console.log('🔍 Navigating to ONG details for:', ong.name, 'ID:', ongId);
     this.router.navigate(['/ong', ongId]);
   }
 
-
   private showOngDetails(ong: Ong): void {
     const details = [
-      `Organization: ${ong.name}`,
+      `Organização: ${ong.name}`,
       `CNPJ: ${this.formatCnpj(ong.cnpj)}`,
       ong.email ? `Email: ${ong.email}` : '',
-      ong.phone ? `Phone: ${this.formatPhone(ong.phone)}` : '',
-      ong.address ? `Address: ${this.getAddressString(ong.address)}` : ''
+      ong.phone ? `Telefone: ${this.formatPhone(ong.phone)}` : '',
+      ong.address ? `Endereço: ${this.getAddressString(ong.address)}` : ''
     ].filter(detail => detail !== '').join('\n');
 
-
-    alert(`Organization Details:\n\n${details}`);
+    alert(`Detalhes da Organização:\n\n${details}`);
   }
 }

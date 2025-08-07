@@ -7,7 +7,6 @@ import { MyAnimalsService } from '../my-animals/my-animals.service';
 import { Animal } from '../animal/animal.model';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-animal-edit',
   standalone: true,
@@ -16,164 +15,148 @@ import { AuthService } from '../authentication/auth.service';
     <div class="edit-animal-container">
       <header class="edit-header">
         <button (click)="goBack()" class="back-btn">
-          ← Back to My Animals
+          ← Voltar aos Meus Animais
         </button>
-        <h1>✏️ Edit Animal</h1>
-        <p *ngIf="animal">Editing details for {{ animal.name }}</p>
+        <h1>✏️ Editar Animal</h1>
+        <p *ngIf="animal">Editando detalhes de {{ animal.name }}</p>
       </header>
 
-
-      <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading animal details...</p>
+        <p>Carregando detalhes do animal...</p>
       </div>
 
-
-      <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Ops! Algo deu errado</h3>
         <p>{{ error }}</p>
-        <button (click)="loadAnimal()" class="retry-btn">Try Again</button>
+        <button (click)="loadAnimal()" class="retry-btn">Tentar Novamente</button>
       </div>
 
-
-      <!-- Edit Form -->
       <div *ngIf="!loading && !error && editForm" class="form-container">
         <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="edit-form">
          
-          <!-- Basic Information -->
           <div class="form-section">
-            <h3>Basic Information</h3>
+            <h3>Informações Básicas</h3>
            
             <div class="form-row">
               <div class="form-group">
-                <label for="name">Name *</label>
+                <label for="name">Nome *</label>
                 <input
                   type="text"
                   id="name"
                   formControlName="name"
-                  placeholder="Animal's name"
+                  placeholder="Nome do animal"
                   [class.error]="editForm.get('name')?.invalid && editForm.get('name')?.touched">
                 <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="error-message">
-                  Name is required
+                  Nome é obrigatório
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="animalType">Animal Type *</label>
+                <label for="animalType">Tipo de Animal *</label>
                 <select
                   id="animalType"
                   formControlName="animalType"
                   [class.error]="editForm.get('animalType')?.invalid && editForm.get('animalType')?.touched">
-                  <option value="">Select animal type</option>
-                  <option value="DOG">Dog</option>
-                  <option value="CAT">Cat</option>
-                  <option value="BIRD">Bird</option>
-                  <option value="RABBIT">Rabbit</option>
-                  <option value="OTHER">Other</option>
+                  <option value="">Selecione o tipo de animal</option>
+                  <option value="DOG">Cachorro</option>
+                  <option value="CAT">Gato</option>
+                  <option value="BIRD">Pássaro</option>
+                  <option value="RABBIT">Coelho</option>
+                  <option value="OTHER">Outro</option>
                 </select>
                 <div *ngIf="editForm.get('animalType')?.invalid && editForm.get('animalType')?.touched" class="error-message">
-                  Animal type is required
+                  Tipo de animal é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="breed">Breed</label>
+                <label for="breed">Raça</label>
                 <input
                   type="text"
                   id="breed"
                   formControlName="breed"
-                  placeholder="Animal's breed">
+                  placeholder="Raça do animal">
               </div>
 
-
               <div class="form-group">
-                <label for="color">Color</label>
+                <label for="color">Cor</label>
                 <input
                   type="text"
                   id="color"
                   formControlName="color"
-                  placeholder="Animal's color">
+                  placeholder="Cor do animal">
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="age">Age *</label>
+                <label for="age">Idade *</label>
                 <input
                   type="number"
                   id="age"
                   formControlName="age"
-                  placeholder="Age in years"
+                  placeholder="Idade em anos"
                   min="0"
                   [class.error]="editForm.get('age')?.invalid && editForm.get('age')?.touched">
                 <div *ngIf="editForm.get('age')?.invalid && editForm.get('age')?.touched" class="error-message">
-                  Age is required and must be 0 or greater
+                  Idade é obrigatória e deve ser 0 ou maior
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="gender">Gender *</label>
+                <label for="gender">Sexo *</label>
                 <select
                   id="gender"
                   formControlName="gender"
                   [class.error]="editForm.get('gender')?.invalid && editForm.get('gender')?.touched">
-                  <option value="">Select gender</option>
-                  <option value="M">Male</option>
-                  <option value="F">Female</option>
+                  <option value="">Selecione o sexo</option>
+                  <option value="M">Macho</option>
+                  <option value="F">Fêmea</option>
                 </select>
                 <div *ngIf="editForm.get('gender')?.invalid && editForm.get('gender')?.touched" class="error-message">
-                  Gender is required
+                  Sexo é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="weight">Weight (kg)</label>
+                <label for="weight">Peso (kg)</label>
                 <input
                   type="number"
                   id="weight"
                   formControlName="weight"
-                  placeholder="Weight in kilograms"
+                  placeholder="Peso em quilogramas"
                   min="0"
                   step="0.1">
               </div>
 
-
               <div class="form-group">
-                <label for="size">Size (cm)</label>
+                <label for="size">Tamanho (cm)</label>
                 <input
                   type="number"
                   id="size"
                   formControlName="size"
-                  placeholder="Height in centimeters"
+                  placeholder="Altura em centímetros"
                   min="0"
                   step="1">
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="fur">Fur Type</label>
+                <label for="fur">Tipo de Pelagem</label>
                 <select id="fur" formControlName="fur">
-                  <option value="">Select fur type</option>
-                  <option value="SHORT">Short</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="LONG">Long</option>
-                  <option value="NONE">None</option>
+                  <option value="">Selecione o tipo de pelagem</option>
+                  <option value="SHORT">Curta</option>
+                  <option value="MEDIUM">Média</option>
+                  <option value="LONG">Longa</option>
+                  <option value="NONE">Nenhuma</option>
                 </select>
               </div>
-
 
               <div class="form-group checkbox-group">
                 <label class="checkbox-label">
@@ -181,14 +164,12 @@ import { AuthService } from '../authentication/auth.service';
                     type="checkbox"
                     formControlName="castrated">
                   <span class="checkmark"></span>
-                  Castrated/Spayed
+                  Castrado/Esterilizado
                 </label>
               </div>
             </div>
           </div>
 
-
-          <!-- Status Section -->
           <div class="form-section">
             <h3>Status</h3>
             <div class="form-group checkbox-group">
@@ -197,70 +178,63 @@ import { AuthService } from '../authentication/auth.service';
                   type="checkbox"
                   formControlName="adopted">
                 <span class="checkmark"></span>
-                Adopted
+                Adotado
               </label>
             </div>
           </div>
 
-
-          <!-- Description -->
           <div class="form-section">
-            <h3>Description</h3>
+            <h3>Descrição</h3>
             <div class="form-group">
-              <label for="obs">Additional Notes</label>
+              <label for="obs">Observações Adicionais</label>
               <textarea
                 id="obs"
                 formControlName="obs"
-                placeholder="Add any additional information about the animal..."
+                placeholder="Adicione qualquer informação adicional sobre o animal..."
                 rows="4"></textarea>
             </div>
           </div>
 
-
-          <!-- Photo Section -->
           <div class="form-section">
-            <h3>Photo</h3>
+            <h3>Foto</h3>
             <div class="photo-section">
               <div *ngIf="currentPhotoUrl" class="current-photo">
-                <h4>Current Photo:</h4>
-                <img [src]="currentPhotoUrl" alt="Current animal photo" class="photo-preview">
+                <h4>Foto Atual:</h4>
+                <img [src]="currentPhotoUrl" alt="Foto atual do animal" class="photo-preview">
               </div>
              
               <div class="form-group">
-                <label for="photo">Update Photo</label>
+                <label for="photo">Atualizar Foto</label>
                 <input
                   type="file"
                   id="photo"
                   (change)="onFileSelected($event)"
                   accept="image/*"
                   class="file-input">
-                <small class="help-text">Upload a new photo to replace the current one (JPG, PNG, GIF)</small>
+                <small class="help-text">Envie uma nova foto para substituir a atual (JPG, PNG, GIF)</small>
               </div>
 
-
               <div *ngIf="newPhotoPreview" class="new-photo-preview">
-                <h4>New Photo Preview:</h4>
-                <img [src]="newPhotoPreview" alt="New photo preview" class="photo-preview">
+                <h4>Pré-visualização da Nova Foto:</h4>
+                <img [src]="newPhotoPreview" alt="Pré-visualização da nova foto" class="photo-preview">
               </div>
             </div>
           </div>
 
-
-          <!-- Action Buttons -->
           <div class="form-actions">
             <button
               type="button"
               (click)="goBack()"
               class="cancel-btn"
               [disabled]="saving">
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               class="save-btn"
               [disabled]="editForm.invalid || saving">
-              <span *ngIf="saving">Saving...</span>
-              <span *ngIf="!saving">💾 Save Changes</span>
+              <span *ngIf="saving">Salvando...</span>
+              <span *ngIf="!saving">💾 Salvar Alterações</span>
             </button>
           </div>
         </form>
@@ -276,13 +250,11 @@ import { AuthService } from '../authentication/auth.service';
       background-color: #f8f9fa;
     }
 
-
     .edit-header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
     }
-
 
     .back-btn {
       position: absolute;
@@ -298,11 +270,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .back-btn:hover {
       background: #5a6268;
     }
-
 
     .edit-header h1 {
       color: #333;
@@ -310,18 +280,15 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 0.5rem;
     }
 
-
     .edit-header p {
       color: #666;
       font-size: 1.1rem;
     }
 
-
     .loading-container {
       text-align: center;
       padding: 4rem 0;
     }
-
 
     .loading-spinner {
       width: 50px;
@@ -333,19 +300,16 @@ import { AuthService } from '../authentication/auth.service';
       margin: 0 auto 1rem;
     }
 
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
 
     .error-container {
       text-align: center;
       padding: 4rem 0;
       color: #dc3545;
     }
-
 
     .retry-btn {
       background-color: #007bff;
@@ -358,11 +322,9 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 1rem;
     }
 
-
     .retry-btn:hover {
       background-color: #0056b3;
     }
-
 
     .form-container {
       background: white;
@@ -371,11 +333,9 @@ import { AuthService } from '../authentication/auth.service';
       overflow: hidden;
     }
 
-
     .edit-form {
       padding: 2rem;
     }
-
 
     .form-section {
       margin-bottom: 2rem;
@@ -383,11 +343,9 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 1px solid #eee;
     }
 
-
     .form-section:last-child {
       border-bottom: none;
     }
-
 
     .form-section h3 {
       color: #333;
@@ -397,7 +355,6 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 2px solid #007bff;
     }
 
-
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -405,19 +362,16 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 1rem;
     }
 
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
-
 
     .form-group label {
       font-weight: 600;
       color: #333;
       margin-bottom: 0.5rem;
     }
-
 
     .form-group input,
     .form-group select,
@@ -429,7 +383,6 @@ import { AuthService } from '../authentication/auth.service';
       transition: border-color 0.3s, box-shadow 0.3s;
     }
 
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
@@ -438,12 +391,10 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     }
 
-
     .form-group input.error,
     .form-group select.error {
       border-color: #dc3545;
     }
-
 
     .error-message {
       color: #dc3545;
@@ -451,12 +402,10 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 0.25rem;
     }
 
-
     .checkbox-group {
       flex-direction: row !important;
       align-items: center;
     }
-
 
     .checkbox-label {
       display: flex;
@@ -466,12 +415,10 @@ import { AuthService } from '../authentication/auth.service';
       color: #333;
     }
 
-
     .checkbox-label input[type="checkbox"] {
       margin-right: 0.5rem;
       transform: scale(1.2);
     }
-
 
     .photo-section {
       display: flex;
@@ -479,19 +426,16 @@ import { AuthService } from '../authentication/auth.service';
       gap: 1.5rem;
     }
 
-
     .current-photo,
     .new-photo-preview {
       text-align: center;
     }
-
 
     .current-photo h4,
     .new-photo-preview h4 {
       color: #333;
       margin-bottom: 1rem;
     }
-
 
     .photo-preview {
       max-width: 300px;
@@ -500,18 +444,15 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-
     .file-input {
       padding: 0.5rem !important;
     }
-
 
     .help-text {
       color: #666;
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
-
 
     .form-actions {
       display: flex;
@@ -521,7 +462,6 @@ import { AuthService } from '../authentication/auth.service';
       padding-top: 2rem;
       border-top: 1px solid #eee;
     }
-
 
     .cancel-btn {
       background: #6c757d;
@@ -534,11 +474,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .cancel-btn:hover:not(:disabled) {
       background: #5a6268;
     }
-
 
     .save-btn {
       background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -553,13 +491,11 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
     }
 
-
     .save-btn:hover:not(:disabled) {
       background: linear-gradient(135deg, #218838 0%, #1dd1a1 100%);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
     }
-
 
     .save-btn:disabled,
     .cancel-btn:disabled {
@@ -568,28 +504,23 @@ import { AuthService } from '../authentication/auth.service';
       transform: none !important;
     }
 
-
     @media (max-width: 768px) {
       .edit-animal-container {
         padding: 1rem;
       }
-
 
       .back-btn {
         position: static;
         margin-bottom: 1rem;
       }
 
-
       .form-row {
         grid-template-columns: 1fr;
       }
 
-
       .form-actions {
         flex-direction: column;
       }
-
 
       .cancel-btn,
       .save-btn {
@@ -609,7 +540,6 @@ export class AnimalEditComponent implements OnInit {
   newPhotoPreview: string | null = null;
   selectedFile: File | null = null;
 
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -621,23 +551,19 @@ export class AnimalEditComponent implements OnInit {
     this.initializeForm();
   }
 
-
   ngOnInit(): void {
-    // Check if user is an ONG
     if (!this.authService.isOng()) {
-      this.error = 'You must be logged in as an ONG to edit animals.';
+      this.error = 'Você deve estar logado como uma ONG para editar animais.';
       return;
     }
-
 
     this.animalId = this.route.snapshot.paramMap.get('id');
     if (this.animalId) {
       this.loadAnimal();
     } else {
-      this.error = 'No animal ID provided.';
+      this.error = 'ID do animal não fornecido.';
     }
   }
-
 
   private initializeForm(): void {
     this.editForm = this.fb.group({
@@ -656,33 +582,27 @@ export class AnimalEditComponent implements OnInit {
     });
   }
 
-
   loadAnimal(): void {
     if (!this.animalId) return;
 
-
     this.loading = true;
     this.error = null;
-
 
     this.myAnimalsService.getMyAnimalById(this.animalId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (animal: any) => {
-          console.log('✅ Animal loaded for editing:', animal);
           this.animal = animal;
           this.populateForm(animal);
           this.currentPhotoUrl = this.getImageSrc(animal.photo);
           this.loading = false;
         },
         error: (error: any) => {
-          console.error('❌ Error loading animal:', error);
-          this.error = error.message || 'Failed to load animal details.';
+          this.error = error.message || 'Falha ao carregar detalhes do animal.';
           this.loading = false;
         }
       });
   }
-
 
   private populateForm(animal: Animal): void {
     this.editForm.patchValue({
@@ -701,7 +621,6 @@ export class AnimalEditComponent implements OnInit {
     });
   }
 
-
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
@@ -709,7 +628,6 @@ export class AnimalEditComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
      
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         this.newPhotoPreview = e.target?.result as string;
@@ -718,45 +636,30 @@ export class AnimalEditComponent implements OnInit {
     }
   }
 
-
   onSubmit(): void {
     if (this.editForm.invalid || !this.animalId) return;
-
 
     this.saving = true;
     const formData = this.editForm.value;
 
-
-    // Ensure size is a number or null
     if (formData.size === '' || formData.size === null || formData.size === undefined) {
       formData.size = null;
     } else {
       formData.size = Number(formData.size);
     }
 
-
-    console.log('📋 Form data before sending:', {
-      ...formData,
-      photo: formData.photo ? '[photo data]' : 'no photo'
-    });
-
-
-    // If a new photo was selected, convert it to base64
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = () => {
         const base64 = reader.result as string;
-        // Remove data URL prefix to get just the base64 string
         const base64Only = base64.includes(',') ? base64.split(',')[1] : base64;
         formData.photo = base64Only;
         this.saveAnimal(formData);
       };
       reader.readAsDataURL(this.selectedFile);
     } else {
-      // Keep existing photo - ensure it's only base64 without prefix
       if (this.animal?.photo) {
         let photoData = this.animal.photo;
-        // If the existing photo has data URL prefix, remove it
         if (photoData.startsWith('data:')) {
           photoData = photoData.split(',')[1] || photoData;
         }
@@ -766,54 +669,40 @@ export class AnimalEditComponent implements OnInit {
     }
   }
 
-
   private saveAnimal(animalData: any): void {
-    console.log('🔍 Sending animal data:', {
-      ...animalData,
-      photo: animalData.photo ? `[base64 data ${animalData.photo.length} chars]` : 'no photo'
-    });
-   
     this.myAnimalsService.updateMyAnimal(this.animalId!, animalData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updatedAnimal: any) => {
-          console.log('✅ Animal updated successfully:', updatedAnimal);
           this.saving = false;
           this.router.navigate(['/my-animals']);
         },
         error: (error: any) => {
-          console.error('❌ Error updating animal:', error);
-          this.error = error.message || 'Failed to update animal.';
+          this.error = error.message || 'Falha ao atualizar animal.';
           this.saving = false;
         }
       });
   }
 
-
   getImageSrc(photo: string | undefined): string {
     if (!photo) {
-      return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+      return '/assets/default-animal.jpeg';
     }
    
-    // If it's already a complete data URL, return as-is
     if (photo.startsWith('data:')) {
       return photo;
     }
    
-    // If it's already a complete HTTP URL, return as-is
     if (photo.startsWith('http://') || photo.startsWith('https://')) {
       return photo;
     }
-   
-    // If it looks like base64, add data URL prefix
+
     if (photo.match(/^[A-Za-z0-9+/]/)) {
       return `data:image/jpeg;base64,${photo}`;
     }
    
-    // Default fallback
-    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+    return '/assets/default-animal.jpeg';
   }
-
 
   goBack(): void {
     this.router.navigate(['/my-animals']);

@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
         <h2>Login</h2>
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label for="username">Username:</label>
+            <label for="username">Nome de Usuário:</label>
             <input 
               type="text" 
               id="username" 
@@ -23,12 +23,12 @@ import { AuthService } from './auth.service';
             >
             <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" 
                  class="error-message">
-              Username is required
+              Nome de Usuário é obrigatório
             </div>
           </div>
 
           <div class="form-group">
-            <label for="password">Password:</label>
+            <label for="password">Senha:</label>
             <input 
               type="password" 
               id="password" 
@@ -37,18 +37,18 @@ import { AuthService } from './auth.service';
             >
             <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
                  class="error-message">
-              Password is required
+              Senha é obrigatório
             </div>
           </div>
 
           <button type="submit" [disabled]="loginForm.invalid || isLoading" class="login-btn">
-            {{ isLoading ? 'Logging in...' : 'Login' }}
+            {{ isLoading ? 'Autenticando...' : 'Entrar' }}
           </button>
         </form>
 
         <div class="button-spacing">
           <button type="button" (click)="navigateToRegister()" class="register-btn">
-            Create new account
+            Criar Nova Conta
           </button>
         </div>
 
@@ -182,7 +182,6 @@ export class LoginComponent {
       this.isLoading = true;
       this.errorMessage = '';
 
-      // Map username to login to match backend DTO
       const loginData = {
         login: this.loginForm.value.username,
         password: this.loginForm.value.password
@@ -191,17 +190,17 @@ export class LoginComponent {
       this.authService.login(loginData).subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.router.navigate(['/dashboard']); // Redirect to main page
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.isLoading = false;
-          this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+          this.errorMessage = error.error?.message || 'Login falhou. Por favor tente novamente.';
         }
       });
     }
   }
 
   navigateToRegister(): void {
-    this.router.navigate(['/register']); // Navigate to register component
+    this.router.navigate(['/register']);
   }
 }

@@ -13,8 +13,6 @@ export class MyEventsService {
  
   constructor(private http: HttpClient) {}
 
-
-  // Get events for the authenticated ONG
   getMyEvents(): Observable<EventModel[]> {
     return this.http.get<EventModel[]>(`${this.apiUrl}/ong/my-events`).pipe(
       retry(2), // Retry failed requests up to 2 times
@@ -22,66 +20,54 @@ export class MyEventsService {
     );
   }
 
-
-  // Get specific event by ID (for the authenticated ONG)
   getMyEventById(id: string): Observable<EventModel> {
     return this.http.get<EventModel>(`${this.apiUrl}/event/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-
-  // Create new event (for the authenticated ONG)
   createMyEvent(event: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/event`, event).pipe(
       catchError(this.handleError)
     );
   }
 
-
-  // Update event (for the authenticated ONG)
   updateMyEvent(id: string, event: Partial<EventModel>): Observable<EventModel> {
     return this.http.put<EventModel>(`${this.apiUrl}/event/${id}`, event).pipe(
       catchError(this.handleError)
     );
   }
 
-
-  // Delete event (for the authenticated ONG)
   deleteMyEvent(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/event/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-
   private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An unknown error occurred!';
+    let errorMessage = 'Um erro desconhecido aconteceu!';
    
     if (error.error instanceof ErrorEvent) {
-      // Client-side or network error
-      errorMessage = `Error: ${error.error.message}`;
+      errorMessage = `Erro: ${error.error.message}`;
     } else {
-      // Backend returned an unsuccessful response code
       switch (error.status) {
         case 401:
-          errorMessage = 'You are not authorized to access this resource.';
+          errorMessage = 'Você não tem autorização para acessar este recurso.';
           break;
         case 403:
-          errorMessage = 'You do not have permission to access these events.';
+          errorMessage = 'Você não tem permissão para acessar estes eventos.';
           break;
         case 404:
-          errorMessage = 'The requested events could not be found.';
+          errorMessage = 'O evento requisitado não foi encontrado.';
           break;
         case 500:
-          errorMessage = 'Internal server error. Please try again later.';
+          errorMessage = 'Erro interno do servidor. Por favor tente novamente.';
           break;
         default:
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+          errorMessage = `Código do erro: ${error.status}\nMensagem: ${error.message}`;
       }
     }
    
-    console.error('MyEventsService Error:', errorMessage, error);
     return throwError(() => new Error(errorMessage));
   }
 }

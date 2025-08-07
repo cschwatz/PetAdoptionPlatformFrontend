@@ -7,7 +7,6 @@ import { MyEventsService } from '../my-events/my-events.service';
 import { Event as EventModel, EventTypeEnum } from './event.model';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-event-edit',
   standalone: true,
@@ -16,25 +15,25 @@ import { AuthService } from '../authentication/auth.service';
     <div class="edit-event-container">
       <header class="edit-header">
         <button (click)="goBack()" class="back-btn">
-          ← Back to My Events
+          ← Voltar aos meus eventos
         </button>
         <h1>✏️ Edit Event</h1>
-        <p *ngIf="event">Editing details for {{ event.name }}</p>
+        <p *ngIf="event">Editando os detalhes de {{ event.name }}</p>
       </header>
 
 
       <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading event details...</p>
+        <p>Carregando os detalhes do evento...</p>
       </div>
 
 
       <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Opa! Algum estagiário peludo está causando transtornos</h3>
         <p>{{ error }}</p>
-        <button (click)="loadEvent()" class="retry-btn">Try Again</button>
+        <button (click)="loadEvent()" class="retry-btn">Tentar novamente</button>
       </div>
 
 
@@ -44,11 +43,11 @@ import { AuthService } from '../authentication/auth.service';
          
           <!-- Basic Information -->
           <div class="form-section">
-            <h3>Basic Information</h3>
+            <h3>Informação básica</h3>
            
             <div class="form-row">
               <div class="form-group full-width">
-                <label for="name">Event Name *</label>
+                <label for="name">Nome do Evento *</label>
                 <input
                   type="text"
                   id="name"
@@ -56,7 +55,7 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="Enter event name"
                   [class.error]="editForm.get('name')?.invalid && editForm.get('name')?.touched">
                 <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="error-message">
-                  Event name is required
+                  Nome do Evento é obrigatório
                 </div>
               </div>
             </div>
@@ -64,81 +63,74 @@ import { AuthService } from '../authentication/auth.service';
 
             <div class="form-row">
               <div class="form-group">
-                <label for="eventType">Event Type *</label>
+                <label for="eventType">Tipo do Evento *</label>
                 <select
                   id="eventType"
                   formControlName="eventType"
                   [class.error]="editForm.get('eventType')?.invalid && editForm.get('eventType')?.touched">
-                  <option value="">Select event type</option>
-                  <option value="ADOPTION_FAIR">Adoption Fair</option>
-                  <option value="FUNDRAISING">Fundraising</option>
-                  <option value="AWARENESS_CAMPAIGN">Awareness Campaign</option>
-                  <option value="VETERINARY_CLINIC">Veterinary Clinic</option>
-                  <option value="TRAINING_WORKSHOP">Training Workshop</option>
-                  <option value="VOLUNTEER_MEETING">Volunteer Meeting</option>
-                  <option value="OTHER">Other</option>
+                  <option value="">Selecionar tipo do evento</option>
+                  <option value="ADOPTION_FAIR">Feira de Adoção</option>
+                  <option value="FUNDRAISING">Angariamento de Fundos</option>
+                  <option value="AWARENESS_CAMPAIGN">Campanha de Conscientização</option>
+                  <option value="VETERINARY_CLINIC">Clínica Veterinária</option>
+                  <option value="VOLUNTEER_MEETING">Encontro de Voluntários</option>
+                  <option value="OTHER">Outros</option>
                 </select>
                 <div *ngIf="editForm.get('eventType')?.invalid && editForm.get('eventType')?.touched" class="error-message">
-                  Event type is required
+                  Tipo do Evento é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group full-width">
-                <label for="obs">Event Description</label>
+                <label for="obs">Descrição do Evento</label>
                 <textarea
                   id="obs"
                   formControlName="obs"
                   placeholder="Describe your event - what will happen, who should attend, etc."
                   rows="4"></textarea>
-                <small class="help-text">Provide details about the event to help people understand what to expect</small>
+                <small class="help-text">Forneça detalhes sobre o evento para ajudar as pessoas a entender o que esperar</small>
               </div>
             </div>
           </div>
 
-
-          <!-- Date & Time -->
           <div class="form-section">
-            <h3>Date & Time</h3>
+            <h3>Data e Horários</h3>
            
             <div class="form-row">
               <div class="form-group">
-                <label for="startDate">Start Date & Time *</label>
+                <label for="startDate">Data e Horário de Início *</label>
                 <input
                   type="datetime-local"
                   id="startDate"
                   formControlName="startDate"
                   [class.error]="editForm.get('startDate')?.invalid && editForm.get('startDate')?.touched">
                 <div *ngIf="editForm.get('startDate')?.invalid && editForm.get('startDate')?.touched" class="error-message">
-                  Start date and time is required
+                  Data e Horário de Início é obrigatório
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="endDate">End Date & Time *</label>
+                <label for="endDate">Data e Horário de Encerramento *</label>
                 <input
                   type="datetime-local"
                   id="endDate"
                   formControlName="endDate"
                   [class.error]="editForm.get('endDate')?.invalid && editForm.get('endDate')?.touched">
                 <div *ngIf="editForm.get('endDate')?.invalid && editForm.get('endDate')?.touched" class="error-message">
-                  End date and time is required
+                  Data e Horário de Encerramento é obrigatório
                 </div>
               </div>
             </div>
           </div>
 
-
-          <!-- Location -->
           <div class="form-section">
-            <h3>Location</h3>
+            <h3>Localização</h3>
            
             <div class="form-row">
               <div class="form-group">
-                <label for="street">Street Address</label>
+                <label for="street">Rua</label>
                 <input
                   type="text"
                   id="street"
@@ -146,9 +138,8 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="Street address">
               </div>
 
-
               <div class="form-group">
-                <label for="number">Number</label>
+                <label for="number">Número</label>
                 <input
                   type="number"
                   id="number"
@@ -158,10 +149,9 @@ import { AuthService } from '../authentication/auth.service';
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="neighborhood">Neighborhood</label>
+                <label for="neighborhood">Bairro</label>
                 <input
                   type="text"
                   id="neighborhood"
@@ -169,9 +159,8 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="Neighborhood">
               </div>
 
-
               <div class="form-group">
-                <label for="city">City</label>
+                <label for="city">Cidade</label>
                 <input
                   type="text"
                   id="city"
@@ -180,10 +169,9 @@ import { AuthService } from '../authentication/auth.service';
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="state">State</label>
+                <label for="state">Estado (UF)</label>
                 <input
                   type="text"
                   id="state"
@@ -191,7 +179,6 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="State"
                   maxlength="2">
               </div>
-
 
               <div class="form-group">
                 <label for="cep">CEP</label>
@@ -205,22 +192,20 @@ import { AuthService } from '../authentication/auth.service';
             </div>
           </div>
 
-
-          <!-- Action Buttons -->
           <div class="form-actions">
             <button
               type="button"
               (click)="goBack()"
               class="cancel-btn"
               [disabled]="saving">
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               class="save-btn"
               [disabled]="editForm.invalid || saving">
-              <span *ngIf="saving">Updating Event...</span>
-              <span *ngIf="!saving">💾 Update Event</span>
+              <span *ngIf="saving">Atualizando Evento...</span>
+              <span *ngIf="!saving">💾 Atualizar Evento</span>
             </button>
           </div>
         </form>
@@ -236,13 +221,11 @@ import { AuthService } from '../authentication/auth.service';
       background-color: #f8f9fa;
     }
 
-
     .edit-header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
     }
-
 
     .back-btn {
       position: absolute;
@@ -258,11 +241,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .back-btn:hover {
       background: #5a6268;
     }
-
 
     .edit-header h1 {
       color: #333;
@@ -270,18 +251,15 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 0.5rem;
     }
 
-
     .edit-header p {
       color: #666;
       font-size: 1.1rem;
     }
 
-
     .loading-container {
       text-align: center;
       padding: 4rem 0;
     }
-
 
     .loading-spinner {
       width: 50px;
@@ -293,12 +271,10 @@ import { AuthService } from '../authentication/auth.service';
       margin: 0 auto 20px;
     }
 
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
 
     .error-container {
       text-align: center;
@@ -309,7 +285,6 @@ import { AuthService } from '../authentication/auth.service';
       border-radius: 8px;
       border: 1px solid #f5c6cb;
     }
-
 
     .retry-btn {
       background-color: #007bff;
@@ -322,11 +297,9 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 1rem;
     }
 
-
     .retry-btn:hover {
       background-color: #0056b3;
     }
-
 
     .form-container {
       background: white;
@@ -335,11 +308,9 @@ import { AuthService } from '../authentication/auth.service';
       overflow: hidden;
     }
 
-
     .edit-form {
       padding: 2rem;
     }
-
 
     .form-section {
       margin-bottom: 2rem;
@@ -347,11 +318,9 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 1px solid #eee;
     }
 
-
     .form-section:last-child {
       border-bottom: none;
     }
-
 
     .form-section h3 {
       color: #333;
@@ -360,8 +329,7 @@ import { AuthService } from '../authentication/auth.service';
       padding-bottom: 0.5rem;
       border-bottom: 2px solid #007bff;
     }
-
-
+  
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -369,24 +337,20 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 1rem;
     }
 
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
 
-
     .form-group.full-width {
       grid-column: 1 / -1;
     }
-
 
     .form-group label {
       font-weight: 600;
       color: #333;
       margin-bottom: 0.5rem;
     }
-
 
     .form-group input,
     .form-group select,
@@ -398,7 +362,6 @@ import { AuthService } from '../authentication/auth.service';
       transition: border-color 0.3s, box-shadow 0.3s;
     }
 
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
@@ -407,12 +370,10 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     }
 
-
     .form-group input.error,
     .form-group select.error {
       border-color: #dc3545;
     }
-
 
     .error-message {
       color: #dc3545;
@@ -420,13 +381,11 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 0.25rem;
     }
 
-
     .help-text {
       color: #666;
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
-
 
     .form-actions {
       display: flex;
@@ -436,7 +395,6 @@ import { AuthService } from '../authentication/auth.service';
       padding-top: 2rem;
       border-top: 1px solid #eee;
     }
-
 
     .cancel-btn {
       background: #6c757d;
@@ -449,11 +407,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .cancel-btn:hover:not(:disabled) {
       background: #5a6268;
     }
-
 
     .save-btn {
       background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
@@ -468,13 +424,11 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
     }
 
-
     .save-btn:hover:not(:disabled) {
       background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
     }
-
 
     .save-btn:disabled,
     .cancel-btn:disabled {
@@ -483,28 +437,23 @@ import { AuthService } from '../authentication/auth.service';
       transform: none !important;
     }
 
-
     @media (max-width: 768px) {
       .edit-event-container {
         padding: 1rem;
       }
-
 
       .back-btn {
         position: static;
         margin-bottom: 1rem;
       }
 
-
       .form-row {
         grid-template-columns: 1fr;
       }
 
-
       .form-actions {
         flex-direction: column;
       }
-
 
       .cancel-btn,
       .save-btn {
@@ -521,7 +470,6 @@ export class EventEditComponent implements OnInit {
   error: string | null = null;
   eventId: string = '';
 
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -533,26 +481,20 @@ export class EventEditComponent implements OnInit {
     this.initializeForm();
   }
 
-
   ngOnInit(): void {
-    // Check if user is an ONG
     if (!this.authService.isOng()) {
-      this.error = 'You must be logged in as an ONG to edit events.';
+      this.error = 'Você deve ser uma ONG para editar um evento.';
       return;
     }
 
-
-    // Get event ID from route
     this.eventId = this.route.snapshot.paramMap.get('id') || '';
     if (!this.eventId) {
-      this.error = 'Event ID is required.';
+      this.error = 'ID do evento é requerido.';
       return;
     }
-
 
     this.loadEvent();
   }
-
 
   private initializeForm(): void {
     this.editForm = this.fb.group({
@@ -561,7 +503,6 @@ export class EventEditComponent implements OnInit {
       obs: [''],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
-      // Address fields
       street: [''],
       number: [null],
       neighborhood: [''],
@@ -571,39 +512,28 @@ export class EventEditComponent implements OnInit {
     });
   }
 
-
   loadEvent(): void {
-    console.log('📡 Loading event for editing:', this.eventId);
-   
     this.loading = true;
     this.error = null;
-
 
     this.myEventsService.getMyEventById(this.eventId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (event) => {
-          console.log('✅ Event loaded:', event);
           this.event = event;
           this.populateForm(event);
           this.loading = false;
         },
         error: (error: any) => {
-          console.error('❌ Error loading event:', error);
-          this.error = error.message || 'Failed to load event details.';
+          this.error = error.message || 'Falha ao carregar detalhes do evento.';
           this.loading = false;
         }
       });
   }
 
-
   private populateForm(event: EventModel): void {
-    console.log('📝 Populating form with event data');
-   
-    // Convert backend date format to datetime-local format
     const startDateLocal = this.formatDateForForm(event.startDate);
     const endDateLocal = this.formatDateForForm(event.endDate);
-
 
     this.editForm.patchValue({
       name: event.name,
@@ -611,7 +541,6 @@ export class EventEditComponent implements OnInit {
       obs: event.obs || '',
       startDate: startDateLocal,
       endDate: endDateLocal,
-      // Address fields
       street: event.address?.street || '',
       number: event.address?.number || null,
       neighborhood: event.address?.neighborhood || '',
@@ -621,9 +550,7 @@ export class EventEditComponent implements OnInit {
     });
   }
 
-
   private formatDateForForm(dateStr: string): string {
-    // Convert from "30/08/2025 14:30" to "2025-08-30T14:30"
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month, year] = datePart.split('/');
     const [hours, minutes] = timePart.split(':');
@@ -631,9 +558,7 @@ export class EventEditComponent implements OnInit {
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
   }
 
-
   private formatDateForBackend(dateTimeLocal: string): string {
-    // Convert from "2025-08-30T14:30" to "30/08/2025 14:30"
     const date = new Date(dateTimeLocal);
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -644,30 +569,22 @@ export class EventEditComponent implements OnInit {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
 
-
   onSubmit(): void {
     if (this.editForm.invalid) {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.editForm.controls).forEach(key => {
         this.editForm.get(key)?.markAsTouched();
       });
       return;
     }
 
-
     this.saving = true;
     this.error = null;
 
-
     const formData = this.editForm.value;
 
-
-    // Convert datetime-local to backend format
     const startDate = this.formatDateForBackend(formData.startDate);
     const endDate = this.formatDateForBackend(formData.endDate);
 
-
-    // Build address object if any address fields are filled
     let address = null;
     if (formData.street || formData.city || formData.state) {
       address = {
@@ -680,7 +597,6 @@ export class EventEditComponent implements OnInit {
       };
     }
 
-
     const eventData: Partial<EventModel> = {
       name: formData.name,
       eventType: formData.eventType as EventTypeEnum,
@@ -688,29 +604,21 @@ export class EventEditComponent implements OnInit {
       startDate: startDate,
       endDate: endDate,
       address: address || undefined
-      // Note: ONG association is handled on the backend based on authenticated user
     };
-
-
-    console.log('📋 Updating event with data:', eventData);
-
 
     this.myEventsService.updateMyEvent(this.eventId, eventData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (updatedEvent) => {
-          console.log('✅ Event updated successfully:', updatedEvent);
+        next: () => {
           this.saving = false;
           this.router.navigate(['/my-events']);
         },
         error: (error: any) => {
-          console.error('❌ Error updating event:', error);
-          this.error = error.message || 'Failed to update event.';
+          this.error = error.message || 'Falha ao atualizar o evento.';
           this.saving = false;
         }
       });
   }
-
 
   goBack(): void {
     this.router.navigate(['/my-events']);

@@ -6,7 +6,6 @@
   background-color: #f8f9fa;
 }
 
-
 .account-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -23,8 +22,6 @@
   }
 }
 
-
-// Loading states
 .loading-container {
   text-align: center;
   padding: 4rem 0;
@@ -40,12 +37,10 @@
   }
 }
 
-
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
 
 .error-container {
   text-align: center;
@@ -68,8 +63,6 @@
   }
 }
 
-
-// User type badge
 .user-type-badge {
   display: inline-flex;
   align-items: center;
@@ -90,8 +83,6 @@
   }
 }
 
-
-// Account content
 .account-content {
   background: white;
   border-radius: 12px;
@@ -99,8 +90,6 @@
   overflow: hidden;
 }
 
-
-// Tab navigation
 .tab-nav {
   display: flex;
   border-bottom: 1px solid #dee2e6;
@@ -130,14 +119,10 @@
   }
 }
 
-
-// Tab content
 .tab-content {
   padding: 2rem;
 }
 
-
-// Form sections
 .form-section {
   margin-bottom: 2.5rem;
  
@@ -150,8 +135,6 @@
   }
 }
 
-
-// Form layout
 .form-row {
   display: flex;
   gap: 1rem;
@@ -162,7 +145,6 @@
     gap: 0;
   }
 }
-
 
 .form-group {
   flex: 1;
@@ -226,8 +208,6 @@
   }
 }
 
-
-// Form actions
 .form-actions {
   display: flex;
   gap: 1rem;
@@ -239,7 +219,6 @@
     flex-direction: column;
   }
 }
-
 
 .save-btn {
   flex: 1;
@@ -267,7 +246,6 @@
   }
 }
 
-
 .cancel-btn {
   flex: 1;
   padding: 0.875rem 1.5rem;
@@ -287,8 +265,6 @@
   }
 }
 
-
-// Messages
 .error-message {
   color: #dc3545;
   font-size: 0.875rem;
@@ -299,7 +275,6 @@
   border-radius: 4px;
   margin-bottom: 1rem;
 }
-
 
 .success-message {
   color: #155724;
@@ -312,8 +287,6 @@
   text-align: center;
 }
 
-
-// Responsive design
 @media (max-width: 768px) {
   .account-container {
     padding: 1rem;

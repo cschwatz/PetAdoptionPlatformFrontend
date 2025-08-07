@@ -5,17 +5,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OngEventService } from './ong-event.service';
 import { Event as EventModel, EventTypeEnum } from './event.model';
 
-
 @Component({
   selector: 'app-event-details',
   standalone: true,
   imports: [CommonModule],
   template: `
     <div class="event-details-container">
-      <!-- Header with back button -->
       <header class="event-header">
         <button (click)="goBack()" class="back-btn">
-          ← Back to Events
+          ← Voltar aos Eventos
         </button>
         <h1 *ngIf="event">{{ getEventIcon(event.eventType) }} {{ event.name }}</h1>
         <div *ngIf="event" class="event-status-header">
@@ -26,42 +24,34 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
         </div>
       </header>
 
-
-      <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading event details...</p>
+        <p>Carregando Detalhes dos Eventos...</p>
       </div>
 
-
-      <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Opa! Confundiram os cabos de rede com os brinquedos de mastigar</h3>
         <p>{{ error }}</p>
-        <button (click)="loadEvent()" class="retry-btn">Try Again</button>
+        <button (click)="loadEvent()" class="retry-btn">Tentar novamente</button>
       </div>
 
-
-      <!-- Event Details -->
       <div *ngIf="!loading && !error && event" class="event-content">
         <div class="event-details-grid">
-         
-          <!-- Main Info Card -->
           <div class="detail-card main-info">
             <div class="card-header">
-              <h2>📅 Event Information</h2>
+              <h2>📅 Informações do Evento</h2>
             </div>
             <div class="card-content">
               <div class="detail-row">
-                <strong>Start Date & Time:</strong>
+                <strong>Data e Horário de Início:</strong>
                 <span>{{ formatDateTime(event.startDate) }}</span>
               </div>
               <div class="detail-row">
-                <strong>End Date & Time:</strong>
+                <strong>Data e Horário de Encerramento:</strong>
                 <span>{{ formatDateTime(event.endDate) }}</span>
               </div>
               <div class="detail-row">
-                <strong>Event Type:</strong>
+                <strong>Tipo de Evento:</strong>
                 <span>{{ getEventIcon(event.eventType) }} {{ getEventTypeLabel(event.eventType) }}</span>
               </div>
               <div class="detail-row">
@@ -73,26 +63,24 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
             </div>
           </div>
 
-
-          <!-- Location Card -->
           <div class="detail-card location-info" *ngIf="event.address">
             <div class="card-header">
-              <h2>📍 Location</h2>
+              <h2>📍 Localização</h2>
             </div>
             <div class="card-content">
               <div class="address-details">
                 <p><strong>{{ getAddressString(event.address) }}</strong></p>
                 <div class="address-components" *ngIf="event.address">
                   <div class="detail-row" *ngIf="event.address.street">
-                    <strong>Street:</strong>
+                    <strong>Rua:</strong>
                     <span>{{ event.address.street }} {{ event.address.number }}</span>
                   </div>
                   <div class="detail-row" *ngIf="event.address.neighborhood">
-                    <strong>Neighborhood:</strong>
+                    <strong>Bairro:</strong>
                     <span>{{ event.address.neighborhood }}</span>
                   </div>
                   <div class="detail-row" *ngIf="event.address.city">
-                    <strong>City:</strong>
+                    <strong>Cidade:</strong>
                     <span>{{ event.address.city }}, {{ event.address.state }}</span>
                   </div>
                   <div class="detail-row" *ngIf="event.address.cep">
@@ -104,11 +92,9 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
             </div>
           </div>
 
-
-          <!-- Organizer Card -->
           <div class="detail-card organizer-info" *ngIf="event.ong">
             <div class="card-header">
-              <h2>🏢 Organizer</h2>
+              <h2>🏢 Organização</h2>
             </div>
             <div class="card-content">
               <div class="organizer-details">
@@ -118,7 +104,7 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
                   <a [href]="'mailto:' + event.ong.email">{{ event.ong.email }}</a>
                 </div>
                 <div class="detail-row" *ngIf="event.ong.phone">
-                  <strong>Phone:</strong>
+                  <strong>Telefone:</strong>
                   <a [href]="'tel:' + event.ong.phone">{{ event.ong.phone }}</a>
                 </div>
                 <div class="detail-row" *ngIf="event.ong.cnpj">
@@ -127,21 +113,19 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
                 </div>
                 <div class="organizer-actions">
                   <button (click)="contactOrganizer()" class="contact-btn">
-                    📞 Contact Organizer
+                    📞 Contatar Organizador
                   </button>
                   <button (click)="viewOngDetails()" class="view-ong-btn">
-                    🏢 View ONG Profile
+                    🏢 Ver Perfil da ONG
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-
-          <!-- Description Card -->
           <div class="detail-card description-info" *ngIf="event.obs">
             <div class="card-header">
-              <h2>📝 Description</h2>
+              <h2>📝 Descrição</h2>
             </div>
             <div class="card-content">
               <div class="description-text">
@@ -149,18 +133,14 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
               </div>
             </div>
           </div>
-
-
         </div>
 
-
-        <!-- Action Buttons -->
         <div class="action-buttons">
           <button (click)="shareEvent()" class="share-btn">
-            🔗 Share Event
+            🔗 Compartilhar Evento
           </button>
           <button (click)="goBack()" class="back-btn-bottom">
-            ← Back to Events
+            ← Voltar aos Eventos
           </button>
         </div>
       </div>
@@ -175,13 +155,11 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       background-color: #f8f9fa;
     }
 
-
     .event-header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
     }
-
 
     .back-btn {
       position: absolute;
@@ -197,18 +175,15 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       transition: background-color 0.3s;
     }
 
-
     .back-btn:hover {
       background: #5a6268;
     }
-
 
     .event-header h1 {
       color: #333;
       font-size: 2.5rem;
       margin-bottom: 1rem;
     }
-
 
     .event-status-header {
       display: flex;
@@ -217,7 +192,6 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       align-items: center;
     }
 
-
     .status-badge {
       padding: 0.5rem 1rem;
       border-radius: 20px;
@@ -225,24 +199,20 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       font-size: 0.9rem;
     }
 
-
-    .status-badge.upcoming {
+    .status-badge.em_breve {
       background: #e3f2fd;
       color: #1976d2;
     }
 
-
-    .status-badge.ongoing {
+    .status-badge.em_andamento {
       background: #e8f5e8;
       color: #388e3c;
     }
 
-
-    .status-badge.past {
+    .status-badge.encerrado {
       background: #fce4ec;
       color: #c2185b;
     }
-
 
     .event-type {
       background: #f3e5f5;
@@ -253,12 +223,10 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       font-size: 0.9rem;
     }
 
-
     .loading-container {
       text-align: center;
       padding: 4rem 0;
     }
-
 
     .loading-spinner {
       width: 50px;
@@ -270,19 +238,16 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       margin: 0 auto 1rem;
     }
 
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
 
     .error-container {
       text-align: center;
       padding: 4rem 0;
       color: #dc3545;
     }
-
 
     .retry-btn {
       background-color: #007bff;
@@ -295,11 +260,9 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       margin-top: 1rem;
     }
 
-
     .retry-btn:hover {
       background-color: #0056b3;
     }
-
 
     .event-details-grid {
       display: grid;
@@ -307,7 +270,6 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       gap: 2rem;
       margin-bottom: 3rem;
     }
-
 
     .detail-card {
       background: white;
@@ -317,12 +279,10 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-
     .detail-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
-
 
     .card-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -330,18 +290,15 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       padding: 1.5rem;
     }
 
-
     .card-header h2 {
       margin: 0;
       font-size: 1.3rem;
       font-weight: 600;
     }
 
-
     .card-content {
       padding: 2rem;
     }
-
 
     .detail-row {
       display: flex;
@@ -352,12 +309,10 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       border-bottom: 1px solid #eee;
     }
 
-
     .detail-row:last-child {
       border-bottom: none;
       margin-bottom: 0;
     }
-
 
     .detail-row strong {
       color: #333;
@@ -365,29 +320,24 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       min-width: 120px;
     }
 
-
     .detail-row span, .detail-row a {
       color: #666;
       text-align: right;
       flex: 1;
     }
 
-
     .detail-row a {
       color: #007bff;
       text-decoration: none;
     }
 
-
     .detail-row a:hover {
       text-decoration: underline;
     }
 
-
     .address-details {
       text-align: center;
     }
-
 
     .address-details > p {
       font-size: 1.1rem;
@@ -395,11 +345,9 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       margin-bottom: 1.5rem;
     }
 
-
     .address-components {
       text-align: left;
     }
-
 
     .organizer-details h3 {
       color: #333;
@@ -408,13 +356,11 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       font-size: 1.4rem;
     }
 
-
     .organizer-actions {
       display: flex;
       gap: 1rem;
       margin-top: 1.5rem;
     }
-
 
     .contact-btn, .view-ong-btn {
       flex: 1;
@@ -426,40 +372,33 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       transition: all 0.3s;
     }
 
-
     .contact-btn {
       background: #28a745;
       color: white;
     }
 
-
     .contact-btn:hover {
       background: #218838;
     }
-
 
     .view-ong-btn {
       background: #6f42c1;
       color: white;
     }
 
-
     .view-ong-btn:hover {
       background: #5a32a3;
     }
-
 
     .description-text {
       line-height: 1.6;
       color: #555;
     }
 
-
     .description-text p {
       margin: 0;
       font-size: 1.1rem;
     }
-
 
     .action-buttons {
       display: flex;
@@ -467,7 +406,6 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       gap: 2rem;
       margin-top: 3rem;
     }
-
 
     .share-btn, .back-btn-bottom {
       padding: 1rem 2rem;
@@ -479,57 +417,47 @@ import { Event as EventModel, EventTypeEnum } from './event.model';
       transition: all 0.3s;
     }
 
-
     .share-btn {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
     }
-
 
     .share-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
 
-
     .back-btn-bottom {
       background: #6c757d;
       color: white;
     }
 
-
     .back-btn-bottom:hover {
       background: #5a6268;
     }
-
 
     @media (max-width: 768px) {
       .event-details-container {
         padding: 1rem;
       }
 
-
       .back-btn {
         position: static;
         margin-bottom: 1rem;
       }
 
-
       .event-details-grid {
         grid-template-columns: 1fr;
       }
-
 
       .organizer-actions {
         flex-direction: column;
       }
 
-
       .action-buttons {
         flex-direction: column;
         align-items: center;
       }
-
 
       .share-btn, .back-btn-bottom {
         width: 100%;
@@ -544,7 +472,6 @@ export class EventDetailsComponent implements OnInit {
   error: string | null = null;
   eventId: string | null = null;
 
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -552,59 +479,43 @@ export class EventDetailsComponent implements OnInit {
     private destroyRef: DestroyRef
   ) {}
 
-
   ngOnInit(): void {
-    console.log('🔍 EventDetailsComponent ngOnInit');
-    console.log('🔍 Route snapshot params:', this.route.snapshot.params);
-    console.log('🔍 Route snapshot paramMap:', this.route.snapshot.paramMap);
-   
     this.eventId = this.route.snapshot.paramMap.get('id');
-    console.log('🔍 Extracted eventId:', this.eventId);
    
     if (this.eventId) {
       this.loadEvent();
     } else {
-      this.error = 'No event ID provided.';
+      this.error = 'Nenhum ID de evento foi fornecido.';
     }
   }
-
 
   loadEvent(): void {
     if (!this.eventId) return;
 
-
-    console.log('🔍 Loading event with ID:', this.eventId);
     this.loading = true;
     this.error = null;
-
 
     this.eventService.getEventById(this.eventId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (event: EventModel) => {
-          console.log('✅ Event details loaded:', event);
           this.event = event;
           this.loading = false;
         },
         error: (error: any) => {
-          console.error('❌ Error loading event details:', error);
-          console.error('❌ Requested event ID was:', this.eventId);
-          this.error = error.message || 'Failed to load event details.';
+          this.error = error.message || 'Falha ao carregar detalhes do evento.';
           this.loading = false;
         }
       });
   }
 
-
   private parseBackendDate(dateStr: string): Date {
-    // Convert "dd/MM/yyyy HH:mm" format to Date object
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month, year] = datePart.split('/');
     const [hours, minutes] = timePart.split(':');
    
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
   }
-
 
   getEventIcon(eventType: EventTypeEnum): string {
     const iconMap = {
@@ -618,69 +529,60 @@ export class EventDetailsComponent implements OnInit {
     return iconMap[eventType] || '📅';
   }
 
-
   getEventTypeLabel(eventType: EventTypeEnum): string {
     const labelMap = {
-      [EventTypeEnum.ADOPTION_FAIR]: 'Adoption Fair',
-      [EventTypeEnum.FUNDRAISING]: 'Fundraising',
-      [EventTypeEnum.AWARENESS_CAMPAIGN]: 'Awareness Campaign',
-      [EventTypeEnum.VETERINARY_CLINIC]: 'Veterinary Clinic',
-      [EventTypeEnum.VOLUNTEER_MEETING]: 'Volunteer Meeting',
-      [EventTypeEnum.OTHER]: 'Other'
+      [EventTypeEnum.ADOPTION_FAIR]: 'Feira de Adoção',
+      [EventTypeEnum.FUNDRAISING]: 'Angariamento de Fundos',
+      [EventTypeEnum.AWARENESS_CAMPAIGN]: 'Campanha de Conscientização',
+      [EventTypeEnum.VETERINARY_CLINIC]: 'Clínica Veterinária',
+      [EventTypeEnum.VOLUNTEER_MEETING]: 'Encontro de Voluntários',
+      [EventTypeEnum.OTHER]: 'Outros'
     };
     return labelMap[eventType] || eventType;
   }
-
 
   getEventStatus(event: EventModel): string {
     const now = new Date();
     const startDate = this.parseBackendDate(event.startDate);
     const endDate = this.parseBackendDate(event.endDate);
 
-
-    if (endDate < now) return 'past';
-    if (startDate <= now && endDate >= now) return 'ongoing';
-    return 'upcoming';
+    if (endDate < now) return 'encerrado';
+    if (startDate <= now && endDate >= now) return 'em_andamento';
+    return 'em_breve';
   }
-
 
   getEventStatusLabel(event: EventModel): string {
     const status = this.getEventStatus(event);
     const statusMap: { [key: string]: string } = {
-      'upcoming': 'Upcoming',
-      'ongoing': 'Ongoing',
-      'past': 'Past'
+      'em_breve': 'Em breve',
+      'em_andamento': 'Em andamento',
+      'encerrado': 'Encerrado'
     };
-    return statusMap[status] || 'Unknown';
+    return statusMap[status] || 'Desconhecido';
   }
-
 
   formatDateTime(dateTimeStr: string): string {
     const date = this.parseBackendDate(dateTimeStr);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('pt-BR', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'America/Sao_Paulo'
     });
   }
 
-
   formatCep(cep: string): string {
     if (!cep) return '';
-    // Format CEP as XXXXX-XXX
     return cep.replace(/(\d{5})(\d{3})/, '$1-$2');
   }
 
-
   formatCnpj(cnpj: string): string {
     if (!cnpj) return '';
-    // Format CNPJ as XX.XXX.XXX/XXXX-XX
     return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
   }
-
 
   getAddressString(address: any): string {
     if (!address) return '';
@@ -695,24 +597,20 @@ export class EventDetailsComponent implements OnInit {
     return parts.join(', ');
   }
 
-
   contactOrganizer(): void {
     if (!this.event?.ong) return;
 
-
     const contactInfo = [];
-    if (this.event.ong.phone) contactInfo.push(`Phone: ${this.event.ong.phone}`);
+    if (this.event.ong.phone) contactInfo.push(`Telefone: ${this.event.ong.phone}`);
     if (this.event.ong.email) contactInfo.push(`Email: ${this.event.ong.email}`);
 
-
     const message = contactInfo.length > 0
-      ? `Contact ${this.event.ong.name} about "${this.event.name}":\n\n${contactInfo.join('\n')}`
-      : `Contact information for ${this.event.ong.name} is not available.`;
+      ? `Contate ${this.event.ong.name} sobre "${this.event.name}":\n\n${contactInfo.join('\n')}`
+      : `Informações de contato de ${this.event.ong.name} não está disponível.`;
 
 
     alert(message);
   }
-
 
   viewOngDetails(): void {
     if (this.event?.ong?.id) {
@@ -720,12 +618,10 @@ export class EventDetailsComponent implements OnInit {
     }
   }
 
-
   shareEvent(): void {
     if (!this.event) return;
 
-
-    const shareText = `Check out this event: ${this.event.name} - ${this.formatDateTime(this.event.startDate)}`;
+    const shareText = `Dê uma olhada neste evento: ${this.event.name} - ${this.formatDateTime(this.event.startDate)}`;
    
     if (navigator.share) {
       navigator.share({
@@ -736,13 +632,12 @@ export class EventDetailsComponent implements OnInit {
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareText).then(() => {
-        alert('Event details copied to clipboard!');
+        alert('Detalhes do evento copiados para a área de transferência!');
       }).catch(() => {
-        alert(`Share this event:\n\n${shareText}`);
+        alert(`Compartilhe este evento:\n\n${shareText}`);
       });
     }
   }
-
 
   goBack(): void {
     this.router.navigate(['/ong-events']);

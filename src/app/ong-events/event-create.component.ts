@@ -7,7 +7,6 @@ import { MyEventsService } from '../my-events/my-events.service';
 import { Event as EventModel, EventTypeEnum } from './event.model';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-event-create',
   standalone: true,
@@ -17,18 +16,18 @@ import { AuthService } from '../authentication/auth.service';
       <!-- Header with back button -->
       <header class="create-header">
         <button (click)="goBack()" class="back-btn">
-          ← Back to Events
+          ← Voltar aos Eventos
         </button>
-        <h1>📅 Create New Event</h1>
-        <p>Organize a new event for your ONG</p>
+        <h1>📅 Criar Novo Evento</h1>
+        <p>Organize um novo evento para sua ONG</p>
       </header>
 
 
       <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Opa! Derrubaram o pote de aǵua nos fios do servidor</h3>
         <p>{{ error }}</p>
-        <button (click)="error = null" class="retry-btn">Try Again</button>
+        <button (click)="error = null" class="retry-btn">Tentar Novamente</button>
       </div>
 
 
@@ -38,11 +37,11 @@ import { AuthService } from '../authentication/auth.service';
          
           <!-- Basic Information -->
           <div class="form-section">
-            <h3>Basic Information</h3>
+            <h3>Informação Básica</h3>
            
             <div class="form-row">
               <div class="form-group full-width">
-                <label for="name">Event Name *</label>
+                <label for="name">Nome do Evento *</label>
                 <input
                   type="text"
                   id="name"
@@ -50,89 +49,80 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="Enter event name"
                   [class.error]="createForm.get('name')?.invalid && createForm.get('name')?.touched">
                 <div *ngIf="createForm.get('name')?.invalid && createForm.get('name')?.touched" class="error-message">
-                  Event name is required
+                  Nome do Evento é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="eventType">Event Type *</label>
+                <label for="eventType">Tipo do Evento *</label>
                 <select
                   id="eventType"
                   formControlName="eventType"
                   [class.error]="createForm.get('eventType')?.invalid && createForm.get('eventType')?.touched">
-                  <option value="">Select event type</option>
-                  <option value="ADOPTION_FAIR">Adoption Fair</option>
-                  <option value="FUNDRAISING">Fundraising</option>
-                  <option value="AWARENESS_CAMPAIGN">Awareness Campaign</option>
-                  <option value="VETERINARY_CLINIC">Veterinary Clinic</option>
-                  <option value="TRAINING_WORKSHOP">Training Workshop</option>
-                  <option value="VOLUNTEER_MEETING">Volunteer Meeting</option>
+                  <option value="">Selecione o tipo do evento</option>
+                  <option value="ADOPTION_FAIR">Feira de Adoção</option>
+                  <option value="FUNDRAISING">Angariamento de Fundos</option>
+                  <option value="AWARENESS_CAMPAIGN">Campanha de Conscientização</option>
+                  <option value="VETERINARY_CLINIC">Clínica Veterinária</option>
+                  <option value="VOLUNTEER_MEETING">Encontro de Voluntários</option>
                   <option value="OTHER">Other</option>
                 </select>
                 <div *ngIf="createForm.get('eventType')?.invalid && createForm.get('eventType')?.touched" class="error-message">
-                  Event type is required
+                  Tipo do Evento é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group full-width">
-                <label for="obs">Event Description</label>
+                <label for="obs">Descrição do Evento</label>
                 <textarea
                   id="obs"
                   formControlName="obs"
                   placeholder="Describe your event - what will happen, who should attend, etc."
                   rows="4"></textarea>
-                <small class="help-text">Provide details about the event to help people understand what to expect</small>
+                <small class="help-text">Forneça detalhes do evento para ajudar as pessoas e entenderem seu funcionamento</small>
               </div>
             </div>
           </div>
 
-
-          <!-- Date & Time -->
           <div class="form-section">
-            <h3>Date & Time</h3>
-           
+            <h3>Data e Horário</h3>
             <div class="form-row">
               <div class="form-group">
-                <label for="startDate">Start Date & Time *</label>
+                <label for="startDate">Data e Horário de Início *</label>
                 <input
                   type="datetime-local"
                   id="startDate"
                   formControlName="startDate"
                   [class.error]="createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched">
                 <div *ngIf="createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched" class="error-message">
-                  Start date and time is required
+                  Data e Horário de Início é obrigatório
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="endDate">End Date & Time *</label>
+                <label for="endDate">Data e Horário de Encerramento *</label>
                 <input
                   type="datetime-local"
                   id="endDate"
                   formControlName="endDate"
                   [class.error]="createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched">
                 <div *ngIf="createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched" class="error-message">
-                  End date and time is required
+                  Data e Horário de Encerramento é obrigatório
                 </div>
               </div>
             </div>
           </div>
 
-
-          <!-- Location -->
           <div class="form-section">
             <h3>Location</h3>
            
             <div class="form-row">
               <div class="form-group">
-                <label for="street">Street Address</label>
+                <label for="street">Rua</label>
                 <input
                   type="text"
                   id="street"
@@ -140,9 +130,8 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="Street address">
               </div>
 
-
               <div class="form-group">
-                <label for="number">Number</label>
+                <label for="number">Número</label>
                 <input
                   type="number"
                   id="number"
@@ -152,10 +141,9 @@ import { AuthService } from '../authentication/auth.service';
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="neighborhood">Neighborhood</label>
+                <label for="neighborhood">Bairro</label>
                 <input
                   type="text"
                   id="neighborhood"
@@ -163,9 +151,8 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="Neighborhood">
               </div>
 
-
               <div class="form-group">
-                <label for="city">City</label>
+                <label for="city">Cidade</label>
                 <input
                   type="text"
                   id="city"
@@ -174,10 +161,9 @@ import { AuthService } from '../authentication/auth.service';
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="state">State</label>
+                <label for="state">Estado</label>
                 <input
                   type="text"
                   id="state"
@@ -185,7 +171,6 @@ import { AuthService } from '../authentication/auth.service';
                   placeholder="State"
                   maxlength="2">
               </div>
-
 
               <div class="form-group">
                 <label for="cep">CEP</label>
@@ -199,22 +184,20 @@ import { AuthService } from '../authentication/auth.service';
             </div>
           </div>
 
-
-          <!-- Action Buttons -->
           <div class="form-actions">
             <button
               type="button"
               (click)="goBack()"
               class="cancel-btn"
               [disabled]="saving">
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               class="save-btn"
               [disabled]="createForm.invalid || saving">
-              <span *ngIf="saving">Creating Event...</span>
-              <span *ngIf="!saving">📅 Create Event</span>
+              <span *ngIf="saving">Criando Evento...</span>
+              <span *ngIf="!saving">📅 Criar Evento</span>
             </button>
           </div>
         </form>
@@ -230,13 +213,11 @@ import { AuthService } from '../authentication/auth.service';
       background-color: #f8f9fa;
     }
 
-
     .create-header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
     }
-
 
     .back-btn {
       position: absolute;
@@ -252,11 +233,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .back-btn:hover {
       background: #5a6268;
     }
-
 
     .create-header h1 {
       color: #333;
@@ -264,12 +243,10 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 0.5rem;
     }
 
-
     .create-header p {
       color: #666;
       font-size: 1.1rem;
     }
-
 
     .error-container {
       text-align: center;
@@ -280,7 +257,6 @@ import { AuthService } from '../authentication/auth.service';
       border-radius: 8px;
       border: 1px solid #f5c6cb;
     }
-
 
     .retry-btn {
       background-color: #007bff;
@@ -293,11 +269,9 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 1rem;
     }
 
-
     .retry-btn:hover {
       background-color: #0056b3;
     }
-
 
     .form-container {
       background: white;
@@ -306,11 +280,9 @@ import { AuthService } from '../authentication/auth.service';
       overflow: hidden;
     }
 
-
     .create-form {
       padding: 2rem;
     }
-
 
     .form-section {
       margin-bottom: 2rem;
@@ -318,11 +290,9 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 1px solid #eee;
     }
 
-
     .form-section:last-child {
       border-bottom: none;
     }
-
 
     .form-section h3 {
       color: #333;
@@ -332,7 +302,6 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 2px solid #007bff;
     }
 
-
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -340,24 +309,20 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 1rem;
     }
 
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
 
-
     .form-group.full-width {
       grid-column: 1 / -1;
     }
-
 
     .form-group label {
       font-weight: 600;
       color: #333;
       margin-bottom: 0.5rem;
     }
-
 
     .form-group input,
     .form-group select,
@@ -369,7 +334,6 @@ import { AuthService } from '../authentication/auth.service';
       transition: border-color 0.3s, box-shadow 0.3s;
     }
 
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
@@ -378,12 +342,10 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
     }
 
-
     .form-group input.error,
     .form-group select.error {
       border-color: #dc3545;
     }
-
 
     .error-message {
       color: #dc3545;
@@ -391,13 +353,11 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 0.25rem;
     }
 
-
     .help-text {
       color: #666;
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
-
 
     .form-actions {
       display: flex;
@@ -407,7 +367,6 @@ import { AuthService } from '../authentication/auth.service';
       padding-top: 2rem;
       border-top: 1px solid #eee;
     }
-
 
     .cancel-btn {
       background: #6c757d;
@@ -420,11 +379,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .cancel-btn:hover:not(:disabled) {
       background: #5a6268;
     }
-
 
     .save-btn {
       background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -439,13 +396,11 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
     }
 
-
     .save-btn:hover:not(:disabled) {
       background: linear-gradient(135deg, #218838 0%, #1dd1a1 100%);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
     }
-
 
     .save-btn:disabled,
     .cancel-btn:disabled {
@@ -454,28 +409,23 @@ import { AuthService } from '../authentication/auth.service';
       transform: none !important;
     }
 
-
     @media (max-width: 768px) {
       .create-event-container {
         padding: 1rem;
       }
-
 
       .back-btn {
         position: static;
         margin-bottom: 1rem;
       }
 
-
       .form-row {
         grid-template-columns: 1fr;
       }
 
-
       .form-actions {
         flex-direction: column;
       }
-
 
       .cancel-btn,
       .save-btn {
@@ -490,7 +440,6 @@ export class EventCreateComponent implements OnInit {
   saving = false;
   error: string | null = null;
 
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -501,15 +450,12 @@ export class EventCreateComponent implements OnInit {
     this.initializeForm();
   }
 
-
   ngOnInit(): void {
-    // Check if user is an ONG
     if (!this.authService.isOng()) {
-      this.error = 'You must be logged in as an ONG to create events.';
+      this.error = 'Você deve ser uma ONG para criar um evento.';
       return;
     }
   }
-
 
   private initializeForm(): void {
     this.createForm = this.fb.group({
@@ -518,7 +464,6 @@ export class EventCreateComponent implements OnInit {
       obs: [''],
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
-      // Address fields
       street: [''],
       number: [null],
       neighborhood: [''],
@@ -528,30 +473,22 @@ export class EventCreateComponent implements OnInit {
     });
   }
 
-
   onSubmit(): void {
     if (this.createForm.invalid) {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.createForm.controls).forEach(key => {
         this.createForm.get(key)?.markAsTouched();
       });
       return;
     }
 
-
     this.saving = true;
     this.error = null;
 
-
     const formData = this.createForm.value;
 
-
-    // Convert datetime-local to backend format (dd/MM/yyyy HH:mm)
     const startDate = this.formatDateForBackend(formData.startDate);
     const endDate = this.formatDateForBackend(formData.endDate);
 
-
-    // Build address object if any address fields are filled
     let address = null;
     if (formData.street || formData.city || formData.state) {
       address = {
@@ -564,7 +501,6 @@ export class EventCreateComponent implements OnInit {
       };
     }
 
-
     const eventData: Omit<EventModel, 'id' | 'ong'> = {
       name: formData.name,
       eventType: formData.eventType as EventTypeEnum,
@@ -572,32 +508,23 @@ export class EventCreateComponent implements OnInit {
       startDate: startDate,
       endDate: endDate,
       address: address || undefined
-      // Note: ONG association is handled on the backend based on authenticated user
     };
-
-
-    console.log('📋 Creating event with data:', eventData);
-
 
     this.myEventsService.createMyEvent(eventData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (createdEvent) => {
-          console.log('✅ Event created successfully:', createdEvent);
+        next: () => {
           this.saving = false;
           this.router.navigate(['/my-events']);
         },
         error: (error: any) => {
-          console.error('❌ Error creating event:', error);
-          this.error = error.message || 'Failed to create event.';
+          this.error = error.message || 'Falha ao criar o evento.';
           this.saving = false;
         }
       });
   }
 
-
   private formatDateForBackend(dateTimeLocal: string): string {
-    // Convert from "2025-08-30T14:30" to "30/08/2025 14:30"
     const date = new Date(dateTimeLocal);
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -607,7 +534,6 @@ export class EventCreateComponent implements OnInit {
    
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
-
 
   goBack(): void {
     this.router.navigate(['/my-events']);

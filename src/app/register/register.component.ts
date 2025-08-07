@@ -118,7 +118,7 @@ export type UserType = 'PERSON' | 'ONG';
 
 
               <div class="form-group half-width">
-                <label for="middleName">Middle Name</label>
+                <label for="middleName">Nome do Meio</label>
                 <input
                   type="text"
                   id="middleName"
@@ -709,7 +709,7 @@ export class RegisterComponent {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
-  private apiUrl = 'http://localhost:8080'; // Adjust to match your backend
+  private apiUrl = 'http://localhost:8080';
 
 
   constructor(
@@ -751,10 +751,10 @@ export class RegisterComponent {
         ...baseForm,
         name: ['', Validators.required],
         cnpj: ['', Validators.required],
-        pix: [''], // Optional PIX key for donations
-        instagram: [''], // Optional Instagram profile URL
-        facebook: [''], // Optional Facebook profile URL
-        tiktok: [''] // Optional TikTok profile URL
+        pix: [''],
+        instagram: [''],
+        facebook: [''],
+        tiktok: [''] 
       });
     }
   }
@@ -809,13 +809,11 @@ export class RegisterComponent {
       }
 
 
-      // Make HTTP POST request to the appropriate endpoint
       this.http.post(endpoint, registerData).subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          this.successMessage = `${this.userType === 'PERSON' ? 'Personal' : 'Organization'} conta criada com sucesso! Redirecionando ao login...`;
+          this.successMessage = `${this.userType === 'PERSON' ? 'Pessoal' : 'Organização'} conta criada com sucesso! Redirecionando ao login...`;
          
-          // Redirect to login after 2 seconds
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);

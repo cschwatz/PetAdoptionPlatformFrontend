@@ -1,7 +1,6 @@
 import { Address } from '../address/address.model';
 import { Ong } from '../ong/ong.model';
 
-
 export enum EventTypeEnum {
   ADOPTION_FAIR = 'ADOPTION_FAIR',
   FUNDRAISING = 'FUNDRAISING',
@@ -11,14 +10,13 @@ export enum EventTypeEnum {
   OTHER = 'OTHER'
 }
 
-
 export interface Event {
   id: string;
   name: string;
-  obs?: string;      // Description field for the event
+  obs?: string;      
   eventType: EventTypeEnum;
-  startDate: string; // ISO date string
-  endDate: string;   // ISO date string
+  startDate: string;
+  endDate: string;
   address?: Address;
   ong?: Ong;
 }

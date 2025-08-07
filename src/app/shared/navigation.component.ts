@@ -11,36 +11,33 @@ import { AuthService } from '../authentication/auth.service';
   template: `
     <header class="navigation-header" *ngIf="isLoggedIn">
       <div class="header-content">
-        <h1 class="logo" (click)="navigateTo('/dashboard')">Animal Adoption Platform</h1>
+        <h1 class="logo" (click)="navigateTo('/dashboard')">Plataforma de Adoção de Animais</h1>
         <nav class="navigation">
           <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
-            🏠 Home
+            🏠 Página Inicial
           </a>
           <a routerLink="/adoption" routerLinkActive="active" class="nav-link">
-            🐕 Adopt
+            🐕 Adotar
           </a>
-          <!-- Show Events link for Person users, My Events for ONG users -->
           <a *ngIf="isPerson" routerLink="/ong-events" routerLinkActive="active" class="nav-link">
-            📅 Events
+            📅 Eventos
           </a>
           <a *ngIf="isOng" routerLink="/my-events" routerLinkActive="active" class="nav-link">
-            📅 My Events
+            📅 Meus Eventos
           </a>
-          <!-- Show ONG link only for Person users -->
           <a *ngIf="isPerson" routerLink="/ong" routerLinkActive="active" class="nav-link">
             🏢 ONGs
           </a>
-          <!-- Show My Animals link only for ONG users -->
           <a *ngIf="isOng" routerLink="/my-animals" routerLinkActive="active" class="nav-link">
-            🐾 My Animals
+            🐾 Meus Animais
           </a>
           <a routerLink="/my-account" routerLinkActive="active" class="nav-link">
-            👤 My Account
+            👤 Minha Conta
           </a>
         </nav>
         <div class="user-actions">
-          <span class="user-greeting">Welcome, {{ userDisplayName }}!</span>
-          <button (click)="logout()" class="logout-btn">Logout</button>
+          <span class="user-greeting">Bem-vindo(a)!</span>
+          <button (click)="logout()" class="logout-btn">Sair</button>
         </div>
       </div>
     </header>
@@ -207,7 +204,6 @@ export class NavigationComponent implements OnInit {
   userType: string = '';
   isPerson: boolean = false;
   isOng: boolean = false;
-  userDisplayName: string = 'User';
 
 
   constructor(
@@ -225,8 +221,6 @@ export class NavigationComponent implements OnInit {
       }
     });
 
-
-    // Initial check
     this.isLoggedIn = this.authService.isLoggedInSync();
     if (this.isLoggedIn) {
       this.updateUserInfo();
@@ -237,10 +231,7 @@ export class NavigationComponent implements OnInit {
   private updateUserInfo(): void {
     this.userType = this.authService.getUserType() || 'User';
     this.isPerson = this.authService.isPerson();
-    this.isOng = this.authService.isOng();
-   
-    // Set display name based on user type
-    this.userDisplayName = this.isPerson ? 'Person' : this.isOng ? 'Organization' : 'User';
+    this.isOng = this.authService.isOng();   
   }
 
 

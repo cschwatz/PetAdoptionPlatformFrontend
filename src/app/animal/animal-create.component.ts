@@ -6,7 +6,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MyAnimalsService } from '../my-animals/my-animals.service';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-animal-create',
   standalone: true,
@@ -15,157 +14,142 @@ import { AuthService } from '../authentication/auth.service';
     <div class="create-animal-container">
       <header class="create-header">
         <button (click)="goBack()" class="back-btn">
-          ← Back to My Animals
+          ← Voltar aos Meus Animais
         </button>
-        <h1>🐾 Add New Animal</h1>
-        <p>Fill in the details for the new animal</p>
+        <h1>🐾 Adicionar Novo Animal</h1>
+        <p>Preencha os detalhes do novo animal</p>
       </header>
 
-
-      <!-- Error State -->
       <div *ngIf="error" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Ops! Algum animal energético derrubou o servidor enquanto brincava</h3>
         <p>{{ error }}</p>
-        <button (click)="error = null" class="retry-btn">Dismiss</button>
+        <button (click)="error = null" class="retry-btn">Dispensar</button>
       </div>
 
-
-      <!-- Create Form -->
       <div *ngIf="!error" class="form-container">
         <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="create-form">
-         
-          <!-- Basic Information -->
           <div class="form-section">
-            <h3>Basic Information</h3>
+            <h3>Informações Básicas</h3>
            
             <div class="form-row">
               <div class="form-group">
-                <label for="name">Name *</label>
+                <label for="name">Nome *</label>
                 <input
                   type="text"
                   id="name"
                   formControlName="name"
-                  placeholder="Animal's name"
+                  placeholder="Nome do animal"
                   [class.error]="createForm.get('name')?.invalid && createForm.get('name')?.touched">
                 <div *ngIf="createForm.get('name')?.invalid && createForm.get('name')?.touched" class="error-message">
-                  Name is required
+                  Nome é obrigatório
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="animalType">Animal Type *</label>
+                <label for="animalType">Tipo de Animal *</label>
                 <select
                   id="animalType"
                   formControlName="animalType"
                   [class.error]="createForm.get('animalType')?.invalid && createForm.get('animalType')?.touched">
-                  <option value="">Select animal type</option>
-                  <option value="DOG">Dog</option>
-                  <option value="CAT">Cat</option>
-                  <option value="BIRD">Bird</option>
-                  <option value="RABBIT">Rabbit</option>
-                  <option value="OTHER">Other</option>
+                  <option value="">Selecione o tipo de animal</option>
+                  <option value="DOG">Cachorro</option>
+                  <option value="CAT">Gato</option>
+                  <option value="BIRD">Pássaro</option>
+                  <option value="RABBIT">Coelho</option>
+                  <option value="OTHER">Outro</option>
                 </select>
                 <div *ngIf="createForm.get('animalType')?.invalid && createForm.get('animalType')?.touched" class="error-message">
-                  Animal type is required
+                  Tipo de animal é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="breed">Breed</label>
+                <label for="breed">Raça</label>
                 <input
                   type="text"
                   id="breed"
                   formControlName="breed"
-                  placeholder="Animal's breed">
+                  placeholder="Raça do animal">
               </div>
 
-
               <div class="form-group">
-                <label for="color">Color</label>
+                <label for="color">Cor</label>
                 <input
                   type="text"
                   id="color"
                   formControlName="color"
-                  placeholder="Animal's color">
+                  placeholder="Cor do animal">
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="age">Age *</label>
+                <label for="age">Idade *</label>
                 <input
                   type="number"
                   id="age"
                   formControlName="age"
-                  placeholder="Age in years"
+                  placeholder="Idade em anos"
                   min="0"
                   [class.error]="createForm.get('age')?.invalid && createForm.get('age')?.touched">
                 <div *ngIf="createForm.get('age')?.invalid && createForm.get('age')?.touched" class="error-message">
-                  Age is required and must be 0 or greater
+                  Idade é obrigatória e deve ser 0 ou maior
                 </div>
               </div>
 
-
               <div class="form-group">
-                <label for="gender">Gender *</label>
+                <label for="gender">Sexo *</label>
                 <select
                   id="gender"
                   formControlName="gender"
                   [class.error]="createForm.get('gender')?.invalid && createForm.get('gender')?.touched">
-                  <option value="">Select gender</option>
-                  <option value="M">Male</option>
-                  <option value="F">Female</option>
+                  <option value="">Selecione o sexo</option>
+                  <option value="M">Macho</option>
+                  <option value="F">Fêmea</option>
                 </select>
                 <div *ngIf="createForm.get('gender')?.invalid && createForm.get('gender')?.touched" class="error-message">
-                  Gender is required
+                  campo Sexo é obrigatório
                 </div>
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="weight">Weight (kg)</label>
+                <label for="weight">Peso (kg)</label>
                 <input
                   type="number"
                   id="weight"
                   formControlName="weight"
-                  placeholder="Weight in kilograms"
+                  placeholder="Peso em quilogramas"
                   min="0"
                   step="0.1">
               </div>
 
-
               <div class="form-group">
-                <label for="size">Size (cm)</label>
+                <label for="size">Tamanho (cm)</label>
                 <input
                   type="number"
                   id="size"
                   formControlName="size"
-                  placeholder="Height in centimeters"
+                  placeholder="Altura em centímetros"
                   min="0"
                   step="1">
               </div>
             </div>
 
-
             <div class="form-row">
               <div class="form-group">
-                <label for="fur">Fur Type</label>
+                <label for="fur">Tipo de Pelagem</label>
                 <select id="fur" formControlName="fur">
-                  <option value="">Select fur type</option>
-                  <option value="SHORT">Short</option>
-                  <option value="MEDIUM">Medium</option>
-                  <option value="LONG">Long</option>
-                  <option value="NONE">None</option>
+                  <option value="">Selecione o tipo de pelagem</option>
+                  <option value="SHORT">Curta</option>
+                  <option value="MEDIUM">Média</option>
+                  <option value="LONG">Longa</option>
+                  <option value="NONE">Nenhuma</option>
                 </select>
               </div>
-
 
               <div class="form-group checkbox-group">
                 <label class="checkbox-label">
@@ -173,14 +157,12 @@ import { AuthService } from '../authentication/auth.service';
                     type="checkbox"
                     formControlName="castrated">
                   <span class="checkmark"></span>
-                  Castrated/Spayed
+                  Castrado/Esterilizado
                 </label>
               </div>
             </div>
           </div>
 
-
-          <!-- Status Section -->
           <div class="form-section">
             <h3>Status</h3>
             <div class="form-group checkbox-group">
@@ -189,65 +171,58 @@ import { AuthService } from '../authentication/auth.service';
                   type="checkbox"
                   formControlName="adopted">
                 <span class="checkmark"></span>
-                Adopted
+                Adotado
               </label>
             </div>
           </div>
 
-
-          <!-- Description -->
           <div class="form-section">
-            <h3>Description</h3>
+            <h3>Descrição</h3>
             <div class="form-group">
-              <label for="obs">Additional Notes</label>
+              <label for="obs">Observações Adicionais</label>
               <textarea
                 id="obs"
                 formControlName="obs"
-                placeholder="Add any additional information about the animal..."
+                placeholder="Adicione qualquer informação adicional sobre o animal..."
                 rows="4"></textarea>
             </div>
           </div>
 
-
-          <!-- Photo Section -->
           <div class="form-section">
-            <h3>Photo</h3>
+            <h3>Foto</h3>
             <div class="photo-section">
               <div class="form-group">
-                <label for="photo">Upload Photo</label>
+                <label for="photo">Enviar Foto</label>
                 <input
                   type="file"
                   id="photo"
                   (change)="onFileSelected($event)"
                   accept="image/*"
                   class="file-input">
-                <small class="help-text">Upload a photo of the animal (JPG, PNG, GIF)</small>
+                <small class="help-text">Envie uma foto do animal (JPG, PNG, GIF)</small>
               </div>
 
-
               <div *ngIf="photoPreview" class="photo-preview-container">
-                <h4>Photo Preview:</h4>
-                <img [src]="photoPreview" alt="Photo preview" class="photo-preview">
+                <h4>Pré-visualização da Foto:</h4>
+                <img [src]="photoPreview" alt="Pré-visualização da foto" class="photo-preview">
               </div>
             </div>
           </div>
 
-
-          <!-- Action Buttons -->
           <div class="form-actions">
             <button
               type="button"
               (click)="goBack()"
               class="cancel-btn"
               [disabled]="saving">
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               class="save-btn"
               [disabled]="createForm.invalid || saving">
-              <span *ngIf="saving">Creating...</span>
-              <span *ngIf="!saving">🐾 Create Animal</span>
+              <span *ngIf="saving">Criando...</span>
+              <span *ngIf="!saving">🐾 Criar Animal</span>
             </button>
           </div>
         </form>
@@ -263,13 +238,11 @@ import { AuthService } from '../authentication/auth.service';
       background-color: #f8f9fa;
     }
 
-
     .create-header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
     }
-
 
     .back-btn {
       position: absolute;
@@ -285,11 +258,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .back-btn:hover {
       background: #5a6268;
     }
-
 
     .create-header h1 {
       color: #333;
@@ -297,12 +268,10 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 0.5rem;
     }
 
-
     .create-header p {
       color: #666;
       font-size: 1.1rem;
     }
-
 
     .error-container {
       text-align: center;
@@ -313,7 +282,6 @@ import { AuthService } from '../authentication/auth.service';
       border-radius: 8px;
       color: #856404;
     }
-
 
     .retry-btn {
       background-color: #007bff;
@@ -326,11 +294,9 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 1rem;
     }
 
-
     .retry-btn:hover {
       background-color: #0056b3;
     }
-
 
     .form-container {
       background: white;
@@ -339,11 +305,9 @@ import { AuthService } from '../authentication/auth.service';
       overflow: hidden;
     }
 
-
     .create-form {
       padding: 2rem;
     }
-
 
     .form-section {
       margin-bottom: 2rem;
@@ -351,11 +315,9 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 1px solid #eee;
     }
 
-
     .form-section:last-child {
       border-bottom: none;
     }
-
 
     .form-section h3 {
       color: #333;
@@ -365,7 +327,6 @@ import { AuthService } from '../authentication/auth.service';
       border-bottom: 2px solid #28a745;
     }
 
-
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -373,19 +334,16 @@ import { AuthService } from '../authentication/auth.service';
       margin-bottom: 1rem;
     }
 
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
-
 
     .form-group label {
       font-weight: 600;
       color: #333;
       margin-bottom: 0.5rem;
     }
-
 
     .form-group input,
     .form-group select,
@@ -397,7 +355,6 @@ import { AuthService } from '../authentication/auth.service';
       transition: border-color 0.3s, box-shadow 0.3s;
     }
 
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
@@ -406,12 +363,10 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
     }
 
-
     .form-group input.error,
     .form-group select.error {
       border-color: #dc3545;
     }
-
 
     .error-message {
       color: #dc3545;
@@ -419,12 +374,10 @@ import { AuthService } from '../authentication/auth.service';
       margin-top: 0.25rem;
     }
 
-
     .checkbox-group {
       flex-direction: row !important;
       align-items: center;
     }
-
 
     .checkbox-label {
       display: flex;
@@ -434,12 +387,10 @@ import { AuthService } from '../authentication/auth.service';
       color: #333;
     }
 
-
     .checkbox-label input[type="checkbox"] {
       margin-right: 0.5rem;
       transform: scale(1.2);
     }
-
 
     .photo-section {
       display: flex;
@@ -447,17 +398,14 @@ import { AuthService } from '../authentication/auth.service';
       gap: 1.5rem;
     }
 
-
     .photo-preview-container {
       text-align: center;
     }
-
 
     .photo-preview-container h4 {
       color: #333;
       margin-bottom: 1rem;
     }
-
 
     .photo-preview {
       max-width: 300px;
@@ -466,18 +414,15 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-
     .file-input {
       padding: 0.5rem !important;
     }
-
 
     .help-text {
       color: #666;
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
-
 
     .form-actions {
       display: flex;
@@ -487,7 +432,6 @@ import { AuthService } from '../authentication/auth.service';
       padding-top: 2rem;
       border-top: 1px solid #eee;
     }
-
 
     .cancel-btn {
       background: #6c757d;
@@ -500,11 +444,9 @@ import { AuthService } from '../authentication/auth.service';
       transition: background-color 0.3s;
     }
 
-
     .cancel-btn:hover:not(:disabled) {
       background: #5a6268;
     }
-
 
     .save-btn {
       background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -519,13 +461,11 @@ import { AuthService } from '../authentication/auth.service';
       box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
     }
 
-
     .save-btn:hover:not(:disabled) {
       background: linear-gradient(135deg, #218838 0%, #1dd1a1 100%);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
     }
-
 
     .save-btn:disabled,
     .cancel-btn:disabled {
@@ -534,28 +474,23 @@ import { AuthService } from '../authentication/auth.service';
       transform: none !important;
     }
 
-
     @media (max-width: 768px) {
       .create-animal-container {
         padding: 1rem;
       }
-
 
       .back-btn {
         position: static;
         margin-bottom: 1rem;
       }
 
-
       .form-row {
         grid-template-columns: 1fr;
       }
 
-
       .form-actions {
         flex-direction: column;
       }
-
 
       .cancel-btn,
       .save-btn {
@@ -571,7 +506,6 @@ export class AnimalCreateComponent implements OnInit {
   photoPreview: string | null = null;
   selectedFile: File | null = null;
 
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -582,15 +516,12 @@ export class AnimalCreateComponent implements OnInit {
     this.initializeForm();
   }
 
-
   ngOnInit(): void {
-    // Check if user is an ONG
     if (!this.authService.isOng()) {
-      this.error = 'You must be logged in as an ONG to create animals.';
+      this.error = 'Você deve estar logado como uma ONG para criar animais.';
       return;
     }
   }
-
 
   private initializeForm(): void {
     this.createForm = this.fb.group({
@@ -609,7 +540,6 @@ export class AnimalCreateComponent implements OnInit {
     });
   }
 
-
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
@@ -617,7 +547,6 @@ export class AnimalCreateComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
      
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         this.photoPreview = e.target?.result as string;
@@ -626,35 +555,22 @@ export class AnimalCreateComponent implements OnInit {
     }
   }
 
-
   onSubmit(): void {
     if (this.createForm.invalid) return;
-
 
     this.saving = true;
     const formData = this.createForm.value;
 
-
-    // Ensure size is a number or null
     if (formData.size === '' || formData.size === null || formData.size === undefined) {
       formData.size = null;
     } else {
       formData.size = Number(formData.size);
     }
 
-
-    console.log('📋 Creating new animal with data:', {
-      ...formData,
-      photo: formData.photo ? '[photo data]' : 'no photo'
-    });
-
-
-    // If a photo was selected, convert it to base64
     if (this.selectedFile) {
       const reader = new FileReader();
       reader.onload = () => {
         const base64 = reader.result as string;
-        // Remove data URL prefix to get just the base64 string
         const base64Only = base64.includes(',') ? base64.split(',')[1] : base64;
         formData.photo = base64Only;
         this.createAnimal(formData);
@@ -665,29 +581,24 @@ export class AnimalCreateComponent implements OnInit {
     }
   }
 
-
   private createAnimal(animalData: any): void {
-    console.log('🔍 Sending new animal data:', {
-      ...animalData,
-      photo: animalData.photo ? `[base64 data ${animalData.photo.length} chars]` : 'no photo'
-    });
+    const cleanedData = Object.fromEntries(
+      Object.entries(animalData).filter(([_, value]) => value !== undefined && value !== null && value !== '')
+    );
    
-    this.myAnimalsService.createMyAnimal(animalData)
+    this.myAnimalsService.createMyAnimal(cleanedData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (createdAnimal: any) => {
-          console.log('✅ Animal created successfully:', createdAnimal);
           this.saving = false;
           this.router.navigate(['/my-animals']);
         },
         error: (error: any) => {
-          console.error('❌ Error creating animal:', error);
-          this.error = error.message || 'Failed to create animal.';
+          this.error = error.message || 'Falha ao criar animal.';
           this.saving = false;
         }
       });
   }
-
 
   goBack(): void {
     this.router.navigate(['/my-animals']);

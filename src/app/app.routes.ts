@@ -11,7 +11,6 @@ import { MyEventsComponent } from './my-events/my-events.component';
 import { AnimalComponent } from './animal/animal.component';
 import { AdoptionComponent } from './adoption/adoption.component';
 
-
 export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },

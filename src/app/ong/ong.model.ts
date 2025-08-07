@@ -1,21 +1,19 @@
 import { Address } from '../address/address.model';
 
-
 export interface Ong {
   id?: string;
-  cnpj: string; // Fixed typo from cpnj to cnpj
+  cnpj: string; 
   name: string;
   login: string;
-  password?: string; // often omitted from frontend models
+  password?: string;
   email: string;
   phone: string;
-  pix?: string; // PIX key for donations/payments
-  instagram?: string; // Instagram profile URL
-  facebook?: string; // Facebook profile URL
-  tiktok?: string; // TikTok profile URL
-  address: Address; // Made required to match backend
+  pix?: string;
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
+  address: Address;
 }
-
 
 export interface OngUpdateRequest {
   cnpj?: string;

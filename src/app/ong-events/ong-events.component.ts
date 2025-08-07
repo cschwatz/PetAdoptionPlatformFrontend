@@ -5,7 +5,6 @@ import { OngEventService } from './ong-event.service';
 import { Event as EventModel, EventTypeEnum } from './event.model';
 import { AuthService } from '../authentication/auth.service';
 
-
 @Component({
   selector: 'app-ong-events',
   standalone: true,
@@ -25,7 +24,7 @@ export class OngEventsComponent implements OnInit {
   constructor(
     private eventService: OngEventService,
     private router: Router,
-    private authService: AuthService, // Made private since no longer needed in template
+    private authService: AuthService,
     private destroyRef: DestroyRef,
     private cdr: ChangeDetectorRef
   ) {}
@@ -44,10 +43,8 @@ export class OngEventsComponent implements OnInit {
       return;
     }
 
-
     this.loading = true;
     this.error = null;
-
 
     this.eventService.getAllEvents().subscribe({
       next: (events: EventModel[]) => {
@@ -72,18 +69,13 @@ export class OngEventsComponent implements OnInit {
     });
   }
 
-
   applyFilters(): void {
     let filtered = [...this.events];
 
-
-    // Filter by event type
     if (this.selectedEventType) {
       filtered = filtered.filter(event => event.eventType === this.selectedEventType);
     }
 
-
-    // Filter by time
     const now = new Date();
     if (this.selectedTimeFilter === 'Em breve') {
       filtered = filtered.filter(event => this.parseBackendDate(event.startDate) >= now);
@@ -91,14 +83,10 @@ export class OngEventsComponent implements OnInit {
       filtered = filtered.filter(event => this.parseBackendDate(event.endDate) < now);
     }
 
-
-    // Sort by start date (upcoming first)
     filtered.sort((a, b) => this.parseBackendDate(a.startDate).getTime() - this.parseBackendDate(b.startDate).getTime());
-
 
     this.filteredEvents = filtered;
   }
-
 
   onEventTypeChange(event: any): void {
     const target = event.target as HTMLSelectElement;
@@ -106,13 +94,11 @@ export class OngEventsComponent implements OnInit {
     this.applyFilters();
   }
 
-
   onTimeFilterChange(event: any): void {
     const target = event.target as HTMLSelectElement;
     this.selectedTimeFilter = target.value;
     this.applyFilters();
   }
-
 
   clearFilters(): void {
     this.selectedEventType = '';
@@ -120,11 +106,9 @@ export class OngEventsComponent implements OnInit {
     this.applyFilters();
   }
 
-
   trackByEventId(index: number, event: EventModel): string {
     return event.id || `temp-${index}`;
   }
-
 
   getEventIcon(eventType: EventTypeEnum): string {
     const iconMap = {
@@ -138,7 +122,6 @@ export class OngEventsComponent implements OnInit {
     return iconMap[eventType] || '📅';
   }
 
-
   getEventTypeLabel(eventType: EventTypeEnum): string {
     const labelMap = {
       [EventTypeEnum.ADOPTION_FAIR]: 'Feira de Adoção',
@@ -151,16 +134,13 @@ export class OngEventsComponent implements OnInit {
     return labelMap[eventType] || eventType;
   }
 
-
   private parseBackendDate(dateStr: string): Date {
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month, year] = datePart.split('/');
     const [hours, minutes] = timePart.split(':');
    
-    // Note: Month is 0-indexed in JavaScript Date
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
   }
-
 
   getEventStatus(event: EventModel): string {
     const now = new Date();
@@ -168,40 +148,37 @@ export class OngEventsComponent implements OnInit {
     const endDate = this.parseBackendDate(event.endDate);
 
 
-    if (endDate < now) return 'past';
-    if (startDate <= now && endDate >= now) return 'ongoing';
-    return 'upcoming';
+    if (endDate < now) return 'encerrado';
+    if (startDate <= now && endDate >= now) return 'em_andamento';
+    return 'em_breve';
   }
-
 
   getEventStatusLabel(event: EventModel): string {
     const status = this.getEventStatus(event);
     const statusMap: { [key: string]: string } = {
-      'upcoming': 'Upcoming',
-      'ongoing': 'Ongoing',
-      'past': 'Past'
+      'em_breve': 'Em breve',
+      'em_andamento': 'Em andamento',
+      'encerrado': 'Encerrado'
     };
-    return statusMap[status] || 'Unknown';
+    return statusMap[status] || 'Desconhecido';
   }
-
 
   isPastEvent(event: EventModel): boolean {
     return this.parseBackendDate(event.endDate) < new Date();
   }
 
-
   formatDateTime(dateTimeStr: string): string {
     const date = this.parseBackendDate(dateTimeStr);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('pt-BR', {
       weekday: 'short',
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'America/Sao_Paulo'
     });
   }
-
 
   getAddressString(address: any): string {
     if (!address) return '';
@@ -216,52 +193,36 @@ export class OngEventsComponent implements OnInit {
     return parts.join(', ');
   }
 
-
   viewEventDetails(event: EventModel): void {
-    console.log('🔍 Viewing event details:', event.name);
-    console.log('🔍 Event object:', event);
-    console.log('🔍 Event ID:', event.id);
-    console.log('🔍 Event ID type:', typeof event.id);
-    console.log('🔍 Event ID length:', event.id?.length);
-   
     if (!event.id) {
-      console.error('❌ Event ID is missing!', event);
-      alert('Error: Event ID is missing. Cannot view event details.');
+      alert('Erro: ID do evento não encontrado. Não é possível ver os detalhes do evento.');
       return;
     }
    
     if (event.id === 'my-events' || event.id.includes('my-events')) {
-      console.error('❌ Invalid event ID detected:', event.id);
-      alert('Error: Invalid event ID. Please refresh the page and try again.');
+      alert('Erro: ID de evento inválido. Por favor recarregue a página e tente novamente.');
       return;
     }
    
-    console.log('🚀 Navigating to route:', ['/event', event.id]);
     const navigationResult = this.router.navigate(['/event', event.id]);
-    console.log('🚀 Navigation result:', navigationResult);
   }
-
 
   contactOrganizer(event: EventModel): void {
     if (!event.ong) return;
 
-
     const contactInfo = [];
-    if (event.ong.phone) contactInfo.push(`Phone: ${event.ong.phone}`);
+    if (event.ong.phone) contactInfo.push(`Telefone: ${event.ong.phone}`);
     if (event.ong.email) contactInfo.push(`Email: ${event.ong.email}`);
 
-
     const message = contactInfo.length > 0
-      ? `Contact ${event.ong.name} about "${event.name}":\n\n${contactInfo.join('\n')}`
-      : `Contact information for ${event.ong.name} is not available.`;
-
+      ? `Contato ${event.ong.name} para "${event.name}":\n\n${contactInfo.join('\n')}`
+      : `Informações de contato de ${event.ong.name} não estão disponíveis.`;
 
     alert(message);
   }
 
-
   shareEvent(event: EventModel): void {
-    const shareText = `Check out this event: ${event.name} - ${this.formatDateTime(event.startDate)}`;
+    const shareText = `Dê uma olhada neste evento: ${event.name} - ${this.formatDateTime(event.startDate)}`;
    
     if (navigator.share) {
       navigator.share({
@@ -270,11 +231,10 @@ export class OngEventsComponent implements OnInit {
         url: window.location.href
       }).catch(console.error);
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareText).then(() => {
-        alert('Event details copied to clipboard!');
+        alert('Detalhes do evento foram copiados para a área de transferência!');
       }).catch(() => {
-        alert(`Share this event:\n\n${shareText}`);
+        alert(`Compartilhe este evento:\n\n${shareText}`);
       });
     }
   }

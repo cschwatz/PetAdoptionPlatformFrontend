@@ -1,6 +1,5 @@
 import { Address } from '../address/address.model';
 
-
 export interface Person {
   id?: string;
   cpf: string;
@@ -13,7 +12,6 @@ export interface Person {
   phone: string;
   address: Address;
 }
-
 
 export interface PersonUpdateRequest {
   cpf?: string;
