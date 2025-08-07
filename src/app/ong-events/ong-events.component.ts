@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { OngEventService } from './ong-event.service';
@@ -19,38 +19,27 @@ export class OngEventsComponent implements OnInit {
   loading = false;
   error: string | null = null;
  
-  // Filters
   selectedEventType = '';
   selectedTimeFilter = 'all';
-
 
   constructor(
     private eventService: OngEventService,
     private router: Router,
-    public authService: AuthService, // Make public for template access
+    private authService: AuthService, // Made private since no longer needed in template
+    private destroyRef: DestroyRef,
     private cdr: ChangeDetectorRef
   ) {}
 
-
   ngOnInit(): void {
-    console.log('🚀 OngEventsComponent ngOnInit called');
     this.loadEvents();
   }
 
-
   loadEvents(): void {
-    console.log('📡 loadEvents called');
-   
     if (this.loading) {
-      console.log('⚠️ Already loading, skipping request');
       return;
     }
-
-
-    // Check if user is authenticated
     if (!this.authService.isLoggedInSync()) {
-      console.log('❌ User not authenticated, redirecting to login');
-      this.error = 'You must be logged in to view events.';
+      this.error = 'Você deve estar logado para ver os eventos disponíveis.';
       this.router.navigate(['/login']);
       return;
     }
@@ -62,22 +51,19 @@ export class OngEventsComponent implements OnInit {
 
     this.eventService.getAllEvents().subscribe({
       next: (events: EventModel[]) => {
-        console.log('✅ Events loaded:', events.length);
         this.events = events;
         this.applyFilters();
         this.loading = false;
         this.cdr.detectChanges();
       },
       error: (error: any) => {
-        console.error('❌ Error loading events:', error);
-       
         if (error.message.includes('forbidden') || error.message.includes('403')) {
-          this.error = 'Access forbidden. You might not have permission to view events.';
+          this.error = 'Acesso não permitido. Você não tem permissão para ver os eventos.';
         } else if (error.message.includes('401')) {
-          this.error = 'Your session has expired. Please log in again.';
+          this.error = 'Sua sessão expirou. Por favor realize o login novamente.';
           this.router.navigate(['/login']);
         } else {
-          this.error = error.message || 'Failed to load events. Please try again later.';
+          this.error = error.message || 'Falha ao carregar os eventos. Por favor tente novamente mais tarde.';
         }
        
         this.loading = false;
@@ -99,9 +85,9 @@ export class OngEventsComponent implements OnInit {
 
     // Filter by time
     const now = new Date();
-    if (this.selectedTimeFilter === 'upcoming') {
+    if (this.selectedTimeFilter === 'Em breve') {
       filtered = filtered.filter(event => this.parseBackendDate(event.startDate) >= now);
-    } else if (this.selectedTimeFilter === 'past') {
+    } else if (this.selectedTimeFilter === 'Encerrado') {
       filtered = filtered.filter(event => this.parseBackendDate(event.endDate) < now);
     }
 
@@ -136,7 +122,7 @@ export class OngEventsComponent implements OnInit {
 
 
   trackByEventId(index: number, event: EventModel): string {
-    return event.id;
+    return event.id || `temp-${index}`;
   }
 
 
@@ -155,20 +141,18 @@ export class OngEventsComponent implements OnInit {
 
   getEventTypeLabel(eventType: EventTypeEnum): string {
     const labelMap = {
-      [EventTypeEnum.ADOPTION_FAIR]: 'Adoption Fair',
-      [EventTypeEnum.FUNDRAISING]: 'Fundraising',
-      [EventTypeEnum.AWARENESS_CAMPAIGN]: 'Awareness Campaign',
-      [EventTypeEnum.VETERINARY_CLINIC]: 'Veterinary Clinic',
-      [EventTypeEnum.VOLUNTEER_MEETING]: 'Volunteer Meeting',
-      [EventTypeEnum.OTHER]: 'Other'
+      [EventTypeEnum.ADOPTION_FAIR]: 'Feira de Adoção',
+      [EventTypeEnum.FUNDRAISING]: 'Angariamento de Fundos',
+      [EventTypeEnum.AWARENESS_CAMPAIGN]: 'Campanha de Conscientização',
+      [EventTypeEnum.VETERINARY_CLINIC]: 'Clínica Veterinária',
+      [EventTypeEnum.VOLUNTEER_MEETING]: 'Encontro de Voluntários',
+      [EventTypeEnum.OTHER]: 'Outros'
     };
     return labelMap[eventType] || eventType;
   }
 
 
   private parseBackendDate(dateStr: string): Date {
-    // Convert "dd/MM/yyyy HH:mm" format to Date object
-    // Example: "30/08/2025 00:00" -> Date
     const [datePart, timePart] = dateStr.split(' ');
     const [day, month, year] = datePart.split('/');
     const [hours, minutes] = timePart.split(':');
@@ -235,7 +219,26 @@ export class OngEventsComponent implements OnInit {
 
   viewEventDetails(event: EventModel): void {
     console.log('🔍 Viewing event details:', event.name);
-    this.router.navigate(['/event', event.id]);
+    console.log('🔍 Event object:', event);
+    console.log('🔍 Event ID:', event.id);
+    console.log('🔍 Event ID type:', typeof event.id);
+    console.log('🔍 Event ID length:', event.id?.length);
+   
+    if (!event.id) {
+      console.error('❌ Event ID is missing!', event);
+      alert('Error: Event ID is missing. Cannot view event details.');
+      return;
+    }
+   
+    if (event.id === 'my-events' || event.id.includes('my-events')) {
+      console.error('❌ Invalid event ID detected:', event.id);
+      alert('Error: Invalid event ID. Please refresh the page and try again.');
+      return;
+    }
+   
+    console.log('🚀 Navigating to route:', ['/event', event.id]);
+    const navigationResult = this.router.navigate(['/event', event.id]);
+    console.log('🚀 Navigation result:', navigationResult);
   }
 
 
@@ -275,15 +278,4 @@ export class OngEventsComponent implements OnInit {
       });
     }
   }
-
-
-  createNewEvent(): void {
-    console.log('🎯 Creating new event...');
-    this.router.navigate(['/events/new']);
-  }
 }
-
-
-
-
-

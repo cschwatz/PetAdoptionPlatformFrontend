@@ -15,21 +15,21 @@ import { Router } from '@angular/router';
   template: `
     <div class="adopt-container">
       <header class="adopt-header">
-        <h1>🐕 Find Your Perfect Companion</h1>
-        <p>Browse our amazing animals looking for their forever homes</p>
+        <h1>🐕 Encontre seu novo amigo</h1>
+      <p>Navegue pela plataforma para encontrar animais em busca de um lar definitivo</p>
       </header>
 
 
       <!-- Loading State -->
       <div *ngIf="loading" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Loading adorable animals...</p>
+        <p>Carregando animais adoráveis...</p>
       </div>
 
 
       <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
-        <h3>⚠️ Oops! Something went wrong</h3>
+        <h3>⚠️ Opa! Algum animal deve ter roído os fios</h3>
         <p>{{ error }}</p>
         <button (click)="loadAnimals()" class="retry-btn">Try Again</button>
       </div>
@@ -40,13 +40,13 @@ import { Router } from '@angular/router';
         <!-- Filter/Search Controls -->
         <div class="controls">
           <div class="animals-count">
-            <span>{{ totalAnimals }} animals available for adoption</span>
+            <span>{{ totalAnimals }} animais disponíveis para adoção</span>
           </div>
           <div class="page-size-selector">
-            <label for="pageSize">Show: </label>
+            <label for="pageSize">Mostrar: </label>
             <select id="pageSize" [value]="pageSize" (change)="onPageSizeChange($event)" class="page-size-select">
-              <option value="5">5 per page</option>
-              <option value="10">10 per page</option>
+              <option value="5">5 por página</option>
+              <option value="10">10 por página</option>
             </select>
           </div>
         </div>
@@ -63,8 +63,8 @@ import { Router } from '@angular/router';
                 [alt]="animal.name"
                 (error)="onImageError($event)"
                 class="animal-image">
-              <div class="status-badge" [ngClass]="'status-' + (animal.adopted ? 'adopted' : 'available')">
-                {{ animal.adopted ? 'Adopted' : 'Available' }}
+              <div class="status-badge" [ngClass]="'status-' + (animal.adopted ? 'Adotado' : 'Disponível')">
+                {{ animal.adopted ? 'Adotado' : 'Disponível' }}
               </div>
             </div>
            
@@ -76,19 +76,19 @@ import { Router } from '@angular/router';
              
               <div class="animal-details">
                 <div class="detail-row" *ngIf="animal.breed">
-                  <span class="label">Breed:</span>
+                  <span class="label">Raça:</span>
                   <span class="value">{{ animal.breed }}</span>
                 </div>
                 <div class="detail-row">
-                  <span class="label">Age:</span>
-                  <span class="value">{{ animal.age }} {{ animal.age === 1 ? 'year' : 'years' }}</span>
+                  <span class="label">Idade:</span>
+                  <span class="value">{{ animal.age }} {{ animal.age === 1 ? 'ano' : 'anos' }}</span>
                 </div>
                 <div class="detail-row" *ngIf="animal.gender">
-                  <span class="label">Gender:</span>
-                  <span class="value">{{ animal.gender === 'M' ? 'Male' : 'Female' }}</span>
+                  <span class="label">Gênero:</span>
+                  <span class="value">{{ animal.gender === 'M' ? 'Macho' : 'Fêmea' }}</span>
                 </div>
                 <div class="detail-row" *ngIf="animal.weight">
-                  <span class="label">Weight:</span>
+                  <span class="label">Peso:</span>
                   <span class="value">{{ animal.weight }} kg</span>
                 </div>
               </div>
@@ -99,10 +99,10 @@ import { Router } from '@angular/router';
 
               <div class="card-footer">
                 <button class="adopt-btn" (click)="showInterest(animal, $event)">
-                  ❤️ Show Interest
+                  ❤️ Mostrar interesse
                 </button>
                 <button class="view-btn" (click)="viewAnimalDetails(animal, $event)">
-                  👁️ View Details
+                  Ver Detalhes
                 </button>
               </div>
             </div>
@@ -112,10 +112,9 @@ import { Router } from '@angular/router';
 
         <!-- Empty State -->
         <div *ngIf="paginatedAnimals.length === 0 && !loading" class="empty-state">
-          <h3>🐾 No animals available right now</h3>
-          <p>Check back soon for new furry friends looking for homes!</p>
+          <h3>🐾 Não há animais disponíveis no momento</h3>
+        <p>Volte em breve para checar se há novos amigos peludos procurando um lar!</p>
         </div>
-
 
         <!-- Pagination -->
         <div class="pagination" *ngIf="totalPages > 1">
@@ -123,7 +122,7 @@ import { Router } from '@angular/router';
             class="page-btn"
             [disabled]="currentPage === 1"
             (click)="goToPage(currentPage - 1)">
-            ← Previous
+            ← Anterior
           </button>
          
           <div class="page-numbers">
@@ -140,7 +139,7 @@ import { Router } from '@angular/router';
             class="page-btn"
             [disabled]="currentPage === totalPages"
             (click)="goToPage(currentPage + 1)">
-            Next →
+            Próxima →
           </button>
         </div>
       </div>
@@ -606,9 +605,7 @@ export class AdoptionComponent implements OnInit {
   totalAnimals = 0;
   totalPages = 0;
  
-  // Cache page numbers to avoid recalculating on every change detection
   pageNumbers: number[] = [];
-
 
   constructor(
     private adoptionService: AdoptionService,
@@ -617,47 +614,37 @@ export class AdoptionComponent implements OnInit {
     private router: Router
   ) {}
 
-
   ngOnInit(): void {
     console.log('🚀 AdoptionComponent ngOnInit called');
     this.loadAnimals();
   }
 
-
   loadAnimals(): void {
-    console.log('📡 loadAnimals called');
-   
     if (this.loading) {
-      console.log('⚠️ Already loading, skipping request');
       return;
     }
 
-
     this.loading = true;
     this.error = null;
-
 
     this.adoptionService.getAnimals()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (animals) => {
-          console.log('✅ Animals loaded:', animals.length);
           this.animals = animals;
           this.totalAnimals = animals.length;
           this.calculatePagination();
           this.updatePaginatedAnimals();
           this.loading = false;
-          this.cdr.detectChanges(); // Manually trigger change detection
+          this.cdr.detectChanges();
         },
         error: (error) => {
-          console.error('❌ Error loading animals:', error);
-          this.error = error.message || 'Failed to load animals. Please try again later.';
+          this.error = error.message || 'Falha ao carregar os animais. Por favor tente mais tarde.';
           this.loading = false;
-          this.cdr.detectChanges(); // Manually trigger change detection
+          this.cdr.detectChanges();
         }
       });
   }
-
 
   private calculatePagination(): void {
     this.totalPages = Math.ceil(this.totalAnimals / this.pageSize);

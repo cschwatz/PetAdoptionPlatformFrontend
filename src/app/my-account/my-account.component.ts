@@ -1,11 +1,10 @@
-import { Component, OnInit, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AccountService, UserInfo } from './account.service';
 import { Person, PersonUpdateRequest } from '../person/person.model';
 import { Ong, OngUpdateRequest } from '../ong/ong.model';
-import { Router } from '@angular/router';
 import { Address } from '../address/address.model';
 
 
@@ -181,6 +180,58 @@ import { Address } from '../address/address.model';
 
               <div class="form-row">
                 <div class="form-group">
+                  <label for="pix">PIX Key</label>
+                  <input
+                    type="text"
+                    id="pix"
+                    formControlName="pix"
+                    placeholder="Enter your PIX key for donations"
+                  >
+                  <small class="help-text">Optional: Add your PIX key to receive donations</small>
+                </div>
+              </div>
+
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="instagram">Instagram</label>
+                  <input
+                    type="url"
+                    id="instagram"
+                    formControlName="instagram"
+                    placeholder="https://instagram.com/yourorganization"
+                  >
+                  <small class="help-text">Optional: Link to your Instagram profile</small>
+                </div>
+
+
+                <div class="form-group">
+                  <label for="facebook">Facebook</label>
+                  <input
+                    type="url"
+                    id="facebook"
+                    formControlName="facebook"
+                    placeholder="https://facebook.com/yourorganization"
+                  >
+                  <small class="help-text">Optional: Link to your Facebook page</small>
+                </div>
+
+
+                <div class="form-group">
+                  <label for="tiktok">TikTok</label>
+                  <input
+                    type="url"
+                    id="tiktok"
+                    formControlName="tiktok"
+                    placeholder="https://tiktok.com/@yourorganization"
+                  >
+                  <small class="help-text">Optional: Link to your TikTok profile</small>
+                </div>
+              </div>
+
+
+              <div class="form-row">
+                <div class="form-group">
                   <label for="login">Username</label>
                   <input
                     type="text"
@@ -338,6 +389,14 @@ import { Address } from '../address/address.model';
 
             <!-- Form Actions -->
             <div class="form-actions">
+              <!-- Debug info (temporary) -->
+              <div style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; font-size: 0.875rem;">
+                <strong>Debug Info:</strong><br>
+                Form Valid: {{ profileForm.valid ? '✅' : '❌' }}<br>
+                Is Updating: {{ isUpdating ? '⏳' : '✅' }}<br>
+                Button Should Be: {{ (profileForm.invalid || isUpdating) ? 'DISABLED' : 'ENABLED' }}
+              </div>
+             
               <button
                 type="submit"
                 [disabled]="profileForm.invalid || isUpdating"
@@ -454,7 +513,6 @@ export class MyAccountComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
   activeTab: 'profile' | 'password' = 'profile';
-  private router = inject(Router);
 
 
   constructor(
@@ -483,6 +541,10 @@ export class MyAccountComponent implements OnInit {
       // ONG fields
       name: [''],
       cnpj: [''],
+      pix: [''], // PIX key for donations
+      instagram: [''], // Instagram profile URL
+      facebook: [''], // Facebook profile URL
+      tiktok: [''], // TikTok profile URL
      
       // Common fields
       email: ['', [Validators.required, Validators.email]],
@@ -545,10 +607,19 @@ export class MyAccountComponent implements OnInit {
     if (userInfo.userType === 'PERSON') {
       const person = userInfo.user as Person;
      
-      // Set person-specific validators
+      // Clear ONG-specific validators and update validity
+      this.profileForm.get('name')?.clearValidators();
+      this.profileForm.get('name')?.updateValueAndValidity();
+      this.profileForm.get('cnpj')?.clearValidators();
+      this.profileForm.get('cnpj')?.updateValueAndValidity();
+     
+      // Set person-specific validators and update validity
       this.profileForm.get('firstName')?.setValidators([Validators.required]);
+      this.profileForm.get('firstName')?.updateValueAndValidity();
       this.profileForm.get('familyName')?.setValidators([Validators.required]);
+      this.profileForm.get('familyName')?.updateValueAndValidity();
       this.profileForm.get('cpf')?.setValidators([Validators.required]);
+      this.profileForm.get('cpf')?.updateValueAndValidity();
      
       this.profileForm.patchValue({
         firstName: person.firstName,
@@ -562,13 +633,27 @@ export class MyAccountComponent implements OnInit {
     } else {
       const ong = userInfo.user as Ong;
      
-      // Set ONG-specific validators
+      // Clear person-specific validators and update validity
+      this.profileForm.get('firstName')?.clearValidators();
+      this.profileForm.get('firstName')?.updateValueAndValidity();
+      this.profileForm.get('familyName')?.clearValidators();
+      this.profileForm.get('familyName')?.updateValueAndValidity();
+      this.profileForm.get('cpf')?.clearValidators();
+      this.profileForm.get('cpf')?.updateValueAndValidity();
+     
+      // Set ONG-specific validators and update validity
       this.profileForm.get('name')?.setValidators([Validators.required]);
+      this.profileForm.get('name')?.updateValueAndValidity();
       this.profileForm.get('cnpj')?.setValidators([Validators.required]);
+      this.profileForm.get('cnpj')?.updateValueAndValidity();
      
       this.profileForm.patchValue({
         name: ong.name,
         cnpj: ong.cnpj,
+        pix: ong.pix || '', // Include PIX field
+        instagram: ong.instagram || '', // Include Instagram field
+        facebook: ong.facebook || '', // Include Facebook field
+        tiktok: ong.tiktok || '', // Include TikTok field
         email: ong.email,
         phone: ong.phone,
         address: ong.address
@@ -576,6 +661,18 @@ export class MyAccountComponent implements OnInit {
     }
    
     this.profileForm.updateValueAndValidity();
+   
+    // Debug: Log form status for troubleshooting
+    console.log('🔍 Form populated for', userInfo.userType);
+    console.log('📊 Form valid:', this.profileForm.valid);
+    console.log('❌ Form errors:', this.profileForm.errors);
+    console.log('🔧 Form controls status:');
+    Object.keys(this.profileForm.controls).forEach(key => {
+      const control = this.profileForm.get(key);
+      if (control?.invalid) {
+        console.log(`  - ${key}: invalid (${JSON.stringify(control.errors)})`);
+      }
+    });
   }
 
 
@@ -625,6 +722,10 @@ export class MyAccountComponent implements OnInit {
         const updateData: OngUpdateRequest = {
           name: this.profileForm.value.name,
           cnpj: this.profileForm.value.cnpj,
+          pix: this.profileForm.value.pix, // Include PIX field
+          instagram: this.profileForm.value.instagram, // Include Instagram field
+          facebook: this.profileForm.value.facebook, // Include Facebook field
+          tiktok: this.profileForm.value.tiktok, // Include TikTok field
           email: this.profileForm.value.email,
           phone: this.profileForm.value.phone,
           address: this.profileForm.value.address
@@ -701,6 +802,11 @@ export class MyAccountComponent implements OnInit {
   }
 
 
+  cancelAccountUpdate(): void {
+    this.resetForm();
+  }
+
+
   // Helper methods for template
   getPersonLogin(): string {
     return this.userInfo && this.userInfo.userType === 'PERSON'
@@ -737,9 +843,4 @@ export class MyAccountComponent implements OnInit {
   getOngData(): Ong | null {
     return this.isOng() ? (this.userInfo!.user as Ong) : null;
   }
-
-  cancelAccountUpdate(): void {
-    this.router.navigate(['/dashboard']);
-  }
-
 }

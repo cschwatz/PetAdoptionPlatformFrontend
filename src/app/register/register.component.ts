@@ -32,6 +32,10 @@ export interface OngRegisterRequest {
   password: string;
   email: string;
   phone: string;
+  pix?: string;
+  instagram?: string;
+  facebook?: string;
+  tiktok?: string;
   address: {
     state: string;
     city: string;
@@ -53,11 +57,11 @@ export type UserType = 'PERSON' | 'ONG';
   template: `
     <div class="register-container">
       <div class="register-form">
-        <h2>Create Account</h2>
+        <h2>Criar conta</h2>
        
         <!-- User Type Selection -->
         <div class="user-type-selection">
-          <h3>Account Type</h3>
+          <h3>Tipo de conta</h3>
           <div class="type-options">
             <label class="type-option" [class.selected]="userType === 'PERSON'">
               <input
@@ -68,8 +72,8 @@ export type UserType = 'PERSON' | 'ONG';
                 name="userType"
               >
               <span class="option-content">
-                <strong>👤 Individual</strong>
-                <small>Personal account for adopting pets</small>
+                <strong>👤 Indivíduo</strong>
+                <small>Conta pessoal para adotar animais</small>
               </span>
             </label>
            
@@ -82,17 +86,15 @@ export type UserType = 'PERSON' | 'ONG';
                 name="userType"
               >
               <span class="option-content">
-                <strong>🏢 Organization</strong>
-                <small>NGO account for managing adoptions</small>
+                <strong>🏢 Organização</strong>
+                <small>Conta de ONG para administrar animais para adoção</small>
               </span>
             </label>
           </div>
         </div>
 
-
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
          
-          <!-- Personal/Organization Information Section -->
           <div class="section-title">
             {{ userType === 'PERSON' ? 'Personal Information' : 'Organization Information' }}
           </div>
@@ -101,7 +103,7 @@ export type UserType = 'PERSON' | 'ONG';
           <div *ngIf="userType === 'PERSON'">
             <div class="form-row">
               <div class="form-group half-width">
-                <label for="firstName">First Name *</label>
+                <label for="firstName">Primeiro Nome *</label>
                 <input
                   type="text"
                   id="firstName"
@@ -110,7 +112,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
                      class="error-message">
-                  First name is required
+                  Primeiro Nome é obrigatório
                 </div>
               </div>
 
@@ -128,7 +130,7 @@ export type UserType = 'PERSON' | 'ONG';
 
             <div class="form-row">
               <div class="form-group half-width">
-                <label for="familyName">Family Name *</label>
+                <label for="familyName">Sobrenome *</label>
                 <input
                   type="text"
                   id="familyName"
@@ -137,7 +139,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('familyName')?.invalid && registerForm.get('familyName')?.touched"
                      class="error-message">
-                  Family name is required
+                  Sobrenome é obrigatório
                 </div>
               </div>
 
@@ -153,7 +155,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('cpf')?.invalid && registerForm.get('cpf')?.touched"
                      class="error-message">
-                  CPF is required
+                  CPF é obrigatório
                 </div>
               </div>
             </div>
@@ -164,7 +166,7 @@ export type UserType = 'PERSON' | 'ONG';
           <div *ngIf="userType === 'ONG'">
             <div class="form-row">
               <div class="form-group half-width">
-                <label for="name">Organization Name *</label>
+                <label for="name">Nome da ONG *</label>
                 <input
                   type="text"
                   id="name"
@@ -173,7 +175,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
                      class="error-message">
-                  Organization name is required
+                  Nome da ONG é obrigatório
                 </div>
               </div>
 
@@ -189,7 +191,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('cnpj')?.invalid && registerForm.get('cnpj')?.touched"
                      class="error-message">
-                  CNPJ is required
+                  CNPJ é obrigatório
                 </div>
               </div>
             </div>
@@ -197,7 +199,7 @@ export type UserType = 'PERSON' | 'ONG';
 
 
           <!-- Contact Information (Common) -->
-          <div class="section-title">Contact Information</div>
+          <div class="section-title">Informações de Contato</div>
          
           <div class="form-row">
             <div class="form-group half-width">
@@ -210,14 +212,14 @@ export type UserType = 'PERSON' | 'ONG';
               >
               <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
                    class="error-message">
-                <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
-                <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                <span *ngIf="registerForm.get('email')?.errors?.['required']">Email é obrigatório</span>
+                <span *ngIf="registerForm.get('email')?.errors?.['email']">Por favor insira um Email válido</span>
               </div>
             </div>
 
 
             <div class="form-group half-width">
-              <label for="phone">Phone *</label>
+              <label for="phone">Telefone *</label>
               <input
                 type="tel"
                 id="phone"
@@ -227,18 +229,78 @@ export type UserType = 'PERSON' | 'ONG';
               >
               <div *ngIf="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
                    class="error-message">
-                Phone is required
+                Telefone é obrigatório
+              </div>
+            </div>
+          </div>
+
+
+          <!-- PIX and Social Media Information (ONG Only) -->
+          <div *ngIf="userType === 'ONG'" class="section-title">Social Media & Donations</div>
+          <div *ngIf="userType === 'ONG'">
+            <div class="form-row">
+              <div class="form-group half-width">
+                <label for="pix">Chave PIX</label>
+                <input
+                  type="text"
+                  id="pix"
+                  formControlName="pix"
+                  placeholder="Enter your PIX key for donations"
+                  [class.error]="registerForm.get('pix')?.invalid && registerForm.get('pix')?.touched"
+                >
+                <small class="help-text">Opcional: Adicione uma chave PIX para recebimento de doações</small>
+              </div>
+
+
+              <div class="form-group half-width">
+                <label for="instagram">Instagram</label>
+                <input
+                  type="url"
+                  id="instagram"
+                  formControlName="instagram"
+                  placeholder="https://instagram.com/yourorganization"
+                  [class.error]="registerForm.get('instagram')?.invalid && registerForm.get('instagram')?.touched"
+                >
+                <small class="help-text">Opcional: Link para o perfil do Instagram</small>
+              </div>
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group half-width">
+                <label for="facebook">Facebook</label>
+                <input
+                  type="url"
+                  id="facebook"
+                  formControlName="facebook"
+                  placeholder="https://facebook.com/yourorganization"
+                  [class.error]="registerForm.get('facebook')?.invalid && registerForm.get('facebook')?.touched"
+                >
+                <small class="help-text">Opcional: Link para página do Facebook</small>
+              </div>
+
+
+              <div class="form-group half-width">
+                <label for="tiktok">TikTok</label>
+                <input
+                  type="url"
+                  id="tiktok"
+                  formControlName="tiktok"
+                  placeholder="https://tiktok.com/@yourorganization"
+                  [class.error]="registerForm.get('tiktok')?.invalid && registerForm.get('tiktok')?.touched"
+                >
+                <small class="help-text">Opcional: Link para o perfil no TikTok</small>
               </div>
             </div>
           </div>
 
 
           <!-- Account Information Section -->
-          <div class="section-title">Account Information</div>
+          <div class="section-title">Informações da Conta</div>
          
           <div class="form-row">
             <div class="form-group half-width">
-              <label for="login">Username *</label>
+              <label for="login">Nome de usuário *</label>
               <input
                 type="text"
                 id="login"
@@ -247,13 +309,13 @@ export type UserType = 'PERSON' | 'ONG';
               >
               <div *ngIf="registerForm.get('login')?.invalid && registerForm.get('login')?.touched"
                    class="error-message">
-                Username is required
+                Nome de usuário é obrigatório
               </div>
             </div>
 
 
             <div class="form-group half-width">
-              <label for="password">Password *</label>
+              <label for="password">Senha *</label>
               <input
                 type="password"
                 id="password"
@@ -262,15 +324,15 @@ export type UserType = 'PERSON' | 'ONG';
               >
               <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
                    class="error-message">
-                <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
-                <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+                <span *ngIf="registerForm.get('password')?.errors?.['required']">Senha é obrigatória</span>
+                <span *ngIf="registerForm.get('password')?.errors?.['minlength']">A Senha deve ter ao menos 6 caracteres</span>
               </div>
             </div>
           </div>
 
 
           <!-- Address Information Section -->
-          <div class="section-title">Address Information</div>
+          <div class="section-title">Informações de Endereço</div>
          
           <div formGroupName="address">
             <div class="form-row">
@@ -285,13 +347,13 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('address.cep')?.invalid && registerForm.get('address.cep')?.touched"
                      class="error-message">
-                  CEP is required
+                  CEP é obrigatório
                 </div>
               </div>
 
 
               <div class="form-group half-width">
-                <label for="state">State *</label>
+                <label for="state">Estado (UF) *</label>
                 <input
                   type="text"
                   id="state"
@@ -300,7 +362,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('address.state')?.invalid && registerForm.get('address.state')?.touched"
                      class="error-message">
-                  State is required
+                  Estado é obrigatório
                 </div>
               </div>
             </div>
@@ -308,7 +370,7 @@ export type UserType = 'PERSON' | 'ONG';
 
             <div class="form-row">
               <div class="form-group half-width">
-                <label for="city">City *</label>
+                <label for="city">Cidade *</label>
                 <input
                   type="text"
                   id="city"
@@ -317,13 +379,13 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('address.city')?.invalid && registerForm.get('address.city')?.touched"
                      class="error-message">
-                  City is required
+                  Cidade é obrigatório
                 </div>
               </div>
 
 
               <div class="form-group half-width">
-                <label for="neighborhood">Neighborhood *</label>
+                <label for="neighborhood">Bairro *</label>
                 <input
                   type="text"
                   id="neighborhood"
@@ -332,7 +394,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('address.neighborhood')?.invalid && registerForm.get('address.neighborhood')?.touched"
                      class="error-message">
-                  Neighborhood is required
+                  Bairro é obrigatório
                 </div>
               </div>
             </div>
@@ -340,7 +402,7 @@ export type UserType = 'PERSON' | 'ONG';
 
             <div class="form-row">
               <div class="form-group three-quarters">
-                <label for="street">Street *</label>
+                <label for="street">Rua *</label>
                 <input
                   type="text"
                   id="street"
@@ -349,13 +411,13 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('address.street')?.invalid && registerForm.get('address.street')?.touched"
                      class="error-message">
-                  Street is required
+                    Rua é obrigatório
                 </div>
               </div>
 
 
               <div class="form-group quarter">
-                <label for="number">Number *</label>
+                <label for="number">Número *</label>
                 <input
                   type="number"
                   id="number"
@@ -364,7 +426,7 @@ export type UserType = 'PERSON' | 'ONG';
                 >
                 <div *ngIf="registerForm.get('address.number')?.invalid && registerForm.get('address.number')?.touched"
                      class="error-message">
-                  Number is required
+                  Número é obrigatório
                 </div>
               </div>
             </div>
@@ -374,11 +436,11 @@ export type UserType = 'PERSON' | 'ONG';
           <!-- Buttons -->
           <div class="button-group">
             <button type="submit" [disabled]="registerForm.invalid || isLoading" class="register-btn">
-              {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+              {{ isLoading ? 'Criando Conta...' : 'Criar Conta' }}
             </button>
            
             <button type="button" (click)="goBackToLogin()" class="back-btn">
-              Back to Login
+              Retornar ao Login
             </button>
           </div>
         </form>
@@ -688,7 +750,11 @@ export class RegisterComponent {
       return this.fb.group({
         ...baseForm,
         name: ['', Validators.required],
-        cnpj: ['', Validators.required]
+        cnpj: ['', Validators.required],
+        pix: [''], // Optional PIX key for donations
+        instagram: [''], // Optional Instagram profile URL
+        facebook: [''], // Optional Facebook profile URL
+        tiktok: [''] // Optional TikTok profile URL
       });
     }
   }
@@ -734,6 +800,10 @@ export class RegisterComponent {
           password: this.registerForm.value.password,
           email: this.registerForm.value.email,
           phone: this.registerForm.value.phone,
+          pix: this.registerForm.value.pix || undefined,
+          instagram: this.registerForm.value.instagram || undefined,
+          facebook: this.registerForm.value.facebook || undefined,
+          tiktok: this.registerForm.value.tiktok || undefined,
           address: this.registerForm.value.address
         } as OngRegisterRequest;
       }
@@ -743,7 +813,7 @@ export class RegisterComponent {
       this.http.post(endpoint, registerData).subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          this.successMessage = `${this.userType === 'PERSON' ? 'Personal' : 'Organization'} account created successfully! Redirecting to login...`;
+          this.successMessage = `${this.userType === 'PERSON' ? 'Personal' : 'Organization'} conta criada com sucesso! Redirecionando ao login...`;
          
           // Redirect to login after 2 seconds
           setTimeout(() => {
@@ -752,7 +822,7 @@ export class RegisterComponent {
         },
         error: (error: any) => {
           this.isLoading = false;
-          this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
+          this.errorMessage = error.error?.message || 'Falha ao registrar. Por favor tente novamente.';
         }
       });
     } else {
@@ -777,4 +847,4 @@ export class RegisterComponent {
       }
     });
   }
-} 
+}

@@ -554,7 +554,13 @@ export class EventDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log('🔍 EventDetailsComponent ngOnInit');
+    console.log('🔍 Route snapshot params:', this.route.snapshot.params);
+    console.log('🔍 Route snapshot paramMap:', this.route.snapshot.paramMap);
+   
     this.eventId = this.route.snapshot.paramMap.get('id');
+    console.log('🔍 Extracted eventId:', this.eventId);
+   
     if (this.eventId) {
       this.loadEvent();
     } else {
@@ -567,6 +573,7 @@ export class EventDetailsComponent implements OnInit {
     if (!this.eventId) return;
 
 
+    console.log('🔍 Loading event with ID:', this.eventId);
     this.loading = true;
     this.error = null;
 
@@ -581,6 +588,7 @@ export class EventDetailsComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('❌ Error loading event details:', error);
+          console.error('❌ Requested event ID was:', this.eventId);
           this.error = error.message || 'Failed to load event details.';
           this.loading = false;
         }

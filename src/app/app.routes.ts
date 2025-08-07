@@ -7,7 +7,7 @@ import { OngComponent } from './ong/ong.component';
 import { MyAnimalsComponent } from './my-animals/my-animals.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { OngEventsComponent } from './ong-events/ong-events.component';
-import { SponsorshipComponent } from './sponsorship/sponsorship.component';
+import { MyEventsComponent } from './my-events/my-events.component';
 import { AnimalComponent } from './animal/animal.component';
 import { AdoptionComponent } from './adoption/adoption.component';
 
@@ -36,16 +36,20 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   { path: 'my-animals', component: MyAnimalsComponent },
+  { path: 'my-events', component: MyEventsComponent, canActivate: [authGuard] },
   { path: 'ong-events', component: OngEventsComponent },
   { path: 'events/new',
     loadComponent: () => import('./ong-events/event-create.component').then(c => c.EventCreateComponent),
     canActivate: [authGuard]
   },
+  { path: 'event/edit/:id',
+    loadComponent: () => import('./ong-events/event-edit.component').then(c => c.EventEditComponent),
+    canActivate: [authGuard]
+  },
   { path: 'event/:id',
-    loadComponent: () => import('./ong-events/event-detais.component').then(c => c.EventDetailsComponent)
+    loadComponent: () => import('./ong-events/event-details.component').then(c => c.EventDetailsComponent)
   },
   { path: 'my-account', component: MyAccountComponent },
-  { path: 'sponsorship', component: SponsorshipComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/dashboard' }
 ]

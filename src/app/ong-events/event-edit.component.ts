@@ -1,7 +1,7 @@
 import { Component, OnInit, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MyEventsService } from '../my-events/my-events.service';
 import { Event as EventModel, EventTypeEnum } from './event.model';
@@ -9,32 +9,38 @@ import { AuthService } from '../authentication/auth.service';
 
 
 @Component({
-  selector: 'app-event-create',
+  selector: 'app-event-edit',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <div class="create-event-container">
-      <!-- Header with back button -->
-      <header class="create-header">
+    <div class="edit-event-container">
+      <header class="edit-header">
         <button (click)="goBack()" class="back-btn">
-          ← Back to Events
+          ← Back to My Events
         </button>
-        <h1>📅 Create New Event</h1>
-        <p>Organize a new event for your ONG</p>
+        <h1>✏️ Edit Event</h1>
+        <p *ngIf="event">Editing details for {{ event.name }}</p>
       </header>
+
+
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Loading event details...</p>
+      </div>
 
 
       <!-- Error State -->
       <div *ngIf="error && !loading" class="error-container">
         <h3>⚠️ Oops! Something went wrong</h3>
         <p>{{ error }}</p>
-        <button (click)="error = null" class="retry-btn">Try Again</button>
+        <button (click)="loadEvent()" class="retry-btn">Try Again</button>
       </div>
 
 
-      <!-- Create Form -->
-      <div class="form-container">
-        <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="create-form">
+      <!-- Edit Form -->
+      <div *ngIf="!loading && !error && editForm" class="form-container">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="edit-form">
          
           <!-- Basic Information -->
           <div class="form-section">
@@ -48,8 +54,8 @@ import { AuthService } from '../authentication/auth.service';
                   id="name"
                   formControlName="name"
                   placeholder="Enter event name"
-                  [class.error]="createForm.get('name')?.invalid && createForm.get('name')?.touched">
-                <div *ngIf="createForm.get('name')?.invalid && createForm.get('name')?.touched" class="error-message">
+                  [class.error]="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+                <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="error-message">
                   Event name is required
                 </div>
               </div>
@@ -62,7 +68,7 @@ import { AuthService } from '../authentication/auth.service';
                 <select
                   id="eventType"
                   formControlName="eventType"
-                  [class.error]="createForm.get('eventType')?.invalid && createForm.get('eventType')?.touched">
+                  [class.error]="editForm.get('eventType')?.invalid && editForm.get('eventType')?.touched">
                   <option value="">Select event type</option>
                   <option value="ADOPTION_FAIR">Adoption Fair</option>
                   <option value="FUNDRAISING">Fundraising</option>
@@ -72,7 +78,7 @@ import { AuthService } from '../authentication/auth.service';
                   <option value="VOLUNTEER_MEETING">Volunteer Meeting</option>
                   <option value="OTHER">Other</option>
                 </select>
-                <div *ngIf="createForm.get('eventType')?.invalid && createForm.get('eventType')?.touched" class="error-message">
+                <div *ngIf="editForm.get('eventType')?.invalid && editForm.get('eventType')?.touched" class="error-message">
                   Event type is required
                 </div>
               </div>
@@ -104,8 +110,8 @@ import { AuthService } from '../authentication/auth.service';
                   type="datetime-local"
                   id="startDate"
                   formControlName="startDate"
-                  [class.error]="createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched">
-                <div *ngIf="createForm.get('startDate')?.invalid && createForm.get('startDate')?.touched" class="error-message">
+                  [class.error]="editForm.get('startDate')?.invalid && editForm.get('startDate')?.touched">
+                <div *ngIf="editForm.get('startDate')?.invalid && editForm.get('startDate')?.touched" class="error-message">
                   Start date and time is required
                 </div>
               </div>
@@ -117,8 +123,8 @@ import { AuthService } from '../authentication/auth.service';
                   type="datetime-local"
                   id="endDate"
                   formControlName="endDate"
-                  [class.error]="createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched">
-                <div *ngIf="createForm.get('endDate')?.invalid && createForm.get('endDate')?.touched" class="error-message">
+                  [class.error]="editForm.get('endDate')?.invalid && editForm.get('endDate')?.touched">
+                <div *ngIf="editForm.get('endDate')?.invalid && editForm.get('endDate')?.touched" class="error-message">
                   End date and time is required
                 </div>
               </div>
@@ -212,9 +218,9 @@ import { AuthService } from '../authentication/auth.service';
             <button
               type="submit"
               class="save-btn"
-              [disabled]="createForm.invalid || saving">
-              <span *ngIf="saving">Creating Event...</span>
-              <span *ngIf="!saving">📅 Create Event</span>
+              [disabled]="editForm.invalid || saving">
+              <span *ngIf="saving">Updating Event...</span>
+              <span *ngIf="!saving">💾 Update Event</span>
             </button>
           </div>
         </form>
@@ -222,7 +228,7 @@ import { AuthService } from '../authentication/auth.service';
     </div>
   `,
   styles: [`
-    .create-event-container {
+    .edit-event-container {
       max-width: 800px;
       margin: 0 auto;
       padding: 2rem;
@@ -231,7 +237,7 @@ import { AuthService } from '../authentication/auth.service';
     }
 
 
-    .create-header {
+    .edit-header {
       text-align: center;
       margin-bottom: 3rem;
       position: relative;
@@ -258,16 +264,39 @@ import { AuthService } from '../authentication/auth.service';
     }
 
 
-    .create-header h1 {
+    .edit-header h1 {
       color: #333;
       font-size: 2.5rem;
       margin-bottom: 0.5rem;
     }
 
 
-    .create-header p {
+    .edit-header p {
       color: #666;
       font-size: 1.1rem;
+    }
+
+
+    .loading-container {
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
 
@@ -307,7 +336,7 @@ import { AuthService } from '../authentication/auth.service';
     }
 
 
-    .create-form {
+    .edit-form {
       padding: 2rem;
     }
 
@@ -427,7 +456,7 @@ import { AuthService } from '../authentication/auth.service';
 
 
     .save-btn {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
       color: white;
       border: none;
       padding: 0.75rem 1.5rem;
@@ -436,14 +465,14 @@ import { AuthService } from '../authentication/auth.service';
       font-size: 1rem;
       font-weight: 600;
       transition: all 0.3s;
-      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
     }
 
 
     .save-btn:hover:not(:disabled) {
-      background: linear-gradient(135deg, #218838 0%, #1dd1a1 100%);
+      background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+      box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
     }
 
 
@@ -456,7 +485,7 @@ import { AuthService } from '../authentication/auth.service';
 
 
     @media (max-width: 768px) {
-      .create-event-container {
+      .edit-event-container {
         padding: 1rem;
       }
 
@@ -484,15 +513,18 @@ import { AuthService } from '../authentication/auth.service';
     }
   `]
 })
-export class EventCreateComponent implements OnInit {
-  createForm!: FormGroup;
+export class EventEditComponent implements OnInit {
+  event: EventModel | null = null;
+  editForm!: FormGroup;
   loading = false;
   saving = false;
   error: string | null = null;
+  eventId: string = '';
 
 
   constructor(
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
     private myEventsService: MyEventsService,
     private authService: AuthService,
@@ -505,14 +537,25 @@ export class EventCreateComponent implements OnInit {
   ngOnInit(): void {
     // Check if user is an ONG
     if (!this.authService.isOng()) {
-      this.error = 'You must be logged in as an ONG to create events.';
+      this.error = 'You must be logged in as an ONG to edit events.';
       return;
     }
+
+
+    // Get event ID from route
+    this.eventId = this.route.snapshot.paramMap.get('id') || '';
+    if (!this.eventId) {
+      this.error = 'Event ID is required.';
+      return;
+    }
+
+
+    this.loadEvent();
   }
 
 
   private initializeForm(): void {
-    this.createForm = this.fb.group({
+    this.editForm = this.fb.group({
       name: ['', [Validators.required]],
       eventType: ['', [Validators.required]],
       obs: [''],
@@ -529,11 +572,84 @@ export class EventCreateComponent implements OnInit {
   }
 
 
+  loadEvent(): void {
+    console.log('📡 Loading event for editing:', this.eventId);
+   
+    this.loading = true;
+    this.error = null;
+
+
+    this.myEventsService.getMyEventById(this.eventId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (event) => {
+          console.log('✅ Event loaded:', event);
+          this.event = event;
+          this.populateForm(event);
+          this.loading = false;
+        },
+        error: (error: any) => {
+          console.error('❌ Error loading event:', error);
+          this.error = error.message || 'Failed to load event details.';
+          this.loading = false;
+        }
+      });
+  }
+
+
+  private populateForm(event: EventModel): void {
+    console.log('📝 Populating form with event data');
+   
+    // Convert backend date format to datetime-local format
+    const startDateLocal = this.formatDateForForm(event.startDate);
+    const endDateLocal = this.formatDateForForm(event.endDate);
+
+
+    this.editForm.patchValue({
+      name: event.name,
+      eventType: event.eventType,
+      obs: event.obs || '',
+      startDate: startDateLocal,
+      endDate: endDateLocal,
+      // Address fields
+      street: event.address?.street || '',
+      number: event.address?.number || null,
+      neighborhood: event.address?.neighborhood || '',
+      city: event.address?.city || '',
+      state: event.address?.state || '',
+      cep: event.address?.cep || ''
+    });
+  }
+
+
+  private formatDateForForm(dateStr: string): string {
+    // Convert from "30/08/2025 14:30" to "2025-08-30T14:30"
+    const [datePart, timePart] = dateStr.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const [hours, minutes] = timePart.split(':');
+   
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+  }
+
+
+  private formatDateForBackend(dateTimeLocal: string): string {
+    // Convert from "2025-08-30T14:30" to "30/08/2025 14:30"
+    const date = new Date(dateTimeLocal);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+   
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  }
+
+
   onSubmit(): void {
-    if (this.createForm.invalid) {
+    if (this.editForm.invalid) {
       // Mark all fields as touched to show validation errors
-      Object.keys(this.createForm.controls).forEach(key => {
-        this.createForm.get(key)?.markAsTouched();
+      Object.keys(this.editForm.controls).forEach(key => {
+        this.editForm.get(key)?.markAsTouched();
       });
       return;
     }
@@ -543,10 +659,10 @@ export class EventCreateComponent implements OnInit {
     this.error = null;
 
 
-    const formData = this.createForm.value;
+    const formData = this.editForm.value;
 
 
-    // Convert datetime-local to backend format (dd/MM/yyyy HH:mm)
+    // Convert datetime-local to backend format
     const startDate = this.formatDateForBackend(formData.startDate);
     const endDate = this.formatDateForBackend(formData.endDate);
 
@@ -565,7 +681,7 @@ export class EventCreateComponent implements OnInit {
     }
 
 
-    const eventData: Omit<EventModel, 'id' | 'ong'> = {
+    const eventData: Partial<EventModel> = {
       name: formData.name,
       eventType: formData.eventType as EventTypeEnum,
       obs: formData.obs || undefined,
@@ -576,36 +692,23 @@ export class EventCreateComponent implements OnInit {
     };
 
 
-    console.log('📋 Creating event with data:', eventData);
+    console.log('📋 Updating event with data:', eventData);
 
 
-    this.myEventsService.createMyEvent(eventData)
+    this.myEventsService.updateMyEvent(this.eventId, eventData)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (createdEvent) => {
-          console.log('✅ Event created successfully:', createdEvent);
+        next: (updatedEvent) => {
+          console.log('✅ Event updated successfully:', updatedEvent);
           this.saving = false;
           this.router.navigate(['/my-events']);
         },
         error: (error: any) => {
-          console.error('❌ Error creating event:', error);
-          this.error = error.message || 'Failed to create event.';
+          console.error('❌ Error updating event:', error);
+          this.error = error.message || 'Failed to update event.';
           this.saving = false;
         }
       });
-  }
-
-
-  private formatDateForBackend(dateTimeLocal: string): string {
-    // Convert from "2025-08-30T14:30" to "30/08/2025 14:30"
-    const date = new Date(dateTimeLocal);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear().toString();
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-   
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
 
 

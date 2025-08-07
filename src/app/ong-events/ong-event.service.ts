@@ -58,11 +58,15 @@ export class OngEventService {
   getEventById(id: string): Observable<EventModel> {
     const url = `${this.apiUrl}/${id}`;
     console.log('📡 EventService: Making GET request to', url);
+    console.log('📡 EventService: Event ID parameter:', id);
+    console.log('📡 EventService: Full API URL:', this.apiUrl);
     return this.http.get<EventModel>(url)
       .pipe(
         retry(2),
         catchError((error) => {
           console.error('❌ EventService.getEventById error:', error);
+          console.error('❌ Requested URL was:', url);
+          console.error('❌ Event ID was:', id);
           console.error('❌ Error response body:', error.error);
           console.error('❌ Error response type:', typeof error.error);
           console.error('❌ Error status:', error.status);

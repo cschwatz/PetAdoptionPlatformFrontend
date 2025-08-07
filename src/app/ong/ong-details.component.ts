@@ -127,11 +127,50 @@ import { Ong } from './ong.model';
                   </div>
                 </div>
                
-                <div class="stat-item">
-                  <span class="stat-icon">🆔</span>
+                <div class="stat-item" *ngIf="ong.pix">
+                  <span class="stat-icon">💳</span>
                   <div class="stat-details">
-                    <span class="stat-label">Organization ID</span>
-                    <span class="stat-value">{{ ong.id }}</span>
+                    <span class="stat-label">PIX Key for Donations</span>
+                    <span class="stat-value">{{ ong.pix }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Social Media & Online Presence Card -->
+          <div class="info-card full-width" *ngIf="ong.instagram || ong.facebook || ong.tiktok">
+            <h2 class="card-title">🌐 Social Media & Online Presence</h2>
+            <div class="info-content">
+              <div class="social-media-links">
+                <div class="social-link" *ngIf="ong.instagram">
+                  <span class="social-icon">📸</span>
+                  <div class="social-details">
+                    <span class="social-label">Instagram</span>
+                    <a [href]="ong.instagram" target="_blank" class="social-value">
+                      {{ formatSocialMediaHandle(ong.instagram) }}
+                    </a>
+                  </div>
+                </div>
+               
+                <div class="social-link" *ngIf="ong.facebook">
+                  <span class="social-icon">👥</span>
+                  <div class="social-details">
+                    <span class="social-label">Facebook</span>
+                    <a [href]="ong.facebook" target="_blank" class="social-value">
+                      {{ formatSocialMediaHandle(ong.facebook) }}
+                    </a>
+                  </div>
+                </div>
+               
+                <div class="social-link" *ngIf="ong.tiktok">
+                  <span class="social-icon">🎵</span>
+                  <div class="social-details">
+                    <span class="social-label">TikTok</span>
+                    <a [href]="ong.tiktok" target="_blank" class="social-value">
+                      {{ formatSocialMediaHandle(ong.tiktok) }}
+                    </a>
                   </div>
                 </div>
               </div>
@@ -434,6 +473,64 @@ import { Ong } from './ong.model';
     }
 
 
+    .social-media-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+
+    .social-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+
+    .social-icon {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+    }
+
+
+    .social-details {
+      flex: 1;
+    }
+
+
+    .social-label {
+      display: block;
+      font-weight: 600;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+
+    .social-value {
+      display: block;
+      color: #007bff;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+
+    .social-value:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+
     .actions-content {
       display: flex;
       flex-wrap: wrap;
@@ -511,6 +608,11 @@ import { Ong } from './ong.model';
 
 
       .org-stats {
+        grid-template-columns: 1fr;
+      }
+
+
+      .social-media-links {
         grid-template-columns: 1fr;
       }
 
@@ -626,6 +728,30 @@ export class OngDetailsComponent implements OnInit {
       return digits.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
     }
     return phone; // Return as-is if format is unexpected
+  }
+
+
+  formatSocialMediaHandle(url: string): string {
+    if (!url) return '';
+   
+    try {
+      // Extract the handle/username from the URL for display
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+     
+      // Remove leading/trailing slashes and get the handle
+      const handle = pathname.replace(/^\/+|\/+$/g, '');
+     
+      if (handle) {
+        return `@${handle}`;
+      }
+     
+      // If we can't extract a handle, show the domain
+      return urlObj.hostname;
+    } catch {
+      // If URL is invalid, return as-is
+      return url;
+    }
   }
 
 

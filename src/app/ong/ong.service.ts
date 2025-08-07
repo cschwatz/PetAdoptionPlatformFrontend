@@ -14,23 +14,6 @@ export class OngService {
 
   constructor(private http: HttpClient) {}
 
-
-  /**
-   * Test endpoint access
-   * @returns Observable<any>
-   */
-  testAccess(): Observable<any> {
-    console.log('📡 OngService: Testing access to various endpoints');
-   
-    // Try a different endpoint first to test if auth is working
-    return this.http.get<any>('http://localhost:8080/api/animal')
-      .pipe(
-        retry(1),
-        catchError(this.handleError)
-      );
-  }
-
-
   /**
    * Get all ONGs
    * @returns Observable<Ong[]>
