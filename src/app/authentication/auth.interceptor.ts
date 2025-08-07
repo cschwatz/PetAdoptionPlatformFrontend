@@ -12,7 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const isApiRequest = req.url.startsWith('/api/') || req.url.startsWith(environment.apiUrl);
-    const isDevServerRequest = req.url.includes('localhost:4200');
+    const isDevServerRequest = req.url.includes('localhost:4200') || (!environment.production && req.url.includes('localhost'));
     const isAssetRequest = req.url.includes('/assets/');
     const isDataUrl = req.url.startsWith('data:');
     const isBlobUrl = req.url.startsWith('blob:');

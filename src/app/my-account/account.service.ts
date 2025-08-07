@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Person, PersonUpdateRequest } from '../person/person.model';
 import { Ong, OngUpdateRequest } from '../ong/ong.model';
+import { environment } from '../../environments/environment';
 
 export type UserType = 'PERSON' | 'ONG';
 
@@ -21,8 +22,7 @@ export interface AccountMeDto {
   providedIn: 'root'
 })
 export class AccountService {
-  private apiUrl = 'http://localhost:8080/api';
-
+  private apiUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) {}
 

@@ -16,7 +16,7 @@ import { AuthService } from '../authentication/auth.service';
           <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
             🏠 Página Inicial
           </a>
-          <a routerLink="/adoption" routerLinkActive="active" class="nav-link">
+          <a *ngIf="isPerson" routerLink="/adoption" routerLinkActive="active" class="nav-link">
             🐕 Adotar
           </a>
           <a *ngIf="isPerson" routerLink="/ong-events" routerLinkActive="active" class="nav-link">

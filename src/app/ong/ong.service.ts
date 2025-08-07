@@ -22,7 +22,7 @@ export class OngService {
   }
 
   getOngById(id: string): Observable<Ong> {
-    const url = `${environment.apiUrl}/${id}`;
+    const url = `${this.apiUrl}/${id}`;
    
     return this.http.get<Ong>(url)
       .pipe(
