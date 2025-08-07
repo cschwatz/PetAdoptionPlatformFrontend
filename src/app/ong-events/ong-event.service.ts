@@ -3,12 +3,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Event as EventModel } from './event.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OngEventService {
-  private readonly apiUrl = 'http://localhost:8080/api/event';
+  private readonly apiUrl = `${environment.apiUrl}/event`;
 
   constructor(private http: HttpClient) {}
 

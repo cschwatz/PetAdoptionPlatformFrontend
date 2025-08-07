@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
+  private readonly apiUrl = `${environment.apiUrl}`;
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const isApiRequest = req.url.startsWith('/api/') || req.url.startsWith('http://localhost:8080/api/');
+    const isApiRequest = req.url.startsWith('/api/') || req.url.startsWith(environment.apiUrl);
     const isDevServerRequest = req.url.includes('localhost:4200');
     const isAssetRequest = req.url.includes('/assets/');
     const isDataUrl = req.url.startsWith('data:');

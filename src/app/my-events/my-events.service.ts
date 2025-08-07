@@ -3,19 +3,19 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Event as EventModel } from '../ong-events/event.model';
-
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MyEventsService {
-  private apiUrl = 'http://localhost:8080/api'; // Base URL for API endpoints
+  private apiUrl = `${environment.apiUrl}`;
  
   constructor(private http: HttpClient) {}
 
   getMyEvents(): Observable<EventModel[]> {
     return this.http.get<EventModel[]>(`${this.apiUrl}/ong/my-events`).pipe(
-      retry(2), // Retry failed requests up to 2 times
+      retry(2),
       catchError(this.handleError)
     );
   }

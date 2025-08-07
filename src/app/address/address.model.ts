@@ -1,5 +1,5 @@
 export interface Address {
-  id?: string;        // UUID, optional if excluded in backend JSON
+  id?: string;
   state: string;
   city: string;
   neighborhood: string;

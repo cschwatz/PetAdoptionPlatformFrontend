@@ -3,12 +3,13 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Ong } from './ong.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OngService {
-  private readonly apiUrl = 'http://localhost:8080/api/ong';
+  private readonly apiUrl = `${environment.apiUrl}/ong`;
 
   constructor(private http: HttpClient) {}
 
@@ -21,7 +22,7 @@ export class OngService {
   }
 
   getOngById(id: string): Observable<Ong> {
-    const url = `${this.apiUrl}/${id}`;
+    const url = `${environment.apiUrl}/${id}`;
    
     return this.http.get<Ong>(url)
       .pipe(

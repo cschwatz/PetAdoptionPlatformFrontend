@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
+import { environment } from '../../environments/environment';
 
 export interface PersonRegisterRequest {
   cpf: string;
@@ -709,8 +709,7 @@ export class RegisterComponent {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
-  private apiUrl = 'http://localhost:8080';
-
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
@@ -719,7 +718,6 @@ export class RegisterComponent {
   ) {
     this.registerForm = this.createFormForType('PERSON');
   }
-
 
   private createFormForType(type: UserType): FormGroup {
     const baseForm = {
@@ -779,7 +777,7 @@ export class RegisterComponent {
 
 
       if (this.userType === 'PERSON') {
-        endpoint = `${this.apiUrl}/api/person`;
+        endpoint = `${this.apiUrl}/person`;
         registerData = {
           firstName: this.registerForm.value.firstName,
           middleName: this.registerForm.value.middleName || '',
@@ -792,7 +790,7 @@ export class RegisterComponent {
           address: this.registerForm.value.address
         } as PersonRegisterRequest;
       } else {
-        endpoint = `${this.apiUrl}/api/ong`;
+        endpoint = `${this.apiUrl}/ong`;
         registerData = {
           name: this.registerForm.value.name,
           cnpj: this.registerForm.value.cnpj,
