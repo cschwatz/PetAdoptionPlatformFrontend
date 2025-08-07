@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://url/api'
+    apiUrl: 'https://petadoptionplatform-uf26.onrender.com/api'
 }
