@@ -345,14 +345,7 @@ import { Address } from '../address/address.model';
               </div>
             </div>
 
-            <div class="form-actions">
-              <div style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; font-size: 0.875rem;">
-                <strong>Informações de Debug:</strong><br>
-                Formulário Válido: {{ profileForm.valid ? '✅' : '❌' }}<br>
-                Está Atualizando: {{ isUpdating ? '⏳' : '✅' }}<br>
-                Botão Deveria Estar: {{ (profileForm.invalid || isUpdating) ? 'DESABILITADO' : 'HABILITADO' }}
-              </div>
-             
+            <div class="form-actions">          
               <button
                 type="submit"
                 [disabled]="profileForm.invalid || isUpdating"

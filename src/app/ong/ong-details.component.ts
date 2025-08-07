@@ -31,7 +31,7 @@ import { Ong } from './ong.model';
             <div class="ong-icon">🏢</div>
             <div class="header-info">
               <h1 class="ong-name">{{ ong.name }}</h1>
-              <p class="ong-cnpj">CNPJ: {{ formatCnpj(ong.cnpj) }}</p>
+              <p class="ong-cnpj">CNPJ: {{ ong.cnpj }}</p>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ import { Ong } from './ong.model';
                   <span class="stat-icon">📋</span>
                   <div class="stat-details">
                     <span class="stat-label">CNPJ</span>
-                    <span class="stat-value">{{ formatCnpj(ong.cnpj) }}</span>
+                    <span class="stat-value">{{ ong.cnpj }}</span>
                   </div>
                 </div>
                
@@ -616,11 +616,6 @@ export class OngDetailsComponent implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  formatCnpj(cnpj: string): string {
-    if (!cnpj) return '';
-    return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
   }
 
   formatPhone(phone: string): string {
